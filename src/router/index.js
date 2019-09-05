@@ -73,29 +73,5 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-  {
-    path: '/appUpdate',
-    component: Layout,
-    redirect: '/appUpdate/iosUpdate',
-    name: 'appUpdate',
-    meta: {
-      title: 'App升级配置',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'iosUpdate',
-        component: () => import('@/views/appUpdate/iosUpdate'),
-        name: 'ios',
-        meta: { title: 'ios升级配置', icon: '', noCache: true, roles: ['admin']  }
-      },
-      {
-        path: 'andriodUpdate',
-        component: () => import('@/views/appUpdate/andriodUpdate'),
-        name: 'android',
-        meta: { title: 'android升级配置', icon: '', noCache: true, roles: ['admin']  }
-      }
-    ]
-  },
   { path: '*', redirect: '/404', hidden: true }
 ]
