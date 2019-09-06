@@ -1,19 +1,11 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input style="width: 250px;" v-model="listQuery.name" placeholder="请输入公司名字" />
-      <el-select v-model="listQuery.type" placeholder="机构类型" style="width: 150px" class="filter-item">
-        <el-option v-for="(item,index) in types" :key="item+index" :label="item.name" :value="item.value"/>
-      </el-select>
-      <el-select v-model="listQuery.status" placeholder="状态" style="width: 150px" class="filter-item">
-        <el-option v-for="(item,index) in statusList" :key="item+index" :label="item.name" :value="item.id"/>
-      </el-select>
+      <el-input style="width: 250px;" v-model="listQuery.name" placeholder="请输入客户称呼" />
+      <el-input style="width: 250px;" v-model="listQuery.phone" placeholder="请输入工作手机" />
+      <el-input style="width: 250px;" v-model="listQuery.city" placeholder="请输入商户城市" />
+      <el-input style="width: 250px;" v-model="listQuery.companyName" placeholder="请输入公司名称" />
       <el-button v-waves class="filter-item" type="primary" @click="getDetailList">筛选</el-button>
-      <!-- <el-date-picker
-        v-model="listQuery.submitTime"
-        type="datetime"
-        placeholder="选择日期时间">
-      </el-date-picker> -->
     </div>
 
     <el-table
@@ -35,13 +27,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="机构类型" align="center" width="120px">
+      <el-table-column label="账户余额" align="center" width="120px">
         <template slot-scope="scope">
          <span>{{ scope.row.companyType | typesFiters }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="联系人" align="center">
+      <el-table-column label="赠送金额" align="center">
+        <template slot-scope="scope">
+         <span>{{ scope.row.contactName }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="客户称呼" align="center">
         <template slot-scope="scope">
          <span>{{ scope.row.contactName }}</span>
         </template>
@@ -53,25 +51,16 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="发布状态" width="150px" align="center">
+      <el-table-column label="银行账号" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.companyStatus == 1">{{ scope.row.companyStatus | releaseStatusFilters  }}</el-tag>
-          <el-tag type="danger" v-else>{{ scope.row.companyStatus | releaseStatusFilters }}</el-tag>
+         <span>{{ scope.row.contactPhone }}</span>
         </template>
       </el-table-column>
 
-      <!-- <el-table-column label="提交时间" width="180px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.submitTime }}</span>
-        </template>
-      </el-table-column> -->
-
       <el-table-column label="操作" align="center" width="300px" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-show="scope.row.companyStatus == 0" style="margin-left: 12px;" type="warning" size="small" @click="handleUp(scope.row)">上架</el-button>
-          <el-button v-show="scope.row.companyStatus == 1" style="margin-left: 12px;" type="danger" size="small" @click="handleDown(scope.row)">下架</el-button>
-          <el-button style="margin-left: 12px;" type="success" size="small" @click="handleLookDetail(scope.row)">查看</el-button>
-          <el-button style="margin-left: 12px;" type="warning" size="small" @click="goMain(scope.row)">业务管理</el-button>
+          <el-button style="margin-left: 12px;" type="warning" size="small" @click="handleRecharge(scope.row)">充值</el-button>
+          <el-button style="margin-left: 12px;" type="success" size="small" @click="goMoneyDetail(scope.row)">查看</el-button>
         </template>
       </el-table-column>
 
@@ -81,74 +70,26 @@
 
     <!-- 审核弹框 -->
     <el-dialog :visible.sync="dialogAuditVisible" title="查看">
-      <div class="basicInformation">
-        <h2 class="title">基本信息</h2>
-        <div class="line">
-          <span class="label">机构名称：</span>
-          <span>{{ merchantDetail.companyInfo.name }}</span>
-        </div>
-        <div class="line">
-          <span class="label">机构类型：</span>
-          <span>{{ merchantDetail.companyInfo.type | typesFiters }}</span>
-        </div>
-        <div class="line">
-          <span class="label">登录手机号：</span>
-          <span>{{ merchantDetail.loginPhone }}</span>
-        </div>
-        <div class="line">
-          <span class="label">机构logo：</span>
-          <img @click="imageShow($event)" :src="merchantDetail.companyInfo.logo" alt="" srcset="">
-        </div>
-        <div class="line">
-          <span class="label">详细地址：</span>
-          <span>{{ merchantDetail.companyInfo.address }}</span>
-        </div>
-        <div class="line">
-          <span class="label">地址定位：</span>
-          <span>{{ merchantDetail.companyInfo.location }}</span>
-        </div>
-        <div class="line">
-          <span class="label">服务时间：</span>
-          <span>{{ merchantDetail.companyInfo.workTime }}</span>
-        </div>
-        <div class="line">
-          <span class="label">服务电话：</span>
-          <span v-for="(item, index) in merchantDetail.companyInfo.phones" :key="index">{{item}}</span>
-        </div>
-        <div class="line">
-          <span class="label">品牌标签：</span>
-          <span v-for="(item, index) in merchantDetail.companyInfo.brandTags" :key="index">{{item}}</span>
-        </div>
-        <div class="line">
-          <span class="label">介绍图：</span>
-          <div class="imgList">
-            <img @click="imageShow($event)" style="margin-right: 10px;" v-for="(item, index) in merchantDetail.companyInfo.publicityImgs" :src="item.img" alt="" srcset="" :key="index">
-          </div>
-        </div>
-      </div>
-      <div class="qualification">
-        <h2 class="title">资质信息</h2>
-        <div class="line">
-          <span class="label">工商注册号：</span>
-          <span>{{ merchantDetail.businessLicenseNo }}</span>
-        </div>
-        <div class="line">
-          <span class="label">营业执照：</span>
-          <img @click="imageShow($event)" :src="merchantDetail.businessLicenseImg" alt="" srcset="">
-        </div>
-        <div class="line">
-          <span class="label">法人手持身份证（正面）：</span>
-          <img @click="imageShow($event)" :src="merchantDetail.handheldIdCardImg" alt="" srcset="">
-        </div>
-        <div class="line">
-          <span class="label">其他资质证书：</span>
-          <img @click="imageShow($event)" :src="merchantDetail.otherCertificateImg" alt="" srcset="">
-        </div>
-      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogAuditVisible = false">返回</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="充值" :visible.sync="dialogFormVisible">
+      <el-form :model="Recharge" style="display: flex;align-items: center;flex-flow: column;width: 100%;">
+        <el-form-item>
+          <span>公司名字</span>
+        </el-form-item>
+        <el-form-item label="充值金额：" >
+          <el-input v-model="Recharge.fee" style="width: 300px"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <imgPreview :url="imgUrl" :show="imgShow" v-if="imgShow" @letImageHide="imgShow = false" />
   </div>
 </template>
@@ -209,8 +150,10 @@ export default {
       listQuery: {
         pageNum: 1,
         pageSize: 10,
-        submitTime: '',
-        status: ''
+        name: '',
+        phone: '',
+        city: '',
+        companyName: ''
       },
       statusList: [
         {
@@ -257,6 +200,26 @@ export default {
         loginPhone: ''
       },
       isLookDetail: false,
+      Recharge: {
+        fee: undefined,
+      },
+      tableData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }],
       dialogFormVisible: false,
       dialogAuditVisible: false,
       dialogRefuseVisible: false,
@@ -297,62 +260,6 @@ export default {
         }
       })
     },
-    // 上架
-    handleUp(row) {
-      const id = row.id
-      this.$confirm('确认上架?', '提示', {}).then(() => {
-        let query = {
-          id: id
-        }
-        merchantUp(query).then(response => {
-          if (response.code == 0) {
-            this.$notify({
-              title: '成功',
-              message: '上架成功',
-              type: 'success',
-              duration: 2000
-            })
-          } else {
-            this.$message({
-              message: '上架失败',
-              type: 'error',
-              showClose: true,
-              duration: 1000
-            })
-          }
-          this.getList()
-        })
-      })
-    },
-    // 下架
-    handleDown(row) {
-      const id = row.id
-      this.$alert('<p>确认下架?</p><p style="color: red;">(下架前请确保所有广告位没有该商户，防止程序出错)</p>', '提示', {
-        dangerouslyUseHTMLString: true,
-      }).then(() => {
-        let query = {
-          id: id
-        }
-        merchantDown(query).then(response => {
-          if (response.code == 0) {
-            this.$notify({
-              title: '成功',
-              message: '下架成功',
-              type: 'success',
-              duration: 2000
-            })
-          } else {
-            this.$message({
-              message: '下架失败',
-              type: 'error',
-              showClose: true,
-              duration: 1000
-            })
-          }
-          this.getList()
-        })
-      })
-    },
     //重置表单
     resetTemp() {
       this.temp = {
@@ -360,6 +267,9 @@ export default {
         id: '',
         through: true
       }
+    },
+    handleRecharge(row){
+      this.dialogFormVisible = true
     },
     //唤起新建
     handleCreate(row) {
@@ -392,14 +302,6 @@ export default {
       })
       this.dialogAuditVisible = true
     },
-    // 编辑
-    handleEdit (row) {
-      this.resetTemp()
-    },
-    // 编辑提交
-    updateData () {
-
-    },
     imageShow(e) {
       this.imgUrl = e.target.src
       this.imgShow = true
@@ -407,9 +309,9 @@ export default {
     imageHide () {
       this.imgShow = false
     },
-    goMain(row){
+    goMoneyDetail(row){
       this.$router.push({
-          path: '/mainBusiness/mainBusiness',
+          path: '/auditList/moneyDetail',
           query: {
             id: row.companyId
           }
@@ -426,10 +328,29 @@ export default {
 .el-dialog__body{
   padding-top: 0px !important;
 }
+.el-form-item{
+  display: flex;
+  align-items: center;
+}
+
+.el-card__header{
+  background: skyblue;
+  color: #ffffff;
+  .clearfix{
+    font-size: 18px;
+  }
+}
 .line{
   display: flex;
   align-items: flex-start;
   margin-bottom: 10px;
+  margin-bottom: 20px;
+  .linebox{
+    width: 30%;
+    margin-right: 30px;
+    display: flex;
+    align-items: center;
+  }
   .label{
     font-weight: bold;
     display: block;
