@@ -104,5 +104,42 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/auditManager',
+    component: Layout,
+    redirect: '/auditManager/demand',
+    name: 'auditManager',
+    meta: {
+      title: '审核管理',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'demand',
+        component: () => import('@/views/auditManager/demandList'),
+        name: 'demandList',
+        meta: { title: '需求线索池', noCache: true, roles: ['admin'] }
+      },
+      {
+        path: 'merchants',
+        component: () => import('@/views/auditManager/merchantsList'),
+        name: 'merchantsList',
+        meta: { title: '商户线索池', noCache: true, roles: ['admin'] }
+      },
+      {
+        path: 'applyList',
+        component: () => import('@/views/auditManager/applyList'),
+        name: 'applyList',
+        meta: { title: '申请列表', noCache: true, roles: ['admin'] }
+      },
+      // {
+      //   path: 'detail',
+      //   component: () => import('@/views/userManager/performanceDetail'),
+      //   name: 'performanceDetail',
+      //   hidden: true,
+      //   meta: { title: '绩效详情', noCache: true, roles: ['admin'], path: '/userManager/agentPerformanceData' }
+      // }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
