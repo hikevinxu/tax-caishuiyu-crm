@@ -73,5 +73,36 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
+  {
+    path: '/userManager',
+    component: Layout,
+    redirect: '/userManager/index',
+    name: 'merchants',
+    meta: {
+      title: '用户管理',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/userManager/userManager'),
+        name: 'userManager',
+        meta: { title: '权限管理', noCache: true, roles: ['admin'] }
+      },
+      {
+        path: 'agentPerformanceData',
+        component: () => import('@/views/userManager/agentPerformanceData'),
+        name: 'agentPerformanceData',
+        meta: { title: '客服绩效', noCache: true, roles: ['admin'] }
+      },
+      {
+        path: 'detail',
+        component: () => import('@/views/userManager/performanceDetail'),
+        name: 'performanceDetail',
+        hidden: true,
+        meta: { title: '绩效详情', noCache: true, roles: ['admin'], path: '/userManager/agentPerformanceData' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
