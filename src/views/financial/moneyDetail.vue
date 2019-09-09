@@ -239,7 +239,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .filter-container .filter-item{
     margin-bottom: 0px;
 }
