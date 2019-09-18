@@ -26,14 +26,14 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="使用状态" width="200px" align="center">
+        <el-table-column label="使用状态" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.status == 1">{{ scope.row.status | statusFilters }}</el-tag>
             <el-tag type="danger" v-else>{{ scope.row.status | statusFilters }}</el-tag>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" label="操作" width="200">
+        <el-table-column align="center" label="操作">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" icon="el-icon-edit" @click="openEditDataDialog(scope.row)">编辑</el-button>
             <el-button v-if="scope.row.status != 1" size="mini" type="warning" @click="handleModifyStatus(scope.row,'up')">启用</el-button>
