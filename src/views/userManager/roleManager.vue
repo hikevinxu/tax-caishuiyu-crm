@@ -1,7 +1,7 @@
 <template>
   <div class="roleManager">
     <div class="filter-container">
-      <el-button v-permission="['admin']" v-waves class="filter-item" icon="el-icon-circle-plus" type="warning" @click="openAddDataDialog">添加</el-button>
+      <el-button v-waves class="filter-item" icon="el-icon-circle-plus" type="warning" @click="openAddDataDialog">添加</el-button>
     </div>
     <div class="table">
       <el-table
