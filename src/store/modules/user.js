@@ -11,6 +11,8 @@ const user = {
     avatar: '',
     introduction: '',
     roles: [],
+    permissions: [],
+    userRolesPermissions: {},
     setting: {
       articlePlatform: []
     }
@@ -40,6 +42,12 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_PERMISSIONS: (state, permissions) => {
+      state.permissions = permissions
+    },
+    SET_USER_ROLES_PERMISSIONS: (state, userRolesPermissions) => {
+      state.userRolesPermissions = userRolesPermissions
     }
   },
 
@@ -58,7 +66,12 @@ const user = {
         loginByUsername(params).then(response => {
           const data = response.data
           commit('SET_TOKEN', data.accessToken)
-          // commit('SET_NAME', data.authInfo.username)
+          commit('SET_NAME', data.authInfo.username)
+          // commit('SET_ROLES', data.authInfo.roles)
+          // commit('SET_PERMISSIONS', data.permissions)
+          // commit('SET_USER_ROLES_PERMISSIONS', data.userRolesPermissions)
+          // commit('SET_USER_ROLES_PERMISSIONS', data.permissions)
+          localStorage.setItem('SET_USER_ROLES_PERMISSIONS', JSON.stringify(data))
           setToken(response.data.accessToken)
           resolve()
         }).catch(error => {
@@ -70,20 +83,13 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
+        console.log(JSON.parse(localStorage.getItem('SET_USER_ROLES_PERMISSIONS')))
         const userMap = {
           admin: {
-            roles: ['admin'],
-            token: 'admin',
-            introduction: '我是超级管理员',
+            roles: JSON.parse(localStorage.getItem('SET_USER_ROLES_PERMISSIONS')).permissions,
             avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-            name: '超级管理员'
-          },
-          editor: {
-            roles: ['editor'],
-            token: 'editor',
-            introduction: '我是编辑',
-            avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-            name: 'Normal Editor'
+            name: JSON.parse(localStorage.getItem('SET_USER_ROLES_PERMISSIONS')).authInfo.username,
+            
           }
         }
         const response = {
@@ -93,7 +99,6 @@ const user = {
         commit('SET_ROLES', data.roles)
         commit('SET_NAME', data.name)
         commit('SET_AVATAR', data.avatar)
-        commit('SET_INTRODUCTION', data.introduction)
         resolve(response)
       })
     },

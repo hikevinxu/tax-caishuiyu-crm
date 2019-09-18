@@ -80,27 +80,35 @@ export const asyncRouterMap = [
     name: 'merchants',
     meta: {
       title: '用户管理',
-      icon: 'table'
+      icon: 'table',
+      roles: ['USER_MA', 'ROLE_MA', 'CUSTOMER_PER']
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/userManager/userManager'),
         name: 'userManager',
-        meta: { title: '权限管理', noCache: true, roles: ['admin'] }
+        meta: { title: '用户管理', noCache: true, roles: ['USER_MA'] }
+      },
+      {
+        path: 'roleManager',
+        component: () => import('@/views/userManager/roleManager'),
+        name: 'roleManager',
+        meta: { title: '角色管理', noCache: true, roles: ['ROLE_MA'] }
       },
       {
         path: 'agentPerformanceData',
         component: () => import('@/views/userManager/agentPerformanceData'),
         name: 'agentPerformanceData',
-        meta: { title: '客服绩效', noCache: true, roles: ['admin'] }
+        hidden: true,
+        meta: { title: '客服绩效', noCache: true, roles: ['CUSTOMER_PER'] }
       },
       {
         path: 'detail',
         component: () => import('@/views/userManager/performanceDetail'),
-        name: 'performanceDetail',
+        name: 'userManagerPerformanceDetail',
         hidden: true,
-        meta: { title: '绩效详情', noCache: true, roles: ['admin'], path: '/userManager/agentPerformanceData' }
+        meta: { title: '绩效详情', noCache: true, roles: ['CUSTOMER_PER'], path: '/userManager/agentPerformanceData' }
       }
     ]
   },
@@ -111,70 +119,75 @@ export const asyncRouterMap = [
     name: 'auditManager',
     meta: {
       title: '审核管理',
-      icon: 'table'
+      icon: 'table',
+      roles: ['DEMAND_CLUE_POOL', 'MERCHANT_CLUES_POOL', 'APPLY_LIST']
     },
     children: [
       {
         path: 'demand',
         component: () => import('@/views/auditManager/demandList'),
         name: 'demandList',
-        meta: { title: '需求线索池', noCache: true, roles: ['admin'] }
+        meta: { title: '需求线索池', noCache: true, roles: ['DEMAND_CLUE_POOL'] }
       },
       {
         path: 'merchants',
         component: () => import('@/views/auditManager/merchantsList'),
         name: 'merchantsList',
-        meta: { title: '商户线索池', noCache: true, roles: ['admin'] }
+        hidden: true,
+        meta: { title: '商户线索池', noCache: true, roles: ['MERCHANT_CLUES_POOL'] }
       },
       {
         path: 'applyList',
         component: () => import('@/views/auditManager/applyList'),
         name: 'applyList',
-        meta: { title: '申请列表', noCache: true, roles: ['admin'] }
+        hidden: true,
+        meta: { title: '申请列表', noCache: true, roles: ['APPLY_LIST'] }
       },
-      // {
-      //   path: 'detail',
-      //   component: () => import('@/views/userManager/performanceDetail'),
-      //   name: 'performanceDetail',
-      //   hidden: true,
-      //   meta: { title: '绩效详情', noCache: true, roles: ['admin'], path: '/userManager/agentPerformanceData' }
-      // }
+      {
+        path: 'detail',
+        component: () => import('@/views/auditManager/demandDetail'),
+        name: 'auditManagerDemandDetail',
+        hidden: true,
+        meta: { title: '需求详情', noCache: true, path: '/auditManager/demand' }
+      }
     ]
   },
   {
-    path: '/auditList',
+    path: '/financial',
     component: Layout,
     redirect: '/financial/auditList',
-    name: 'auditList',
+    name: 'financial',
     meta: {
       title: '财务管理',
-      icon: 'table'
+      icon: 'table',
+      roles: ['AUDIT_MA', 'FUNDS_MA']
     },
+    hidden: true,
     children: [
       {
         path: 'auditList',
         component: () => import('@/views/financial/auditList'),
         name: 'auditList',
-        meta: { title: '审核管理', noCache: true, roles: ['admin'] }
+        meta: { title: '审核管理', noCache: true, roles: ['AUDIT_MA'] }
       },
       {
         path: 'auditDetail',
         component: () => import('@/views/financial/auditDetail'),
         name: 'auditDetail',
-        meta: { title: '审核详情', noCache: true, roles: ['admin'] },
+        meta: { title: '审核详情', noCache: true, roles: ['AUDIT_MA']},
         hidden: true,
       },
       {
         path: 'moneyManagement',
         component: () => import('@/views/financial/moneyManagement'),
         name: 'moneyManagement',
-        meta: { title: '资金管理', noCache: true, roles: ['admin'] }
+        meta: { title: '资金管理', noCache: true, roles: ['FUNDS_MA'] }
       },
       {
         path: 'moneyDetail',
         component: () => import('@/views/financial/moneyDetail'),
         name: 'moneyDetail',
-        meta: { title: '资金详情', noCache: true, roles: ['admin'] },
+        meta: { title: '资金详情', noCache: true, roles: ['FUNDS_MA'] },
         hidden: true,
       }
     ]
@@ -182,30 +195,47 @@ export const asyncRouterMap = [
   {
     path: '/customer',
     component: Layout,
-    redirect: '/customer',
+    redirect: '/customer/myPerformance',
     name: 'customer',
     meta: {
       title: '客服管理',
-      icon: 'table'
+      icon: 'table',
+      roles: ['PERSON_PER', 'PRE_AUDIT', 'REVISIT_MA']
     },
     children: [
       {
         path: 'myPerformance',
         component: () => import('@/views/customer/myPerformance'),
         name: 'myPerformance',
-        meta: { title: '我的业绩', noCache: true, roles: ['admin'] }
+        hidden: true,
+        meta: { title: '我的业绩', noCache: true, roles: ['PERSON_PER'] }
+      },
+      {
+        path: 'detail',
+        component: () => import('@/views/customer/performanceDetail'),
+        name: 'customerPerformanceDetail',
+        hidden: true,
+        hidden: true,
+        meta: { title: '绩效详情', noCache: true, roles: ['PERSON_PER'], path: '/customer/myPerformance' }
       },
       {
         path: 'demand',
         component: () => import('@/views/customer/demand'),
         name: 'demand',
-        meta: { title: '需求预审', noCache: true, roles: ['admin'] }
+        meta: { title: '需求预审', noCache: true, roles: ['PRE_AUDIT'] }
       },
       {
         path: 'review',
         component: () => import('@/views/customer/review'),
         name: 'review',
-        meta: { title: '回访管理', noCache: true, roles: ['admin'] }
+        meta: { title: '回访管理', noCache: true, roles: ['REVISIT_MA'] }
+      },
+      {
+        path: 'reviewDetail',
+        component: () => import('@/views/customer/reviewDetail'),
+        name: 'reviewDetail',
+        hidden: true,
+        meta: { title: '回访详情', noCache: true, roles: ['REVISIT_MA'], path: '/customer/review' }
       }
     ]
   },

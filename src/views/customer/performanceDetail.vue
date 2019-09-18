@@ -135,7 +135,6 @@
 import CountTo from 'vue-count-to'
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import { performancePersonDetail } from '@/api/userManager'
 
 export default {
   components: { CountTo, Pagination },
@@ -148,21 +147,12 @@ export default {
         date: ''
       },
       listLoading: false,
-      listData: [
-        {
-          id: 1,
-          name: '小明',
-          quanxian: '123',
-          account: 'zhenhua.xu@kongapi.com',
-          phone: '15515268707',
-          status: 1
-        }
-      ],
+      listData: [],
       total: 0
     }
   },
   created() {
-    this.getPerformancePersonDetail()
+
   },
   methods: {
     getList() {
@@ -170,16 +160,6 @@ export default {
     },
     getSearchList() {
 
-    },
-    getPerformancePersonDetail() {
-      let params = {
-        opUserId: this.$route.query.opUserId
-      }
-      performancePersonDetail(params).then(res => {
-        if(res.code == 0){
-          console.log(res.data)
-        }
-      })
     }
   }
 }

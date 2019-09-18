@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input style="width: 250px;" v-model="listQuery.name" placeholder="请输入客户称呼" />
-      <el-input style="width: 250px;" v-model="listQuery.phone" placeholder="请输入工作手机" />
-      <el-input style="width: 250px;" v-model="listQuery.city" placeholder="请输入商户城市" />
-      <el-input style="width: 250px;" v-model="listQuery.companyName" placeholder="请输入公司名称" />
+      <el-input class="filter-item" style="width: 250px;" v-model="listQuery.name" placeholder="请输入客户称呼" />
+      <el-input class="filter-item" style="width: 250px;" v-model="listQuery.phone" placeholder="请输入工作手机" />
+      <el-input class="filter-item" style="width: 250px;" v-model="listQuery.city" placeholder="请输入商户城市" />
+      <el-input class="filter-item" style="width: 250px;" v-model="listQuery.companyName" placeholder="请输入公司名称" />
       <el-button v-waves class="filter-item" type="primary" @click="getDetailList">筛选</el-button>
     </div>
 
@@ -239,26 +239,26 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      merchantList(this.listQuery).then(response => {
-        if (response.code === 0) {
-          console.log(response)
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
-        }
-      })
+      // merchantList(this.listQuery).then(response => {
+      //   if (response.code === 0) {
+      //     console.log(response)
+      //     this.list = response.data.items
+      //     this.total = response.data.total
+      //     this.listLoading = false
+      //   }
+      // })
     },
     getDetailList(){
       this.listQuery.pageNum = 1
       this.getList()
     },
     getTypes(){
-      merchantApplyTypes().then(res => {
-        console.log(res)
-        if(res.code == 0){
-          this.types = res.data
-        }
-      })
+      // merchantApplyTypes().then(res => {
+      //   console.log(res)
+      //   if(res.code == 0){
+      //     this.types = res.data
+      //   }
+      // })
     },
     //重置表单
     resetTemp() {
@@ -320,7 +320,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .filter-container .filter-item{
     margin-bottom: 0px;
 }

@@ -1,10 +1,18 @@
 <template>
   <div class="agentPerformanceData">
     <div class="filter-container">
-      <el-input class="filter-item" style="width: 250px" v-model="listQuery.name" placeholder="请输入客户称呼" />
-      <el-input class="filter-item" style="width: 250px" v-model="listQuery.name" placeholder="请输入手机号/四位尾号" />
-      <el-date-picker class="filter-item datePicker" style="margin-left: 10px;" @change="getSearchList" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd hh:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
+      <el-input class="filter-item" style="width: 250px" v-model="listQuery.name" clearable placeholder="请输入客户称呼" />
+      <el-input class="filter-item" style="width: 250px" v-model="listQuery.phone" clearable placeholder="请输入手机号/四位尾号" />
+      <el-cascader class="filter-item" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
+      <el-date-picker class="filter-item datePicker" @change="dateChange" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd hh:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+      <el-cascader class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择需求区域"></el-cascader>
+      <el-select class="filter-item" v-model="listQuery.followUpCount" @change="getSearchList" clearable placeholder="请选择跟进状态">
+        <el-option v-for="item in followUpCountList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+      </el-select>
+      <el-select class="filter-item" v-model="listQuery.followStatus" @change="getSearchList" clearable placeholder="请选择联系状态">
+        <el-option v-for="item in followStatusList" :key="item.name + item.id" :label="item.name" :value="item.id"></el-option>
+      </el-select>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
     </div>
     <div class="table">
       <el-table
@@ -17,38 +25,67 @@
 
         <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
 
-        <el-table-column label="姓名" width="150px" align="center">
+        <el-table-column label="称呼" width="100px" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="职位权限" align="center" width="350px">
+        <el-table-column label="工作手机" align="center" width="120px">
           <template slot-scope="scope">
-            <span class="textHidden">{{ scope.row.quanxian }}</span>
+            <span class="textHidden">{{ scope.row.phone }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="登录账号" align="center">
+        <el-table-column label="需求区域" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.account }}</span>
+            <span>{{ scope.row.area }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="工作手机" width="250px" align="center">
+        <el-table-column label="业务需求" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.phone }}</span>
+            <span><el-tag>{{ scope.row.intention }}</el-tag></span>
           </template>
         </el-table-column>
 
-        <el-table-column label="使用状态" width="200px" align="center">
+        <el-table-column label="需求子类" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status == 1">{{ scope.row.status }}</el-tag>
-            <el-tag type="danger" v-else>{{ scope.row.status }}</el-tag>
+            <span v-if="scope.row.serviceRequirements"><el-tag>{{ scope.row.serviceRequirements }}</el-tag></span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" label="操作" width="200">
+        <el-table-column label="更新时间" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.modifyTime }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="跟进状态" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.followUpCount }}次</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="联系状态" align="center">
+          <template slot-scope="scope">
+            <span><el-tag type="danger">{{ scope.row.followStatus | followStatusFilter }}</el-tag></span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="分发次数" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.distributeCount }}次</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="操作员" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.opName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column align="center" label="操作" width="130">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="lookDetail(scope.row)">查看详情</el-button>
           </template>
@@ -56,7 +93,7 @@
 
       </el-table>
 
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
   </div>
 </template>
@@ -64,6 +101,9 @@
 
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import global from '@/utils/global'
+import { intentionIndex } from '@/api/auditManager'
+import { intentionTrees, addressTrees } from '@/api/global'
 
 export default {
   components: { Pagination },
@@ -74,38 +114,101 @@ export default {
         pageNum: 1,
         pageSize: 10,
         name: '',
-        date: ''
+        phone: '',
+        date: '',
+        startDate: '',
+        endDate: '',
+        intentionCode: '',
+        areaCode: '',
+        followStatus: '',
+        followUpCount: ''
       },
       listLoading: false,
-      listData: [
-        {
-          id: 1,
-          name: '小明',
-          quanxian: '123',
-          account: 'zhenhua.xu@kongapi.com',
-          phone: '15515268707',
-          status: 1
-        }
-      ],
+      listData: [],
+      followUpCountList: global.followUpCountList,
+      followStatusList: global.followStatusList,
+      intentionCodeList: [],
+      areaCodeList: [],
       total: 0,
-
+      value: '',
+      props: {
+        value: 'code',
+        label: 'name',
+        children: 'childs'
+      }
     }
   },
   created() {
     this.getSearchList()
+    this.getIntentionTrees()
+    this.getAddressTrees()
   },
   methods: {
     getList() {
-
+      this.listLoading = true
+      let params = {}
+      for(let key  in this.listQuery){
+        if(this.listQuery[key] && this.listQuery[key] != '') {
+          params[key] = this.listQuery[key]
+        }
+      }
+      intentionIndex(params).then(res => {
+        if(res.code == 0){
+          this.listData = res.data.items
+          for(let i=0;i<this.listData.length;i++) {
+            if (this.listData[i].extra && this.listData[i].extra != '') {
+              this.listData[i].extraArr = JSON.parse(this.listData[i].extra)
+              for(let j=0;j<this.listData[i].extraArr.length;j++){
+                if(this.listData[i].extraArr[j].propCode == '100') {
+                  this.listData[i].serviceRequirements = this.listData[i].extraArr[j].valueName
+                }
+              }
+            }
+          }
+          this.total = res.data.total
+          this.listLoading = false
+        }
+      }).catch(err => {
+        this.listLoading = false
+      })
     },
     getSearchList() {
       this.listQuery.pageNum = 1
       this.listQuery.pageSize = 10
       this.getList()
     },
+    dateChange(val) {
+      if (val) {
+        this.listQuery.startDate = this.listQuery.date[0]
+        this.listQuery.endDate = this.listQuery.date[1]
+      }
+      this.getSearchList()
+    },
+    getIntentionTrees() {
+      intentionTrees().then(res => {
+        if(res.code == 0){
+          this.intentionCodeList = res.data
+        }
+      })
+    }, 
+    getAddressTrees() {
+      addressTrees().then(res => {
+        if(res.code == 0){
+          this.areaCodeList = res.data
+        }
+      })
+    },
+    intentionCodeChange(val) {
+      this.listQuery.intentionCode = val[val.length - 1]
+      this.getSearchList()
+    },
+    areaCodeChange(val) {
+      this.listQuery.areaCode = val[val.length - 1]
+      this.getSearchList()
+    },
     lookDetail(row) {
       this.$router.push({
-        path: '/userManager/detail',
+        path: '/auditManager/detail',
         query: {
           id: row.id
         }

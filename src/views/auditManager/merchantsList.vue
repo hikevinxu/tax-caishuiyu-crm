@@ -2,8 +2,8 @@
   <div class="agentPerformanceData">
     <div class="filter-container">
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.name" placeholder="请输入姓名" />
-      <el-date-picker class="filter-item datePicker" style="margin-left: 10px;" @change="getSearchList" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd hh:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
+      <el-date-picker class="filter-item datePicker" @change="getSearchList" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd hh:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
     </div>
     <div class="table">
       <el-table

@@ -2,8 +2,8 @@
   <div class="agentPerformanceData">
     <div class="filter-container">
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.name" placeholder="请输入姓名" />
-      <el-date-picker class="filter-item datePicker" style="margin-left: 10px;" @change="getSearchList" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd hh:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-      <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
+      <el-date-picker class="filter-item datePicker" @change="getSearchList" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd hh:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
     </div>
     <div class="table">
       <el-table
@@ -18,32 +18,31 @@
 
         <el-table-column label="姓名" width="150px" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+            <span>{{ scope.row.opName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="职位权限" align="center" width="350px">
+        <el-table-column label="首次有效分发" align="center">
           <template slot-scope="scope">
-            <span class="textHidden">{{ scope.row.quanxian }}</span>
+            <span class="textHidden">{{ scope.row.firstValidCount }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="登录账号" align="center">
+        <el-table-column label="非首次有效分发" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.account }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="绩效合计" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.performance }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="工作手机" width="250px" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.phone }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="使用状态" width="200px" align="center">
-          <template slot-scope="scope">
-            <el-tag v-if="scope.row.status == 1">{{ scope.row.status }}</el-tag>
-            <el-tag type="danger" v-else>{{ scope.row.status }}</el-tag>
           </template>
         </el-table-column>
 
@@ -63,6 +62,7 @@
 
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { performanceIndex } from '@/api/userManager'
 
 export default {
   components: { Pagination },
@@ -76,18 +76,8 @@ export default {
         date: ''
       },
       listLoading: false,
-      listData: [
-        {
-          id: 1,
-          name: '小明',
-          quanxian: '123',
-          account: 'zhenhua.xu@kongapi.com',
-          phone: '15515268707',
-          status: 1
-        }
-      ],
-      total: 0,
-
+      listData: [],
+      total: 0
     }
   },
   created() {
@@ -95,7 +85,15 @@ export default {
   },
   methods: {
     getList() {
-
+      this.listLoading = true
+      performanceIndex(this.listQuery).then(res => {
+        if(res.code == 0){
+          console.log(res)
+          this.listData = res.data.items
+          this.total = res.data.total
+          this.listLoading = false
+        }
+      })
     },
     getSearchList() {
       this.listQuery.pageNum = 1
@@ -106,7 +104,7 @@ export default {
       this.$router.push({
         path: '/userManager/detail',
         query: {
-          id: row.id
+          opUserId: row.opUserId
         }
       })
     }

@@ -201,14 +201,14 @@ export default {
     // 获取列表
     getList() {
       this.listLoading = true
-      merchantList(this.listQuery).then(response => {
-        if (response.code === 0) {
-          console.log(response)
-          this.list = response.data.items
-          this.total = response.data.total
-          this.listLoading = false
-        }
-      })
+      // merchantList(this.listQuery).then(response => {
+      //   if (response.code === 0) {
+      //     console.log(response)
+      //     this.list = response.data.items
+      //     this.total = response.data.total
+      //     this.listLoading = false
+      //   }
+      // })
     },
     //重置表单
     resetTemp() {
@@ -239,7 +239,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .filter-container .filter-item{
     margin-bottom: 0px;
 }

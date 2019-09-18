@@ -1,208 +1,195 @@
 <template>
-  <div class="demand">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <svg-icon icon-class="component" />
-        <span style="margin-left: 5px;">筛选</span>
-      </div>
-      <div class="filter-container">
-        <el-cascader class="filter-item" @change="queryIntentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
-        <el-cascader class="filter-item" @change="queryAreaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择需求区域"></el-cascader>
-        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getIntentionReview">获取预审线索</el-button>
-      </div>
-    </el-card>
-    <div class="demandDetail" v-if="loading">
-      <el-row>
-        <el-card class="box-card" style="margin-top: 20px;">
-          <div slot="header" class="clearfix">
-            <svg-icon icon-class="user" />
-            <span style="margin-left: 5px;">客户信息</span>
-            <div style="float: right">
-              <!-- <el-button v-waves size="mini" type="danger">下一条</el-button> -->
-              <el-button v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openAddNewRequirementsDialog">添加新需求</el-button>
-              <el-button v-waves size="mini" icon="el-icon-edit" type="primary" @click="openCustomerInfoDialog">编辑</el-button>
-            </div>
+  <div class="demandDetail">
+    <el-row>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <svg-icon icon-class="user" />
+          <span style="margin-left: 5px;">客户信息</span>
+          <div style="float: right">
+            <!-- <el-button v-waves size="mini" type="danger">下一条</el-button> -->
+            <el-button v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openAddNewRequirementsDialog">添加新需求</el-button>
+            <el-button v-waves size="mini" icon="el-icon-edit" type="primary" @click="openCustomerInfoDialog">编辑</el-button>
           </div>
+        </div>
+        <div class="content" style="margin-bottom: 30px;">
+          <div class="contentItem">
+            <label>客户称呼:</label>
+            <span>{{customerInfo.remarkName}}</span>
+          </div>
+          <div class="contentItem">
+            <label>电话号码:</label>
+            <span>{{customerInfo.phone}}</span>
+          </div>
+          <div class="contentItem">
+            <label>客户城市:</label>
+            <span>{{customerInfo.city}}</span>
+          </div>
+        </div>
+      </el-card>
+    </el-row>
+    <el-row v-for="(item, index) in intentionList" :key="'intentionList' + index" >
+      <el-card class="box-card" style="margin-top: 20px;">
+        <div slot="header" class="clearfix">
+          <svg-icon icon-class="form" />
+          <span style="margin-left: 5px;">需求跟进 - {{item.intention}}需求</span>
+          <div style="float: right">
+            <el-button v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
+            <el-button v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
+          </div>
+        </div>
+        <div style="margin-bottom:50px;">
           <div class="content" style="margin-bottom: 30px;">
             <div class="contentItem">
-              <label>客户称呼:</label>
-              <span>{{customerInfo.remarkName}}</span>
+              <label>客户需求:</label>
+              <span>{{item.intention}}</span>
             </div>
             <div class="contentItem">
-              <label>电话号码:</label>
-              <span>{{customerInfo.phone}}</span>
+              <label>需求地区:</label>
+              <span>{{item.area}}</span>
+            </div>
+            <div v-for="(a, b) in item.extraArr" :key="'aa' + b" class="contentItem">
+              <label>{{a.propName}}:</label>
+              <span>{{a.valueName}}</span>
             </div>
             <div class="contentItem">
-              <label>客户城市:</label>
-              <span>{{customerInfo.city}}</span>
+              <label>联系状态:</label>
+              <span>{{item.followStatus | followStatusFilter}}</span>
+            </div>
+            <div class="contentItem">
+              <label>录入时间:</label>
+              <span>{{item.createTime}}</span>
+            </div>
+            <div class="contentItem">
+              <label>更新时间:</label>
+              <span>{{item.modifyTime}}</span>
+            </div>
+            <div class="contentItem">
+              <label>分发次数:</label>
+              <span>{{item.distributeCount}}次</span>
+            </div>
+            <div class="contentItem">
+              <label>跟进状态:</label>
+              <span>{{item.followUpCount}}次</span>
             </div>
           </div>
-        </el-card>
-      </el-row>
-      <el-row v-for="(item, index) in intentionList" :key="'intentionList' + index" >
-        <el-card class="box-card" style="margin-top: 20px;">
-          <div slot="header" class="clearfix">
-            <svg-icon icon-class="form" />
-            <span style="margin-left: 5px;">需求跟进 - {{item.intention}}需求</span>
-            <div style="float: right">
-              <el-button v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
-              <el-button v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
-            </div>
-          </div>
-          <div style="margin-bottom:50px;">
-            <div class="content" style="margin-bottom: 30px;">
-              <div class="contentItem">
-                <label>客户需求:</label>
-                <span>{{item.intention}}</span>
-              </div>
-              <div class="contentItem">
-                <label>需求地区:</label>
-                <span>{{item.area}}</span>
-              </div>
-              <div v-for="(a, b) in item.extraArr" :key="'aa' + b" class="contentItem">
-                <label>{{a.propName}}:</label>
-                <span>{{a.valueName}}</span>
-              </div>
-              <div class="contentItem">
-                <label>联系状态:</label>
-                <span>{{item.followStatus | followStatusFilter}}</span>
-              </div>
-              <div class="contentItem">
-                <label>录入时间:</label>
-                <span>{{item.createTime}}</span>
-              </div>
-              <div class="contentItem">
-                <label>更新时间:</label>
-                <span>{{item.modifyTime}}</span>
-              </div>
-              <div class="contentItem">
-                <label>分发次数:</label>
-                <span>{{item.distributeCount}}次</span>
-              </div>
-              <div class="contentItem">
-                <label>跟进状态:</label>
-                <span>{{item.followUpCount}}次</span>
-              </div>
-            </div>
-            <div class="table" style="padding: 0 40px;">
-              <el-collapse @change="getFollowRecords(item, $event)">
-                <el-collapse-item title="跟进记录" name="跟进记录" >
-                  <el-table
-                    :data="item.recordList"
-                    border
-                    fit
-                    highlight-current-row
-                    style="width: 100%;">
+          <div class="table" style="padding: 0 40px;">
+            <el-collapse @change="getFollowRecords(item, $event)">
+              <el-collapse-item title="跟进记录" name="跟进记录" >
+                <el-table
+                  :data="item.recordList"
+                  border
+                  fit
+                  highlight-current-row
+                  style="width: 100%;">
 
-                    <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
+                  <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
 
-                    <el-table-column label="内容记录" align="center">
-                      <template slot-scope="scope">
-                        <span>{{ scope.row.opContent }}</span>
-                      </template>
-                    </el-table-column>
+                  <el-table-column label="内容记录" align="center">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.opContent }}</span>
+                    </template>
+                  </el-table-column>
 
-                    <el-table-column label="操作者" width="200px" align="center">
-                      <template slot-scope="scope">
-                        <span>{{ scope.row.opName }}</span>
-                      </template>
-                    </el-table-column>
+                  <el-table-column label="操作者" width="200px" align="center">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.opName }}</span>
+                    </template>
+                  </el-table-column>
 
-                    <el-table-column label="时间" width="200px" align="center">
-                      <template slot-scope="scope">
-                        <span>{{ scope.row.createTime }}</span>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-collapse-item>
-              </el-collapse>
-            </div>
+                  <el-table-column label="时间" width="200px" align="center">
+                    <template slot-scope="scope">
+                      <span>{{ scope.row.createTime }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-collapse-item>
+            </el-collapse>
           </div>
-        </el-card>
-      </el-row>
-      <div class="dialog">
-        <el-dialog class="followFormDialog" :title="'添加新' + dialogTitle" :visible.sync="dialogfollowFormVisible" width="720px">
-          <el-form :model="followForm" label-width="120px">
-            <el-form-item label="联系方式：">
-              <el-select v-model="followForm.opContent" placeholder="请选择联系方式">
-                <el-option label="手机" value="手机"></el-option>
-                <el-option label="微信" value="微信"></el-option>
-                <el-option label="QQ" value="QQ"></el-option>
-                <el-option label="财税鱼官方IM" value="财税鱼官方IM"></el-option>
-                <el-option label="邮件" value="邮件"></el-option>
-                <el-option label="其他" value="其他"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="联系状态：">
-              <el-select v-model="followForm.followStatus" placeholder="请选择联系状态">
-                <el-option v-for="item in followStatusList" :key="item.name + item.id" :label="item.name" :value="item.id"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="客户需求：">
-              <!-- <el-select v-model="firstCode" style="width: 150px; margin-right: 10px;" @change="firstCodeChange" placeholder="请选择客户需求">
-                <el-option v-for="(item, index) in firstCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
-              </el-select>
-              <el-select v-if="secondCodeList.length != 0" v-model="secondCode" style="width: 150px;margin-right: 10px;" @change="secondCodeChange" placeholder="请选择客户需求">
-                <el-option v-for="(item, index) in secondCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
-              </el-select>
-              <el-select  v-if="intentionCodeList.length != 0" v-model="followForm.intentionCode" style="width: 150px; margin-right: 10px;" @change="intentionCodeChange" placeholder="请选择客户需求">
-                <el-option v-for="(item, index) in intentionCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
-              </el-select> -->
-              <el-cascader v-model="followForm.serviceCodeList" class="filter-item" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
-            </el-form-item>
-            <el-form-item v-for="(item, index) in inputList" :key="'input' + index"  :label="item.name + '：'">
-              <el-select v-model="item.value" :placeholder="'请选择' + item.name">
-                <el-option v-for="(k, i) in item.valueTrees" :key="k.name + i" :label="k.name" :value="k.code"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item style="width: 635px;" label="需求地区：">
-              <el-cascader v-model="followForm.addressList" style="width: 300px;" class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" clearable placeholder="请选择需求区域"></el-cascader>
-            </el-form-item>
-            <el-form-item style="width: 635px;" label="公司名称：">
-              <el-input v-model="followForm.companyName" placeholder="请输入公司名称"></el-input>
-            </el-form-item>
-            <el-form-item label="备注：">
-              <el-input type="textarea" v-model="followForm.remark"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogfollowFormVisible = false">取 消</el-button>
-            <el-button type="primary" v-if="dialogTitle == '跟进'" @click="addFollowRecords">确 定</el-button>
-            <el-button type="primary" v-else @click="addNewRequirements">确 定</el-button>
-          </div>
-        </el-dialog>
-        <el-dialog class="userInfoDialog" title="编辑" :visible.sync="customerInfoDialog" width="720px">
-          <el-form :model="customerInfoForm" label-width="120px">
-            <el-form-item style="width: 635px;" label="客户称呼：">
-              <el-input v-model="customerInfoForm.remarkName" placeholder="请输入客户称呼"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="customerInfoDialog = false">取 消</el-button>
-            <el-button type="primary" @click="saveCustomerInfo">确 定</el-button>
-          </div>
-        </el-dialog>
-        <el-dialog class="distributeDialog" title="分发" :visible.sync="distributeDialog" width="720px">
-          <el-form :model="distributeForm" label-width="120px">
-            <el-form-item style="width: 635px;" label="短信称呼：">
-              <el-input v-model="distributeForm.nickname" placeholder="请输入短信称呼"></el-input>
-            </el-form-item>
-            <el-form-item style="width: 635px;" label="手机号：">
-              <el-input v-model="distributeForm.phone" placeholder="请输入手机号"></el-input>
-            </el-form-item>
-            <el-form-item style="width: 635px;" label="公司类型：">
-              <el-input v-model="distributeForm.companyType" placeholder="请输入公司类型"></el-input>
-            </el-form-item>
-            <el-form-item style="width: 635px;" label="公司评价：">
-              <el-input type="textarea" v-model="distributeForm.companyComment" placeholder="请输入公司评价"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="distributeDialog = false">取 消</el-button>
-            <el-button type="primary" @click="distribute">确 定</el-button>
-          </div>
-        </el-dialog>
-      </div>
+        </div>
+      </el-card>
+    </el-row>
+    <div class="dialog">
+      <el-dialog class="followFormDialog" :title="'添加新' + dialogTitle" :visible.sync="dialogfollowFormVisible" width="720px">
+        <el-form :model="followForm" label-width="120px">
+          <el-form-item label="联系方式：">
+            <el-select v-model="followForm.opContent" placeholder="请选择联系方式">
+              <el-option label="手机" value="手机"></el-option>
+              <el-option label="微信" value="微信"></el-option>
+              <el-option label="QQ" value="QQ"></el-option>
+              <el-option label="财税鱼官方IM" value="财税鱼官方IM"></el-option>
+              <el-option label="邮件" value="邮件"></el-option>
+              <el-option label="其他" value="其他"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="联系状态：">
+            <el-select v-model="followForm.followStatus" placeholder="请选择联系状态">
+              <el-option v-for="item in followStatusList" :key="item.name + item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="客户需求：">
+            <!-- <el-select v-model="firstCode" style="width: 150px; margin-right: 10px;" @change="firstCodeChange" placeholder="请选择客户需求">
+              <el-option v-for="(item, index) in firstCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
+            </el-select>
+            <el-select v-if="secondCodeList.length != 0" v-model="secondCode" style="width: 150px;margin-right: 10px;" @change="secondCodeChange" placeholder="请选择客户需求">
+              <el-option v-for="(item, index) in secondCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
+            </el-select>
+            <el-select  v-if="intentionCodeList.length != 0" v-model="followForm.intentionCode" style="width: 150px; margin-right: 10px;" @change="intentionCodeChange" placeholder="请选择客户需求">
+              <el-option v-for="(item, index) in intentionCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
+            </el-select> -->
+            <el-cascader v-model="followForm.serviceCodeList" class="filter-item" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
+          </el-form-item>
+          <el-form-item v-for="(item, index) in inputList" :key="'input' + index"  :label="item.name + '：'">
+            <el-select v-model="item.value" :placeholder="'请选择' + item.name">
+              <el-option v-for="(k, i) in item.valueTrees" :key="k.name + i" :label="k.name" :value="k.code"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item style="width: 635px;" label="需求地区：">
+            <el-cascader v-model="followForm.addressList" style="width: 300px;" class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" clearable placeholder="请选择需求区域"></el-cascader>
+          </el-form-item>
+          <el-form-item style="width: 635px;" label="公司名称：">
+            <el-input v-model="followForm.companyName" placeholder="请输入公司名称"></el-input>
+          </el-form-item>
+          <el-form-item label="备注：">
+            <el-input type="textarea" v-model="followForm.remark"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogfollowFormVisible = false">取 消</el-button>
+          <el-button type="primary" v-if="dialogTitle == '跟进'" @click="addFollowRecords">确 定</el-button>
+          <el-button type="primary" v-else @click="addNewRequirements">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog class="userInfoDialog" title="编辑" :visible.sync="customerInfoDialog" width="720px">
+        <el-form :model="customerInfoForm" label-width="120px">
+          <el-form-item style="width: 635px;" label="客户称呼：">
+            <el-input v-model="customerInfoForm.remarkName" placeholder="请输入客户称呼"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="customerInfoDialog = false">取 消</el-button>
+          <el-button type="primary" @click="saveCustomerInfo">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog class="distributeDialog" title="分发" :visible.sync="distributeDialog" width="720px">
+        <el-form :model="distributeForm" label-width="120px">
+          <el-form-item style="width: 635px;" label="短信称呼：">
+            <el-input v-model="distributeForm.nickname" placeholder="请输入短信称呼"></el-input>
+          </el-form-item>
+          <el-form-item style="width: 635px;" label="手机号：">
+            <el-input v-model="distributeForm.phone" placeholder="请输入手机号"></el-input>
+          </el-form-item>
+          <el-form-item style="width: 635px;" label="公司类型：">
+            <el-input v-model="distributeForm.companyType" placeholder="请输入公司类型"></el-input>
+          </el-form-item>
+          <el-form-item style="width: 635px;" label="公司评价：">
+            <el-input type="textarea" v-model="distributeForm.companyComment" placeholder="请输入公司评价"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="distributeDialog = false">取 消</el-button>
+          <el-button type="primary" @click="distribute">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -211,9 +198,9 @@
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import global from '@/utils/global'
-import { intentionReview, intentionDetail } from '@/api/customer'
-import { intentionServiceExtend, intentionTrees, addressTrees } from '@/api/global'
 import { intentionManageDetail, intentionFollowUp, intentionSaveFollowUp, intentionSave, userSave, intentionDistribute } from '@/api/auditManager'
+import { intentionDetail } from '@/api/customer'
+import { intentionServiceExtend, intentionTrees, addressTrees } from '@/api/global'
 
 export default {
   components: { Pagination },
@@ -221,8 +208,9 @@ export default {
   data() {
     return {
       listQuery: {
-        intentionCode: '',
-        areaCode: '',
+        pageNum: 1,
+        pageSize: 10,
+        date: ''
       },
       customerInfo: {},
       customerInfoForm: {
@@ -230,7 +218,7 @@ export default {
         remarkName: ''
       },
       intentionList: [],
-      loading: false,
+      listLoading: false,
       listData: [],
       total: 0,
       customerInfoDialog: false,
@@ -276,47 +264,14 @@ export default {
     }
   },
   created() {
-    // this.getIntentionReview()
+    this.getDetail()
     this.getIntentionTrees()
     this.getAddressTrees()
   },
   methods: {
-    getIntentionReview(){
-      let params = {}
-      for(let key  in this.listQuery){
-        if(this.listQuery[key] && this.listQuery[key] != '') {
-          params[key] = this.listQuery[key]
-        }
-      }
-      intentionReview(params).then(res => {
-        if(res.code == 0){
-          if(res.data) {
-            this.loading= true
-            this.customerInfo = res.data.userInfo
-            let arr = []
-            for(let key in res.data.intentionInfoMap) {
-              arr = res.data.intentionInfoMap[key].concat(arr)
-            }
-            this.intentionList = arr
-            for(let i=0;i<this.intentionList.length;i++) {
-              if (this.intentionList[i].extra && this.intentionList[i].extra != '') {
-                this.intentionList[i].extraArr = JSON.parse(this.intentionList[i].extra)
-              }
-            }
-          } else {
-            this.$message({
-              message: '暂无可用的预审线索',
-              type: 'error',
-              showClose: true,
-              duration: 1000
-            })
-          }
-        }
-      })
-    },
-    getDetail(id){
+    getDetail(){
       let params = {
-        intentionId: id
+        intentionId: Number(this.$route.query.id)
       }
       intentionDetail(params).then(res => {
         if(res.code == 0){
@@ -333,26 +288,6 @@ export default {
           }
         }
       })
-    },
-    getIntentionTrees() {
-      intentionTrees().then(res => {
-        if(res.code == 0){
-          this.intentionCodeList = res.data
-        }
-      })
-    }, 
-    getAddressTrees() {
-      addressTrees().then(res => {
-        if(res.code == 0){
-          this.areaCodeList = res.data
-        }
-      })
-    },
-    queryIntentionCodeChange(val) {
-      this.listQuery.intentionCode = val[val.length - 1]
-    },
-    queryAreaCodeChange(val) {
-      this.listQuery.areaCode = val[val.length - 1]
     },
     getFollowRecords(row, val){
       if (val.length == 0) {
@@ -433,6 +368,20 @@ export default {
               callback()
             }
           }
+        }
+      })
+    },
+    getIntentionTrees() {
+      intentionTrees().then(res => {
+        if(res.code == 0){
+          this.intentionCodeList = res.data
+        }
+      })
+    },
+    getAddressTrees() {
+      addressTrees().then(res => {
+        if(res.code == 0){
+          this.areaCodeList = res.data
         }
       })
     },
@@ -550,7 +499,7 @@ export default {
             duration: 1000
           })
           this.dialogfollowFormVisible = false
-          this.getDetail(this.followForm.intentionId)
+          this.getDetail()
         }
       })
     },
@@ -608,7 +557,7 @@ export default {
             duration: 1000
           })
           this.dialogfollowFormVisible = false
-          this.getDetail(this.intentionList[0].id)
+          this.getDetail()
         }
       })
     },
@@ -631,7 +580,7 @@ export default {
             duration: 1000
           })
           this.customerInfoDialog = false
-          this.getDetail(this.intentionList[0].id)
+          this.getDetail()
         }
       })
     },
@@ -660,7 +609,7 @@ export default {
             duration: 1000
           })
           this.distributeDialog = false
-          this.getDetail(this.distributeForm.intentionId)
+          this.getDetail()
         }
       })
     }
@@ -668,7 +617,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.demand {
+.demandDetail {
   padding: 20px;
   background-color: #f0f2f5;
   min-height: calc(100vh - 84px);
@@ -691,6 +640,9 @@ export default {
         width: 200px;
       }
     }
+  }
+  .datePicker {
+    display: inline-flex;
   }
   .followFormDialog,
   .addFormDialog {

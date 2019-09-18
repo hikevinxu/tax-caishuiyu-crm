@@ -1,46 +1,49 @@
 /**
- * 跳转类型过滤器
- * @function jumpTypeFilters
- * @param jumpType Number 跳转类型
+ * 联系状态过滤器
+ * @function followStatusFilter
+ * @param followStatus Number 联系状态
  */
-export function jumpTypeFilters(jumpType) {
-  switch (jumpType) {
+export function followStatusFilter(followStatus) {
+  switch (followStatus) {
     case 1:
-      return '原生普通页面'
+      return '很有兴趣'
       break;
     case 2:
-      return 'h5链接'
+      return '较感兴趣'
       break;
     case 3:
-      return '服务搜索页'
+      return '一般/可继续跟进'
       break;
     case 4:
-      return '公司详情页'
+      return '挂断/不回复/强硬抵触'
+      break;
+    case 5:
+      return '关机/未接通/可再拨打'
+      break;
+    case 6:
+      return '空号/无效/资料不符'
+      break;
+    case 7:
+      return '完结需求'
       break;
     default: 
-      return ''
+      return '无'
       break;
   }
 }
 
 /**
- * 上下架过滤器
+ * 启用-停用
  * @function statusFilters
- * @param status Number 上下架状态码
+ * @param status Number 状态码
  */
 export function statusFilters(status) {
   switch (status) {
     case 0:
-      return '待上架'
+      return '已停用'
       break;
     case 1:
-      return '已上架'
-      break;
-    case 2:
-      return '已下架'
-      break;
-    case 3:
-      return '已过期'
+      return '已启用'
       break;
     default: 
       return ''
