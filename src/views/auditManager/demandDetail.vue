@@ -65,16 +65,16 @@
             </div>
             <div class="contentItem">
               <label>分发次数:</label>
-              <span>{{item.distributeCount}}次</span>
+              <span>{{item.distributeCount ? item.distributeCount : '0'}}次</span>
             </div>
             <div class="contentItem">
               <label>跟进状态:</label>
-              <span>{{item.followUpCount}}次</span>
+              <span>{{item.followUpCount ? item.followUpCount : '0' }}次</span>
             </div>
           </div>
           <div class="table" style="padding: 0 40px;">
             <el-collapse @change="getFollowRecords(item, $event)">
-              <el-collapse-item title="跟进记录" name="跟进记录" >
+              <el-collapse-item title="跟进记录" name="跟进记录">
                 <el-table
                   :data="item.recordList"
                   border
@@ -294,6 +294,7 @@ export default {
       })
     },
     getFollowRecords(row, val){
+      console.log(val)
       if (val.length == 0) {
         return
       }
