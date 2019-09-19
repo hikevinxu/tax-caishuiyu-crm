@@ -1,4 +1,4 @@
-import { fetchPost } from './request'
+import { fetchGet, fetchPost } from './request'
 import qs from 'qs'
 
 /**
@@ -23,4 +23,14 @@ export function logout() {
   //   method: 'post'
   // })
   // return fetchPost('/auth/login_ldap', paramsString)
+}
+
+
+/**
+ * 获取当前用户权限
+ * @function userPermissions
+ * @type 'Get'
+ */
+export function userPermissions(params) {
+  return fetchGet('/permission/userPermissions', params)
 }

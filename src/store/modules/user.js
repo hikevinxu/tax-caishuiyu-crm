@@ -1,4 +1,4 @@
-import { loginByUsername } from '@/api/login'
+import { loginByUsername, userPermissions } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
@@ -10,9 +10,9 @@ const user = {
     name: '',
     avatar: '',
     introduction: '',
+    currentRoles: [],
     roles: [],
     permissions: [],
-    userRolesPermissions: {},
     setting: {
       articlePlatform: []
     }
@@ -46,8 +46,8 @@ const user = {
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
     },
-    SET_USER_ROLES_PERMISSIONS: (state, userRolesPermissions) => {
-      state.userRolesPermissions = userRolesPermissions
+    SET_CURRENT_ROLES: (state, currentRoles) => {
+      state.currentRoles = currentRoles
     }
   },
 
@@ -66,12 +66,7 @@ const user = {
         loginByUsername(params).then(response => {
           const data = response.data
           commit('SET_TOKEN', data.accessToken)
-          commit('SET_NAME', data.authInfo.username)
-          // commit('SET_ROLES', data.authInfo.roles)
-          // commit('SET_PERMISSIONS', data.permissions)
-          // commit('SET_USER_ROLES_PERMISSIONS', data.userRolesPermissions)
-          // commit('SET_USER_ROLES_PERMISSIONS', data.permissions)
-          localStorage.setItem('SET_USER_ROLES_PERMISSIONS', JSON.stringify(data))
+          // localStorage.setItem('SET_USER_ROLES_PERMISSIONS', JSON.stringify(data))
           setToken(response.data.accessToken)
           resolve()
         }).catch(error => {
@@ -83,23 +78,27 @@ const user = {
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        console.log(JSON.parse(localStorage.getItem('SET_USER_ROLES_PERMISSIONS')))
-        const userMap = {
-          admin: {
-            roles: JSON.parse(localStorage.getItem('SET_USER_ROLES_PERMISSIONS')).permissions,
-            avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-            name: JSON.parse(localStorage.getItem('SET_USER_ROLES_PERMISSIONS')).authInfo.username,
-            
+        userPermissions().then(res => {
+          if(res.code == 0) {
+            const userMap = {
+              admin: {
+                roles: res.data.permissions,
+                avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+                name: res.data.userName,
+                currentRoles: res.data.roles
+              }
+            }
+            const response = {
+              data: userMap.admin
+            }
+            const data = response.data
+            commit('SET_ROLES', data.roles)
+            commit('SET_NAME', data.name)
+            commit('SET_AVATAR', data.avatar)
+            commit('SET_CURRENT_ROLES', data.currentRoles)
+            resolve(response)
           }
-        }
-        const response = {
-          data: userMap.admin
-        }
-        const data = response.data
-        commit('SET_ROLES', data.roles)
-        commit('SET_NAME', data.name)
-        commit('SET_AVATAR', data.avatar)
-        resolve(response)
+        })
       })
     },
 

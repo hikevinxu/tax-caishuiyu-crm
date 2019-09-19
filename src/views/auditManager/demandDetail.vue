@@ -28,7 +28,7 @@
       </el-card>
     </el-row>
     <el-row v-for="(item, index) in intentionList" :key="'intentionList' + index" >
-      <el-card class="box-card" style="margin-top: 20px;">
+      <el-card class="box-card" style="margin-top: 20px;" :style="item.id == id ? 'background: #d9ecff;' : ''">
         <div slot="header" class="clearfix">
           <svg-icon icon-class="form" />
           <span style="margin-left: 5px;">需求跟进 - {{item.intention}}需求</span>
@@ -206,6 +206,7 @@ export default {
   directives: { waves },
   data() {
     return {
+      id: '',
       customerInfo: {},
       customerInfoForm: {
         id: '',
@@ -258,6 +259,7 @@ export default {
     }
   },
   created() {
+    this.id = this.$route.query.id
     this.getDetail()
     this.getIntentionTrees()
     this.getAddressTrees()
@@ -271,10 +273,18 @@ export default {
         if(res.code == 0){
           this.customerInfo = res.data.userInfo
           let arr = []
+          let arr2 = []
           for(let key in res.data.intentionInfoMap) {
             arr = res.data.intentionInfoMap[key].concat(arr)
           }
-          this.intentionList = arr
+          for(let i=0;i<arr.length-1;i++){
+            if(arr[i].id == this.$route.query.id){
+              arr2.push(arr[i])
+              arr.splice(i,1)
+            }
+          }
+          arr2 = arr2.concat(arr)
+          this.intentionList = arr2
           for(let i=0;i<this.intentionList.length;i++) {
             if (this.intentionList[i].extra && this.intentionList[i].extra != '') {
               this.intentionList[i].extraArr = JSON.parse(this.intentionList[i].extra)
@@ -650,6 +660,13 @@ export default {
         }
       }
     }
+  }
+}
+</style>
+<style lang="scss">
+.demandDetail {
+  .el-card__body {
+    background-color: #fff;
   }
 }
 </style>

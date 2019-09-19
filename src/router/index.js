@@ -94,7 +94,7 @@ export const asyncRouterMap = [
         path: 'roleManager',
         component: () => import('@/views/userManager/roleManager'),
         name: 'roleManager',
-        meta: { title: '角色管理', noCache: true, roles: ['ROLE_MA'] }
+        meta: { title: '角色权限', noCache: true, roles: ['ROLE_MA'] }
       },
       {
         path: 'agentPerformanceData',
