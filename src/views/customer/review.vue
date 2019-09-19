@@ -25,13 +25,13 @@
 
         <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
 
-        <el-table-column label="称呼" width="150px" align="center">
+        <el-table-column label="称呼" width="120px" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="工作手机" align="center" width="150px">
+        <el-table-column label="工作手机" align="center" width="120px">
           <template slot-scope="scope">
             <span class="textHidden">{{ scope.row.phone }}</span>
           </template>
@@ -45,13 +45,13 @@
 
         <el-table-column label="业务需求" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.intention }}</span>
+            <span><el-tag>{{ scope.row.intention }}</el-tag></span>
           </template>
         </el-table-column>
 
         <el-table-column label="需求子类" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.serviceRequirements }}</span>
+            <span v-if="scope.row.serviceRequirements"><el-tag>{{ scope.row.serviceRequirements }}</el-tag></span>
           </template>
         </el-table-column>
 
@@ -69,7 +69,7 @@
 
         <el-table-column label="联系状态" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.followStatus | followStatusFilter }}</span>
+            <span><el-tag type="danger">{{ scope.row.followStatus | followStatusFilter }}</el-tag></span>
           </template>
         </el-table-column>
 
