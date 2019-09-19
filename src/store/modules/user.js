@@ -1,5 +1,6 @@
 import { loginByUsername, userPermissions } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { Message } from 'element-ui'
 
 const user = {
   state: {
@@ -64,11 +65,19 @@ const user = {
           password: userInfo.password
         }
         loginByUsername(params).then(response => {
-          const data = response.data
-          commit('SET_TOKEN', data.accessToken)
-          // localStorage.setItem('SET_USER_ROLES_PERMISSIONS', JSON.stringify(data))
-          setToken(response.data.accessToken)
-          resolve()
+          if (response.data.permissions != 0) {
+            const data = response.data
+            commit('SET_TOKEN', data.accessToken)
+            // localStorage.setItem('SET_USER_ROLES_PERMISSIONS', JSON.stringify(data))
+            setToken(response.data.accessToken)
+            resolve()
+          } else {
+            Message({
+              message: '您没有任何权限，请通知管理员修改权限！',
+              type: 'error',
+              duration: 2 * 1000
+            })
+          }
         }).catch(error => {
           reject(error)
         })
@@ -80,6 +89,12 @@ const user = {
       return new Promise((resolve, reject) => {
         userPermissions().then(res => {
           if(res.code == 0) {
+            if (res.data.permissions.length == 0) {
+              commit('SET_TOKEN', '')
+              commit('SET_ROLES', [])
+              removeToken()
+              resolve()
+            }
             const userMap = {
               admin: {
                 roles: res.data.permissions,
