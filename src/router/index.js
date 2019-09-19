@@ -81,7 +81,7 @@ export const asyncRouterMap = [
     meta: {
       title: '用户管理',
       icon: 'table',
-      roles: ['USER_MA', 'ROLE_MA', 'CUSTOMER_PER']
+      roles: ['USER_MA', 'ROLE_MA']
     },
     children: [
       {
@@ -120,7 +120,7 @@ export const asyncRouterMap = [
     meta: {
       title: '审核管理',
       icon: 'table',
-      roles: ['DEMAND_CLUE_POOL', 'MERCHANT_CLUES_POOL', 'APPLY_LIST']
+      roles: ['DEMAND_CLUE_POOL']
     },
     children: [
       {
@@ -159,8 +159,7 @@ export const asyncRouterMap = [
     name: 'financial',
     meta: {
       title: '财务管理',
-      icon: 'table',
-      roles: ['AUDIT_MA', 'FUNDS_MA']
+      icon: 'table'
     },
     hidden: true,
     children: [
@@ -200,7 +199,7 @@ export const asyncRouterMap = [
     meta: {
       title: '客服管理',
       icon: 'table',
-      roles: ['PERSON_PER', 'PRE_AUDIT', 'REVISIT_MA']
+      roles: ['PRE_AUDIT', 'REVISIT_MA']
     },
     children: [
       {
