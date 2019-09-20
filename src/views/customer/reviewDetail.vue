@@ -28,7 +28,7 @@
       </el-card>
     </el-row>
     <el-row v-for="(item, index) in intentionList" :key="'intentionList' + index" >
-      <el-card class="box-card" style="margin-top: 20px;" :style="item.id == id ? 'background: #d9ecff;' : ''">
+      <el-card class="box-card" style="margin-top: 20px;" :style="item.id == id ? 'background: #66b1ff9e;' : ''">
         <div slot="header" class="clearfix">
           <svg-icon icon-class="form" />
           <span style="margin-left: 5px;">需求跟进 - {{item.intention}}需求</span>
@@ -606,7 +606,6 @@ export default {
     openDistributeDialog(item) {
       this.resetDistributeForm()
       this.distributeForm.intentionId = item.id
-      this.distributeForm.phone = this.customerInfo.phone
       this.distributeDialog = true
     },
     distribute(){

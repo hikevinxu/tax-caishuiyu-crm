@@ -290,7 +290,7 @@ export default {
       }
       intentionReview(params).then(res => {
         if(res.code == 0){
-          if(res.data) {
+          if(JSON.stringify(res.data) != "{}") {
             this.loading= true
             this.customerInfo = res.data.userInfo
             let arr = []
@@ -647,7 +647,6 @@ export default {
     openDistributeDialog(item) {
       this.resetDistributeForm()
       this.distributeForm.intentionId = item.id
-      this.distributeForm.phone = this.customerInfo.phone
       this.distributeDialog = true
     },
     distribute(){

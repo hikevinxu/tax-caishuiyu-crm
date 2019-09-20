@@ -28,7 +28,7 @@
       </el-card>
     </el-row>
     <el-row v-for="(item, index) in intentionList" :key="'intentionList' + index" >
-      <el-card class="box-card" style="margin-top: 20px;" :style="item.id == id ? 'background: #d9ecff;' : ''">
+      <el-card class="box-card" style="margin-top: 20px;" :style="item.id == id ? 'background: #66b1ff9e;' : ''">
         <div slot="header" class="clearfix">
           <svg-icon icon-class="form" />
           <span style="margin-left: 5px;">需求跟进 - {{item.intention}}需求</span>
@@ -277,8 +277,8 @@ export default {
           for(let key in res.data.intentionInfoMap) {
             arr = res.data.intentionInfoMap[key].concat(arr)
           }
-          for(let i=0;i<arr.length-1;i++){
-            if(arr[i].id == this.$route.query.id){
+          for(let i=0;i<arr.length;i++){
+            if(arr[i].id == Number(this.$route.query.id)){
               arr2.push(arr[i])
               arr.splice(i,1)
             }
@@ -289,6 +289,20 @@ export default {
             if (this.intentionList[i].extra && this.intentionList[i].extra != '') {
               this.intentionList[i].extraArr = JSON.parse(this.intentionList[i].extra)
             }
+          }
+          if(this.followForm.intentionId && this.followForm.intentionId != '') {
+            let params = {
+              id: this.followForm.intentionId
+            }
+            intentionFollowUp(params).then(res => {
+              if(res.code == 0){
+                for(let i=0;i<this.intentionList.length;i++){
+                  if(this.intentionList[i].id == this.followForm.intentionId) {
+                    this.$set(this.intentionList[i], 'recordList', res.data)
+                  }
+                }
+              }
+            })
           }
         }
       })
@@ -334,7 +348,6 @@ export default {
       this.resetFollowForm()
       this.inputList = []
       this.followForm.intentionId = item.id
-      this.followForm.opContent = item.opContent
       this.followForm.followStatus = item.followStatus
       this.followForm.companyName = item.companyName
       this.followForm.remark = item.remark
@@ -494,7 +507,24 @@ export default {
           }
         }
       }
-      console.log(this.followForm)
+      if (this.followForm.opContent == '') {
+        this.$message({
+          message: '联系方式不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.followForm.followStatus == '') {
+        this.$message({
+          message: '联系状态不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
       intentionSaveFollowUp(this.followForm).then(res => {
         if(res.code == 0){
           this.$notify({
@@ -553,6 +583,24 @@ export default {
         }
       }
       console.log(this.followForm)
+      if (this.followForm.opContent == '') {
+        this.$message({
+          message: '联系方式不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.followForm.followStatus == '') {
+        this.$message({
+          message: '联系状态不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
       intentionSave(this.followForm).then(res => {
         if(res.code == 0){
           this.$notify({
@@ -572,6 +620,15 @@ export default {
       this.customerInfoDialog = true
     },
     saveCustomerInfo() {
+      if (this.customerInfoForm.remarkName == '') {
+        this.$message({
+          message: '客户称呼不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
       let params = {
         id: this.customerInfoForm.id,
         remarkName: this.customerInfoForm.remarkName
@@ -601,7 +658,6 @@ export default {
     openDistributeDialog(item) {
       this.resetDistributeForm()
       this.distributeForm.intentionId = item.id
-      this.distributeForm.phone = this.customerInfo.phone
       this.distributeDialog = true
     },
     distribute(){
