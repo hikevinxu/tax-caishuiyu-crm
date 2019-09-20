@@ -177,8 +177,8 @@
         </el-dialog>
         <el-dialog class="userInfoDialog" title="编辑" :visible.sync="customerInfoDialog" width="720px">
           <el-form :model="customerInfoForm" label-width="120px">
-            <el-form-item style="width: 635px;" label="客户称呼：">
-              <el-input v-model="customerInfoForm.remarkName" placeholder="请输入客户称呼"></el-input>
+            <el-form-item style="width: 635px;" label="客户备注：">
+              <el-input v-model="customerInfoForm.remarkName" placeholder="请输入客户备注"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
