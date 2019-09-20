@@ -148,7 +148,7 @@ export default {
       this.listLoading = true
       let params = {}
       for(let key  in this.listQuery){
-        if(this.listQuery[key] && this.listQuery[key] != '') {
+        if(this.listQuery[key] !== '') {
           params[key] = this.listQuery[key]
         }
       }
@@ -181,6 +181,9 @@ export default {
       if (val) {
         this.listQuery.startDate = this.listQuery.date[0]
         this.listQuery.endDate = this.listQuery.date[1]
+      } else {
+        this.listQuery.startDate = ''
+        this.listQuery.endDate = ''
       }
       this.getSearchList()
     },
