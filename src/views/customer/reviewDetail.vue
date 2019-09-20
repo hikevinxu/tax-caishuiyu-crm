@@ -110,7 +110,7 @@
     </el-row>
     <div class="dialog">
       <el-dialog class="followFormDialog" :title="'添加新' + dialogTitle" :visible.sync="dialogfollowFormVisible" width="720px">
-        <el-form :model="followForm" label-width="120px">
+        <el-form :model="followForm" :rules="followFormRules" label-width="120px">
           <el-form-item label="联系方式：">
             <el-select v-model="followForm.opContent" placeholder="请选择联系方式">
               <el-option label="手机" value="手机"></el-option>
@@ -241,6 +241,14 @@ export default {
         remark: '',
         addressList: [],
         serviceCodeList: []
+      },
+      followFormRules: {
+        opContent: [
+          { required: true, message: '请选择联系方式', trigger: 'blur' }
+        ],
+        followStatus: [
+          { required: true, message: '请选择联系状态', trigger: 'blur' }
+        ]
       },
       firstCode: '',
       firstCodeList: [],
