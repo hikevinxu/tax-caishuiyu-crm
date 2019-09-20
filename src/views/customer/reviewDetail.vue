@@ -296,6 +296,20 @@ export default {
               this.intentionList[i].extraArr = JSON.parse(this.intentionList[i].extra)
             }
           }
+          if(this.followForm.intentionId && this.followForm.intentionId != '') {
+            let params = {
+              id: this.followForm.intentionId
+            }
+            intentionFollowUp(params).then(res => {
+              if(res.code == 0){
+                for(let i=0;i<this.intentionList.length;i++){
+                  if(this.intentionList[i].id == this.followForm.intentionId) {
+                    this.$set(this.intentionList[i], 'recordList', res.data)
+                  }
+                }
+              }
+            })
+          }
         }
       })
     },
@@ -500,6 +514,24 @@ export default {
         }
       }
       console.log(this.followForm)
+      if (this.followForm.opContent == '') {
+        this.$message({
+          message: '联系方式不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.followForm.followStatus == '') {
+        this.$message({
+          message: '联系状态不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
       intentionSaveFollowUp(this.followForm).then(res => {
         if(res.code == 0){
           this.$notify({
@@ -558,6 +590,24 @@ export default {
         }
       }
       console.log(this.followForm)
+      if (this.followForm.opContent == '') {
+        this.$message({
+          message: '联系方式不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.followForm.followStatus == '') {
+        this.$message({
+          message: '联系状态不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
       intentionSave(this.followForm).then(res => {
         if(res.code == 0){
           this.$notify({
@@ -577,6 +627,15 @@ export default {
       this.customerInfoDialog = true
     },
     saveCustomerInfo() {
+      if (this.customerInfoForm.remarkName == '') {
+        this.$message({
+          message: '客户称呼不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
       let params = {
         id: this.customerInfoForm.id,
         remarkName: this.customerInfoForm.remarkName
