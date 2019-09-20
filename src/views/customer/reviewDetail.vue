@@ -283,7 +283,7 @@ export default {
           for(let key in res.data.intentionInfoMap) {
             arr = res.data.intentionInfoMap[key].concat(arr)
           }
-          for(let i=0;i<arr.length-1;i++){
+          for(let i=0;i<arr.length;i++){
             if(arr[i].id == this.$route.query.id){
               arr2.push(arr[i])
               arr.splice(i,1)
