@@ -14,6 +14,10 @@
         <div class="content" style="margin-bottom: 30px;">
           <div class="contentItem">
             <label>客户称呼:</label>
+            <span>{{customerInfo.name}}</span>
+          </div>
+          <div class="contentItem">
+            <label>客户备注:</label>
             <span>{{customerInfo.remarkName}}</span>
           </div>
           <div class="contentItem">
