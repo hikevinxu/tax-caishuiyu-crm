@@ -565,8 +565,14 @@ export default {
         }
       }
       this.followForm.extra = JSON.stringify(arr)
-      this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
-      this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
+      if (this.followForm.addressList.length && this.followForm.addressList.length > 0) {
+        this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
+      }
+      if (this.followForm.serviceCodeList.length && this.followForm.serviceCodeList.length > 0) {
+        this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
+      }
+      // this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
+      // this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
       for(let i=0;i<this.intentionCodeList.length;i++){
         if(this.followForm.serviceCodeList[0] == this.intentionCodeList[i].code){
           for(let j=0;j<this.intentionCodeList[i].childs.length;j++){
@@ -640,8 +646,14 @@ export default {
       }
       this.followForm.extra = JSON.stringify(arr)
       this.followForm.userId = this.customerInfo.id
-      this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
-      this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
+      if (this.followForm.addressList.length && this.followForm.addressList.length > 0) {
+        this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
+      }
+      if (this.followForm.serviceCodeList.length && this.followForm.serviceCodeList.length > 0) {
+        this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
+      }
+      // this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
+      // this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
       for(let i=0;i<this.intentionCodeList.length;i++){
         if(this.followForm.serviceCodeList[0] == this.intentionCodeList[i].code){
           for(let j=0;j<this.intentionCodeList[i].childs.length;j++){

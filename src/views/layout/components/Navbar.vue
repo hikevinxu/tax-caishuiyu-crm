@@ -5,7 +5,7 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <error-log class="errLog-container right-menu-item"/>
+        <!-- <error-log class="errLog-container right-menu-item"/> -->
 
         <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item"/>
