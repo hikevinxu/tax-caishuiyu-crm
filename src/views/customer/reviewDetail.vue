@@ -491,7 +491,7 @@ export default {
     },
     addFollowRecords() {
       console.log(this.followForm)
-      if (this.followForm.opContent == '') {
+      if (!this.followForm.opContent || this.followForm.opContent == '') {
         this.$message({
           message: '联系方式不能为空',
           type: 'error',
@@ -500,7 +500,7 @@ export default {
         })
         return
       }
-      if (this.followForm.followStatus == '') {
+      if (!this.followForm.followStatus || this.followForm.followStatus == '') {
         this.$message({
           message: '联系状态不能为空',
           type: 'error',
@@ -510,37 +510,42 @@ export default {
         return
       }
       let arr = []
-      for(let i=0;i<this.inputList.length;i++) {
-        if (this.inputList[i].value && this.inputList[i].value != '') {
-          for(let j=0;j<this.inputList[i].valueTrees.length;j++) {
-            if (this.inputList[i].valueTrees[j].code == this.inputList[i].value) {
-              arr.push({
-                valueCode: this.inputList[i].value,
-                valueName: this.inputList[i].valueTrees[j].name,
-                propCode: this.inputList[i].code,
-                propName: this.inputList[i].name
-              })
+      console.log(this.inputList.length)
+      if (this.inputList && this.inputList.length > 0) {
+        for(let i=0;i<this.inputList.length;i++) {
+          if (this.inputList[i].value && this.inputList[i].value != '') {
+            for(let j=0;j<this.inputList[i].valueTrees.length;j++) {
+              if (this.inputList[i].valueTrees[j].code == this.inputList[i].value) {
+                arr.push({
+                  valueCode: this.inputList[i].value,
+                  valueName: this.inputList[i].valueTrees[j].name,
+                  propCode: this.inputList[i].code,
+                  propName: this.inputList[i].name
+                })
+              }
             }
           }
         }
       }
       this.followForm.extra = JSON.stringify(arr)
-      if (this.followForm.addressList.length && this.followForm.addressList.length > 0) {
+      if (this.followForm.addressList && this.followForm.addressList.length > 0) {
         this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
       }
-      if (this.followForm.serviceCodeList.length && this.followForm.serviceCodeList.length > 0) {
+      if (this.followForm.serviceCodeList && this.followForm.serviceCodeList.length > 0) {
         this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
       }
-      for(let i=0;i<this.intentionCodeList.length;i++){
-        if(this.followForm.serviceCodeList[0] == this.intentionCodeList[i].code){
-          for(let j=0;j<this.intentionCodeList[i].childs.length;j++){
-            if(this.intentionCodeList[i].childs[j].code == this.followForm.serviceCodeList[1]) {
-              if (this.intentionCodeList[i].childs[j].leafNode) {
-                this.followForm.intention = this.intentionCodeList[i].childs[j].name
-              } else {
-                for(let k=0;k<this.intentionCodeList[i].childs[j].childs.length;k++){
-                  if(this.intentionCodeList[i].childs[j].childs[k].code == this.followForm.serviceCodeList[2]) {
-                    this.followForm.intention = this.intentionCodeList[i].childs[j].childs[k].name
+      if (this.intentionCodeList && this.intentionCodeList > 0) {
+        for(let i=0;i<this.intentionCodeList.length;i++){
+          if(this.followForm.serviceCodeList[0] == this.intentionCodeList[i].code){
+            for(let j=0;j<this.intentionCodeList[i].childs.length;j++){
+              if(this.intentionCodeList[i].childs[j].code == this.followForm.serviceCodeList[1]) {
+                if (this.intentionCodeList[i].childs[j].leafNode) {
+                  this.followForm.intention = this.intentionCodeList[i].childs[j].name
+                } else {
+                  for(let k=0;k<this.intentionCodeList[i].childs[j].childs.length;k++){
+                    if(this.intentionCodeList[i].childs[j].childs[k].code == this.followForm.serviceCodeList[2]) {
+                      this.followForm.intention = this.intentionCodeList[i].childs[j].childs[k].name
+                    }
                   }
                 }
               }
@@ -569,7 +574,7 @@ export default {
     },
     addNewRequirements() {
       console.log(this.followForm)
-      if (this.followForm.opContent == '') {
+      if (!this.followForm.opContent || this.followForm.opContent == '') {
         this.$message({
           message: '联系方式不能为空',
           type: 'error',
@@ -578,7 +583,7 @@ export default {
         })
         return
       }
-      if (this.followForm.followStatus == '') {
+      if (!this.followForm.followStatus || this.followForm.followStatus == '') {
         this.$message({
           message: '联系状态不能为空',
           type: 'error',
@@ -588,38 +593,42 @@ export default {
         return
       }
       let arr = []
-      for(let i=0;i<this.inputList.length;i++) {
-        if (this.inputList[i].value && this.inputList[i].value != '') {
-          for(let j=0;j<this.inputList[i].valueTrees.length;j++) {
-            if (this.inputList[i].valueTrees[j].code == this.inputList[i].value) {
-              arr.push({
-                valueCode: this.inputList[i].value,
-                valueName: this.inputList[i].valueTrees[j].name,
-                propCode: this.inputList[i].code,
-                propName: this.inputList[i].name
-              })
+      if(this.inputList && this.inputList.length > 0) {
+        for(let i=0;i<this.inputList.length;i++) {
+          if (this.inputList[i].value && this.inputList[i].value != '') {
+            for(let j=0;j<this.inputList[i].valueTrees.length;j++) {
+              if (this.inputList[i].valueTrees[j].code == this.inputList[i].value) {
+                arr.push({
+                  valueCode: this.inputList[i].value,
+                  valueName: this.inputList[i].valueTrees[j].name,
+                  propCode: this.inputList[i].code,
+                  propName: this.inputList[i].name
+                })
+              }
             }
           }
         }
       }
       this.followForm.extra = JSON.stringify(arr)
       this.followForm.userId = this.customerInfo.id
-      if (this.followForm.addressList.length && this.followForm.addressList.length > 0) {
+      if (this.followForm.addressList && this.followForm.addressList.length > 0) {
         this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
       }
-      if (this.followForm.serviceCodeList.length && this.followForm.serviceCodeList.length > 0) {
+      if (this.followForm.serviceCodeList && this.followForm.serviceCodeList.length > 0) {
         this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
       }
-      for(let i=0;i<this.intentionCodeList.length;i++){
-        if(this.followForm.serviceCodeList[0] == this.intentionCodeList[i].code){
-          for(let j=0;j<this.intentionCodeList[i].childs.length;j++){
-            if(this.intentionCodeList[i].childs[j].code == this.followForm.serviceCodeList[1]) {
-              if (this.intentionCodeList[i].childs[j].leafNode) {
-                this.followForm.intention = this.intentionCodeList[i].childs[j].name
-              } else {
-                for(let k=0;k<this.intentionCodeList[i].childs[j].childs.length;k++){
-                  if(this.intentionCodeList[i].childs[j].childs[k].code == this.followForm.serviceCodeList[2]) {
-                    this.followForm.intention = this.intentionCodeList[i].childs[j].childs[k].name
+      if (this.intentionCodeList && this.intentionCodeList.length > 0) {
+        for(let i=0;i<this.intentionCodeList.length;i++){
+          if(this.followForm.serviceCodeList[0] == this.intentionCodeList[i].code){
+            for(let j=0;j<this.intentionCodeList[i].childs.length;j++){
+              if(this.intentionCodeList[i].childs[j].code == this.followForm.serviceCodeList[1]) {
+                if (this.intentionCodeList[i].childs[j].leafNode) {
+                  this.followForm.intention = this.intentionCodeList[i].childs[j].name
+                } else {
+                  for(let k=0;k<this.intentionCodeList[i].childs[j].childs.length;k++){
+                    if(this.intentionCodeList[i].childs[j].childs[k].code == this.followForm.serviceCodeList[2]) {
+                      this.followForm.intention = this.intentionCodeList[i].childs[j].childs[k].name
+                    }
                   }
                 }
               }
