@@ -741,6 +741,24 @@ export default {
       this.distributeDialog = true
     },
     distribute(){
+      if (this.distributeForm.nickname == '') {
+        this.$message({
+          message: '客户称呼不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.distributeForm.phone == '') {
+        this.$message({
+          message: '手机号不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
       intentionDistribute(this.distributeForm).then(res => {
         if(res.code == 0){
           this.$notify({
