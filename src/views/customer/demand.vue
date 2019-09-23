@@ -192,7 +192,7 @@
               <el-input v-model="distributeForm.nickname" placeholder="请输入短信称呼"></el-input>
             </el-form-item>
             <el-form-item style="width: 635px;" label="手机号：">
-              <el-input v-model="distributeForm.phone" placeholder="请输入手机号"></el-input>
+              <el-input type="tel" maxlength="11" v-model="distributeForm.phone" placeholder="请输入手机号"></el-input>
             </el-form-item>
             <el-form-item style="width: 635px;" label="公司类型：">
               <el-input v-model="distributeForm.companyType" placeholder="请输入公司类型"></el-input>
@@ -741,18 +741,27 @@ export default {
       this.distributeDialog = true
     },
     distribute(){
-      if (this.distributeForm.nickname == '') {
+      if (!this.distributeForm.nickname || this.distributeForm.nickname == '') {
         this.$message({
-          message: '客户称呼不能为空',
+          message: '短信称呼不能为空',
           type: 'error',
           showClose: true,
           duration: 1000
         })
         return
       }
-      if (this.distributeForm.phone == '') {
+      if (!this.distributeForm.phone || this.distributeForm.phone == '') {
         this.$message({
           message: '手机号不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.distributeForm.phone.length != 11) {
+        this.$message({
+          message: '请输入11位合法手机号',
           type: 'error',
           showClose: true,
           duration: 1000
