@@ -347,7 +347,7 @@ export default {
             intentionDistributeList(params).then(res => {
               if(res.code == 0){
                 for(let i=0;i<this.intentionList.length;i++){
-                  if(this.intentionList[i].id == row.id) {
+                  if(this.intentionList[i].id == this.followForm.intentionId) {
                     this.$set(this.intentionList[i], 'distributeList', res.data)
                   }
                 }
