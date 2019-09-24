@@ -77,7 +77,7 @@
             </div>
           </div>
           <div class="table" style="padding: 0 40px;">
-            <el-collapse @change="getFollowRecords(item, $event)" accordion>
+            <el-collapse v-model="item.collapseName" @change="getFollowRecords(item, $event)" accordion>
               <el-collapse-item title="跟进记录" name="跟进记录" >
                 <el-table
                   :data="item.recordList"
@@ -336,30 +336,31 @@ export default {
             if (this.intentionList[i].extra && this.intentionList[i].extra != '') {
               this.intentionList[i].extraArr = JSON.parse(this.intentionList[i].extra)
             }
+            this.intentionList[i].collapseName = ''
           }
-          if(this.followForm.intentionId && this.followForm.intentionId != '') {
-            let params = {
-              id: this.followForm.intentionId
-            }
-            intentionFollowUp(params).then(res => {
-              if(res.code == 0){
-                for(let i=0;i<this.intentionList.length;i++){
-                  if(this.intentionList[i].id == this.followForm.intentionId) {
-                    this.$set(this.intentionList[i], 'recordList', res.data)
-                  }
-                }
-              }
-            })
-            intentionDistributeList(params).then(res => {
-              if(res.code == 0){
-                for(let i=0;i<this.intentionList.length;i++){
-                  if(this.intentionList[i].id == this.followForm.intentionId) {
-                    this.$set(this.intentionList[i], 'distributeList', res.data)
-                  }
-                }
-              }
-            })
-          }
+          // if(this.followForm.intentionId && this.followForm.intentionId != '') {
+          //   let params = {
+          //     id: this.followForm.intentionId
+          //   }
+          //   intentionFollowUp(params).then(res => {
+          //     if(res.code == 0){
+          //       for(let i=0;i<this.intentionList.length;i++){
+          //         if(this.intentionList[i].id == this.followForm.intentionId) {
+          //           this.$set(this.intentionList[i], 'recordList', res.data)
+          //         }
+          //       }
+          //     }
+          //   })
+          //   intentionDistributeList(params).then(res => {
+          //     if(res.code == 0){
+          //       for(let i=0;i<this.intentionList.length;i++){
+          //         if(this.intentionList[i].id == this.followForm.intentionId) {
+          //           this.$set(this.intentionList[i], 'distributeList', res.data)
+          //         }
+          //       }
+          //     }
+          //   })
+          // }
         }
       })
     },
