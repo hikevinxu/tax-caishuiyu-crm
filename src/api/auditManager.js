@@ -39,6 +39,15 @@ export function intentionFollowUp(params) {
 }
 
 /**
+ * 分发列表
+ * @function intentionDistributeList
+ * @type 'Get'
+ */
+export function intentionDistributeList(params) {
+  return fetchGet('/intention/distributeList', params)
+}
+
+/**
  * 添加跟进
  * @function intentionSaveFollowUp
  * @type 'Post'

@@ -89,7 +89,7 @@
               </div>
             </div>
             <div class="table" style="padding: 0 40px;">
-              <el-collapse @change="getFollowRecords(item, $event)">
+              <el-collapse @change="getFollowRecords(item, $event)" accordion>
                 <el-collapse-item title="跟进记录" name="跟进记录" >
                   <el-table
                     :data="item.recordList"
@@ -103,6 +103,35 @@
                     <el-table-column label="内容记录" align="center">
                       <template slot-scope="scope">
                         <span>{{ scope.row.opContent }}</span>
+                      </template>
+                    </el-table-column>
+
+                    <el-table-column label="操作者" width="200px" align="center">
+                      <template slot-scope="scope">
+                        <span>{{ scope.row.opName }}</span>
+                      </template>
+                    </el-table-column>
+
+                    <el-table-column label="时间" width="200px" align="center">
+                      <template slot-scope="scope">
+                        <span>{{ scope.row.createTime }}</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </el-collapse-item>
+                <el-collapse-item title="分发记录" name="分发记录">
+                  <el-table
+                    :data="item.distributeList"
+                    border
+                    fit
+                    highlight-current-row
+                    style="width: 100%;">
+
+                    <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
+
+                    <el-table-column label="内容记录" align="center">
+                      <template slot-scope="scope">
+                        <span>{{ scope.row.remark }}</span>
                       </template>
                     </el-table-column>
 
@@ -217,7 +246,7 @@ import Pagination from '@/components/Pagination' // Secondary package based on e
 import global from '@/utils/global'
 import { intentionReview, intentionDetail } from '@/api/customer'
 import { intentionServiceExtend, intentionTrees, addressTrees } from '@/api/global'
-import { intentionManageDetail, intentionFollowUp, intentionSaveFollowUp, intentionSave, userSave, intentionDistribute } from '@/api/auditManager'
+import { intentionManageDetail, intentionFollowUp, intentionSaveFollowUp, intentionSave, userSave, intentionDistribute, intentionDistributeList } from '@/api/auditManager'
 
 export default {
   components: { Pagination },
@@ -356,6 +385,15 @@ export default {
                 }
               }
             })
+            intentionDistributeList(params).then(res => {
+              if(res.code == 0){
+                for(let i=0;i<this.intentionList.length;i++){
+                  if(this.intentionList[i].id == row.id) {
+                    this.$set(this.intentionList[i], 'distributeList', res.data)
+                  }
+                }
+              }
+            })
           }
         }
       })
@@ -381,21 +419,37 @@ export default {
       this.listQuery.areaCode = val[val.length - 1]
     },
     getFollowRecords(row, val){
-      if (val.length == 0) {
+      console.log(val)
+      if (val == '') {
         return
       }
-      let params = {
-        id: row.id
-      }
-      intentionFollowUp(params).then(res => {
-        if(res.code == 0){
-          for(let i=0;i<this.intentionList.length;i++){
-            if(this.intentionList[i].id == row.id) {
-              this.$set(this.intentionList[i], 'recordList', res.data)
+      if (val == '跟进记录') {
+        let params = {
+          id: row.id
+        }
+        intentionFollowUp(params).then(res => {
+          if(res.code == 0){
+            for(let i=0;i<this.intentionList.length;i++){
+              if(this.intentionList[i].id == row.id) {
+                this.$set(this.intentionList[i], 'recordList', res.data)
+              }
             }
           }
+        })
+      }else if(val == '分发记录') {
+        let params = {
+          id: row.id
         }
-      })
+        intentionDistributeList(params).then(res => {
+          if(res.code == 0){
+            for(let i=0;i<this.intentionList.length;i++){
+              if(this.intentionList[i].id == row.id) {
+                this.$set(this.intentionList[i], 'distributeList', res.data)
+              }
+            }
+          }
+        })
+      }
     },
     resetFollowForm() {
       this.followForm = {
