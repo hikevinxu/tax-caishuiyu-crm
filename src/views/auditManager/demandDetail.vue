@@ -531,8 +531,37 @@ export default {
     // },
     intentionCodeChange(val) {
       if (val.length != 0) {
-        this.followForm.intentionCode = val[val.length - 1]
-        this.getIntentionServiceExtend(val[val.length - 1])
+        for(let i=0;i<this.intentionCodeList.length;i++){
+          if(val[0] == this.intentionCodeList[i].code) {
+            if (val.length == 1) {
+              this.followForm.intention = this.intentionCodeList[i].name
+              this.followForm.intentionCode = val[val.length - 1]
+              this.getIntentionServiceExtend(val[val.length - 1])
+            } else {
+              if(this.intentionCodeList[i].childs && this.intentionCodeList[i].childs.length > 0) {
+                for (let j=0;j<this.intentionCodeList[i].childs.length;j++) {
+                  if(val[1] == this.intentionCodeList[i].childs[j].code) {
+                    if (val.length == 2) {
+                      this.followForm.intention = this.intentionCodeList[i].childs[j].name
+                      this.followForm.intentionCode = val[val.length - 1]
+                      this.getIntentionServiceExtend(val[val.length - 1])
+                    } else {
+                      for(let k=0;k<this.intentionCodeList[i].childs[j].childs.length;k++) {
+                        if (val[2] == this.intentionCodeList[i].childs[j].childs[k].code) {
+                          if(val.length == 3){
+                            this.followForm.intention = this.intentionCodeList[i].childs[j].childs[k].name
+                            this.followForm.intentionCode = val[val.length - 1]
+                            this.getIntentionServiceExtend(val[val.length - 1])
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       } else {
         this.inputList = []
       }
