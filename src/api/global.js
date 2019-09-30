@@ -10,6 +10,15 @@ export function addressTrees() {
 }
 
 /**
+ * 获取所有省市列表
+ * @function getAddressCityTrees
+ * @type 'Get'
+ */
+export function getAddressCityTrees (params) {
+  return fetchGet('/intention/city_trees', params)
+}
+
+/**
  * 服务类目列表接口
  * @function intentionTrees
  * @type 'get'

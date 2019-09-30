@@ -1,5 +1,5 @@
 <template>
-  <div class="review">
+  <div class="reviewTask">
     <div class="filter-container">
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.name" clearable placeholder="请输入客户称呼" />
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.phone" clearable placeholder="请输入手机号/四位尾号" />
@@ -13,6 +13,7 @@
         <el-option v-for="item in followStatusList" :key="item.name + item.id" :label="item.name" :value="item.id"></el-option>
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
+      <el-button v-waves class="filter-item" type="danger" @click="transfer">转移</el-button>
     </div>
     <div class="table">
       <el-table
@@ -21,7 +22,10 @@
         border
         fit
         highlight-current-row
+        @selection-change="handleSelectionChange"
         style="width: 100%;">
+
+        <el-table-column type="selection" width="55" align="center"></el-table-column>
 
         <el-table-column label="序号" type="index" :index="1" width="50px" align="center" ></el-table-column>
 
@@ -79,13 +83,19 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="任务时限" width="100" align="center">
+          <template slot-scope="scope">
+            <span v-if="scope.row.time >= 0"><el-tag type="danger">{{ scope.row.time | timeFilters }}</el-tag></span>
+          </template>
+        </el-table-column>
+
         <el-table-column label="操作员" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.opName }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" label="操作"  width="120">
+        <el-table-column align="center" label="操作" width="120">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="lookDetail(scope.row)">查看详情</el-button>
           </template>
@@ -104,6 +114,7 @@ import Pagination from '@/components/Pagination' // Secondary package based on e
 import global from '@/utils/global'
 import { intentionReturnVisit } from '@/api/customer'
 import { intentionTrees, addressTrees } from '@/api/global'
+import { setInterval, clearInterval } from 'timers';
 
 export default {
   components: { Pagination },
@@ -135,7 +146,8 @@ export default {
         value: 'code',
         label: 'name',
         children: 'childs'
-      }
+      },
+      multipleSelection: []
     }
   },
   created() {
@@ -156,6 +168,15 @@ export default {
         if(res.code == 0){
           this.listData = res.data.items
           for(let i=0;i<this.listData.length;i++) {
+            this.listData[i].time = 10
+            this.listData[i].timer = setInterval(() => {
+              this.listData[i].time--
+              this.$set(this.listData, i, this.listData[i])
+              if (this.listData[i].time <= 0) {
+                clearInterval(this.listData[i].timer)
+              }
+              this.$forceUpdate()
+            },1000)
             if (this.listData[i].extra && this.listData[i].extra != '') {
               this.listData[i].extraArr = JSON.parse(this.listData[i].extra)
               for(let j=0;j<this.listData[i].extraArr.length;j++){
@@ -165,6 +186,13 @@ export default {
               }
             }
           }
+          // this.timer = setInterval(() => {
+          //   for(let i=0;i<this.listData.length;i++) {
+          //     this.listData[i].time--
+          //     this.$set(this.listData, i, this.listData[i])
+          //   }
+          //   this.$forceUpdate()
+          // }, 1000)
           this.total = res.data.total
           this.listLoading = false
         }
@@ -216,12 +244,39 @@ export default {
           id: row.id
         }
       })
+    },
+    transfer() {
+      this.$prompt('新负责人', '转移', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({ value }) => {
+        console.log(value.trim())
+        // console.log(this.multipleSelection)
+        if(this.multipleSelection.length <= 0) {
+          this.$message({
+            message: '未选择转移对象',
+            type: 'error',
+            showClose: true,
+            duration: 1000
+          })
+          return
+        }
+        // console.log(this.multipleSelection)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消转移'
+        })
+      })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.review {
+.reviewTask {
   padding: 20px;
   .datePicker {
     display: inline-flex;

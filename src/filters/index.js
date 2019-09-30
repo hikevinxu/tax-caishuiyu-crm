@@ -84,6 +84,24 @@ export function validFilters(valid) {
 }
 
 /**
+ * 上下架过滤器
+ * @function statusFilters
+ * @param status Number 上下架状态码
+ */
+export function timeFilters(time) {
+  if(time > 3600) {
+    let hour = Math.floor(time / 3600)
+    let minuter = Math.floor((time % 3600) / 60)
+    let second = Math.floor(time % 60)
+    return (hour > 9 ? hour : '0' + hour) + ':' + (minuter > 9 ? minuter : '0' + minuter) + ':' + (second > 9 ? second : '0' + second)
+  } else {
+    let minuter = Math.floor(time / 60)
+    let second = Math.floor(time % 60)
+    return (minuter > 9 ? minuter : '0' + minuter) + ':' + (second > 9 ? second : '0' + second)
+  }
+}
+
+/**
  * 
  * @function goTypeFilters
  * @param goType Number 跳转类型

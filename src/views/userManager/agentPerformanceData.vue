@@ -2,7 +2,7 @@
   <div class="agentPerformanceData">
     <div class="filter-container">
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.name" placeholder="请输入姓名" />
-      <el-date-picker class="filter-item datePicker" @change="getSearchList" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd hh:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+      <el-date-picker class="filter-item datePicker" @change="dateChange" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
     </div>
     <div class="table">
@@ -54,7 +54,7 @@
 
       </el-table>
 
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
   </div>
 </template>
@@ -62,7 +62,7 @@
 
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import { performanceIndex } from '@/api/userManager'
+import { performanceManageIndex } from '@/api/userManager'
 
 export default {
   components: { Pagination },
@@ -73,7 +73,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         name: '',
-        date: ''
+        date: '',
+        startDate: '',
+        endDate: ''
       },
       listLoading: false,
       listData: [],
@@ -86,7 +88,13 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      performanceIndex(this.listQuery).then(res => {
+      let params = {}
+      for(let key  in this.listQuery){
+        if(this.listQuery[key] !== '' || this.listQuery[key]) {
+          params[key] = this.listQuery[key]
+        }
+      }
+      performanceManageIndex(params).then(res => {
         if(res.code == 0){
           console.log(res)
           this.listData = res.data.items
@@ -99,6 +107,16 @@ export default {
       this.listQuery.pageNum = 1
       this.listQuery.pageSize = 10
       this.getList()
+    },
+    dateChange(val) {
+      if (val) {
+        this.listQuery.startDate = this.listQuery.date[0]
+        this.listQuery.endDate = this.listQuery.date[1]
+      } else {
+        this.listQuery.startDate = ''
+        this.listQuery.endDate = ''
+      }
+      this.getSearchList()
     },
     lookDetail(row) {
       this.$router.push({

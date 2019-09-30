@@ -7,11 +7,16 @@
       <tags-view/>
       <app-main/>
     </div>
+    <Socket></Socket>
+    <right-panel v-if="showSettings">
+      <Messages />
+    </right-panel>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain, TagsView } from './components'
+import RightPanel from '@/components/RightPanel'
+import { Navbar, Sidebar, AppMain, TagsView, Socket, Messages } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -20,7 +25,10 @@ export default {
     Navbar,
     Sidebar,
     AppMain,
-    TagsView
+    TagsView,
+    Socket,
+    RightPanel,
+    Messages
   },
   mixins: [ResizeMixin],
   computed: {
@@ -37,6 +45,11 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
+    }
+  },
+  data() {
+    return {
+      showSettings: true
     }
   },
   methods: {

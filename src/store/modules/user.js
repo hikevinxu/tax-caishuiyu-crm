@@ -5,6 +5,7 @@ import { Message } from 'element-ui'
 const user = {
   state: {
     user: '',
+    userId: localStorage.getItem('userId'),
     status: '',
     code: '',
     token: getToken(),
@@ -38,6 +39,9 @@ const user = {
     SET_NAME: (state, name) => {
       state.name = name
     },
+    SET_USERID: (state, userId) => {
+      state.userId = userId
+    },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
@@ -70,6 +74,8 @@ const user = {
             commit('SET_TOKEN', data.accessToken)
             // localStorage.setItem('SET_USER_ROLES_PERMISSIONS', JSON.stringify(data))
             setToken(response.data.accessToken)
+            commit('SET_USERID', data.authInfo.id)
+            localStorage.setItem('userId', data.authInfo.id)
             resolve()
           } else {
             Message({

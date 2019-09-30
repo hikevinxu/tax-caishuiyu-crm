@@ -20,6 +20,12 @@ const global = {
   statusList: [
     {name: '待上架',id: 0},
     {name: '已上架',id: 1}
+  ],
+  endDemandReason: [
+    {name: '已经在对接中',id: 1},
+    {name: '已经处理好了',id: 2},
+    {name: '目前需要重新考虑',id: 3},
+    {name: '目前暂时不需要办理了',id: 4},
   ]
 }
 export default global

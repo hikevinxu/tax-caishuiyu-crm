@@ -81,7 +81,7 @@ export const asyncRouterMap = [
     meta: {
       title: '用户管理',
       icon: 'table',
-      roles: ['USER_MA', 'ROLE_MA']
+      roles: ['USER_MA', 'ROLE_MA', 'CUSTOMER_PER']
     },
     children: [
       {
@@ -100,7 +100,6 @@ export const asyncRouterMap = [
         path: 'agentPerformanceData',
         component: () => import('@/views/userManager/agentPerformanceData'),
         name: 'agentPerformanceData',
-        hidden: true,
         meta: { title: '客服绩效', noCache: true, roles: ['CUSTOMER_PER'] }
       },
       {
@@ -145,7 +144,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'detail',
-        component: () => import('@/views/auditManager/demandDetail'),
+        component: () => import('@/views/auditManager/demandDetail2'),
         name: 'auditManagerDemandDetail',
         hidden: true,
         meta: { title: '需求详情', noCache: true, path: '/auditManager/demand' }
@@ -199,23 +198,14 @@ export const asyncRouterMap = [
     meta: {
       title: '客服管理',
       icon: 'table',
-      roles: ['PRE_AUDIT', 'REVISIT_MA']
+      roles: ['PERSON_PER', 'PRE_AUDIT', 'REVISIT_MA']
     },
     children: [
       {
         path: 'myPerformance',
         component: () => import('@/views/customer/myPerformance'),
         name: 'myPerformance',
-        hidden: true,
         meta: { title: '我的业绩', noCache: true, roles: ['PERSON_PER'] }
-      },
-      {
-        path: 'detail',
-        component: () => import('@/views/customer/performanceDetail'),
-        name: 'customerPerformanceDetail',
-        hidden: true,
-        hidden: true,
-        meta: { title: '绩效详情', noCache: true, roles: ['PERSON_PER'], path: '/customer/myPerformance' }
       },
       {
         path: 'demand',
@@ -228,6 +218,12 @@ export const asyncRouterMap = [
         component: () => import('@/views/customer/review'),
         name: 'review',
         meta: { title: '回访管理', noCache: true, roles: ['REVISIT_MA'] }
+      },
+      {
+        path: 'reviewTask',
+        component: () => import('@/views/customer/reviewTask'),
+        name: 'reviewTask',
+        meta: { title: '回访任务', noCache: true }
       },
       {
         path: 'reviewDetail',

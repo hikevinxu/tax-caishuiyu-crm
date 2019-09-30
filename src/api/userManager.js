@@ -92,32 +92,30 @@ export function permissionAllPermissions(params) {
 }
 
 /**
- * 客服绩效列表
- * @function performanceIndex
- * @type 'post'
+ * 主管客服绩效列表
+ * @function performanceManageIndex
+ * @type 'Post'
  */
-export function performanceIndex(params) {
-  return fetchPost('/performance/index', params)
+export function performanceManageIndex(params) {
+  return fetchPost('/performance/manage/index', params)
 }
 
 /**
- * 客服绩效详情
- * @function performancePersonDetail
- * @type 'post'
+ * 主管绩效详情接口
+ * @function performanceManageDetail
+ * @type 'Get'
  */
-export function performancePersonDetail(params) {
-  let paramsString = qs.stringify(params)
-  return fetchPost('/performance/person/detail', paramsString)
-} 
+export function performanceManageDetail(params) {
+  return fetchGet('/performance/manage/detail', params)
+}
 
 /**
- * 客服个人绩效首页
- * @function performancePersonIndex
- * @type 'post'
+ * 主管客服个人绩效列表（统计）
+ * @function performanceManagePersonQuery
+ * @type 'Post'
  */
-export function performancePersonIndex(params) {
-  // let paramsString = qs.stringify(params)
-  return fetchPost('/performance/person/index', params)
+export function performanceManagePersonQuery(params) {
+  return fetchPost('/performance/manage/person/query', params)
 }
 
 /**

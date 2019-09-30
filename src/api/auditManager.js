@@ -7,7 +7,7 @@ import qs from 'qs'
  * @type 'Post'
  */
 export function intentionIndex(params) {
-  return fetchPost('/intention/index', params)
+  return fetchPost('/intention/v2/index', params)
 }
 
 
@@ -26,7 +26,7 @@ export function intentionSave(params) {
  * @type 'Post'
  */
 export function intentionManageDetail(params) {
-  return fetchPost('/intention/manage/detail', params)
+  return fetchPost('/intention/v2/manage/detail', params)
 }
 
 /**
@@ -48,21 +48,21 @@ export function intentionDistributeList(params) {
 }
 
 /**
- * 添加跟进
- * @function intentionSaveFollowUp
- * @type 'Post'
- */
-export function intentionSaveFollowUp(params) {
-  return fetchPost('/intention/save/followUp', params)
-}
-
-/**
  * 用户数据编辑
  * @function userSave
  * @type 'Post'
  */
 export function userSave(params) {
   return fetchPost('/user/save', params)
+}
+
+/**
+ * 添加跟进
+ * @function intentionSaveFollowUp
+ * @type 'Post'
+ */
+export function intentionSaveFollowUp(params) {
+  return fetchPost('/intention/save/followUp', params)
 }
 
 
@@ -73,4 +73,14 @@ export function userSave(params) {
  */
 export function intentionDistribute(params) {
   return fetchPost('/intention/v1/distribute', params)
+}
+
+
+/**
+ * 结束需求接口
+ * @function intentionEndService
+ * @type 'Post'
+ */
+export function intentionEndService(params) {
+  return fetchPost('/intention/endService', params)
 }

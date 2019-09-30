@@ -7,7 +7,7 @@ import qs from 'qs'
  * @type 'Post'
  */
 export function intentionReview(params) {
-  return fetchPost('/intention/review', params)
+  return fetchPost('/intention/v2/review', params)
 }
 
 /**
@@ -16,7 +16,7 @@ export function intentionReview(params) {
  * @type 'Post'
  */
 export function intentionReturnVisit(params) {
-  return fetchPost('/intention/returnVisit', params)
+  return fetchPost('intention/v2/returnVisit', params)
 }
 
 /**
@@ -25,5 +25,23 @@ export function intentionReturnVisit(params) {
  * @type 'Post'
  */
 export function intentionDetail(params) {
-  return fetchPost('/intention/detail', params)
+  return fetchPost('/intention/v2/detail', params)
+}
+
+/**
+ * 客服个人绩效详情
+ * @function performancePersonDetail
+ * @type 'Get'
+ */
+export function performancePersonDetail(params) {
+  return fetchGet('/performance/person/detail', params)
+}
+
+/**
+ * 客服个人绩效列表（统计）
+ * @function performancePersonIndex
+ * @type 'post'
+ */
+export function performancePersonIndex(params) {
+  return fetchPost('/performance/person/index', params)
 }
