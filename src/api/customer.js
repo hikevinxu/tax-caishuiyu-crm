@@ -16,7 +16,7 @@ export function intentionReview(params) {
  * @type 'Post'
  */
 export function intentionReturnVisit(params) {
-  return fetchPost('intention/v2/returnVisit', params)
+  return fetchPost('/intention/v2/returnVisit', params)
 }
 
 /**
@@ -44,4 +44,13 @@ export function performancePersonDetail(params) {
  */
 export function performancePersonIndex(params) {
   return fetchPost('/performance/person/index', params)
+}
+
+/**
+ * 回访任务列表接口new
+ * @function intentionReturnVisitTask
+ * @type 'Post'
+ */
+export function intentionReturnVisitTask(params) {
+  return fetchPost('/intention/returnVisitTask', params)
 }

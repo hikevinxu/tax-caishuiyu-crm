@@ -27,6 +27,7 @@ export default {
 <style lang="scss" scoped>
 .performanceDetail {
   padding: 20px;
+  min-height: calc(100vh - 84px);
   .datePicker {
     display: inline-flex;
   }

@@ -144,7 +144,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'detail',
-        component: () => import('@/views/auditManager/demandDetail2'),
+        component: () => import('@/views/auditManager/demandDetail'),
         name: 'auditManagerDemandDetail',
         hidden: true,
         meta: { title: '需求详情', noCache: true, path: '/auditManager/demand' }
@@ -217,13 +217,13 @@ export const asyncRouterMap = [
         path: 'review',
         component: () => import('@/views/customer/review'),
         name: 'review',
-        meta: { title: '回访管理', noCache: true, roles: ['REVISIT_MA'] }
+        meta: { title: '历史回访记录', noCache: true, roles: ['REVISIT_MA'] }
       },
       {
         path: 'reviewTask',
         component: () => import('@/views/customer/reviewTask'),
         name: 'reviewTask',
-        meta: { title: '回访任务', noCache: true }
+        meta: { title: '限时回访任务', noCache: true, roles: ['REVISIT_MA'] }
       },
       {
         path: 'reviewDetail',
@@ -231,6 +231,13 @@ export const asyncRouterMap = [
         name: 'reviewDetail',
         hidden: true,
         meta: { title: '回访详情', noCache: true, roles: ['REVISIT_MA'], path: '/customer/review' }
+      },
+      {
+        path: 'taskDetail',
+        component: () => import('@/views/customer/reviewTaskDetail'),
+        name: 'taskDetail',
+        hidden: true,
+        meta: { title: '回访详情', noCache: true, roles: ['REVISIT_MA'], path: '/customer/reviewTask' }
       }
     ]
   },

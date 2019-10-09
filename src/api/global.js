@@ -10,6 +10,15 @@ export function addressTrees() {
 }
 
 /**
+ * 地区编码接口(国-省市区)
+ * @function addressGlobalTrees
+ * @type 'get'
+ */
+export function addressGlobalTrees() {
+  return fetchGet('/address/globalTrees')
+}
+
+/**
  * 获取所有省市列表
  * @function getAddressCityTrees
  * @type 'Get'

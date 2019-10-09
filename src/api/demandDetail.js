@@ -55,10 +55,46 @@ export function servicesSave(params) {
 }
 
 /**
+ * 跟进列表
+ * @function intentionFollowUp
+ * @type 'Get'
+ */
+export function intentionFollowUp(params) {
+  return fetchGet('/intention/followUp', params)
+}
+
+/**
+ * 用户数据编辑
+ * @function userSave
+ * @type 'Post'
+ */
+export function userSave(params) {
+  return fetchPost('/user/save', params)
+}
+
+/**
  * 根据手机号获取商户信息
  * @function merchantGetByPhone
  * @type 'get'
  */
 export function merchantGetByPhone(params) {
   return fetchGet('/merchant/getByPhone', params)
+}
+
+/**
+ * 需求分发接口new
+ * @function intentionDistribute
+ * @type 'Post'
+ */
+export function intentionDistribute(params) {
+  return fetchPost('/intention/v2/distribute', params)
+}
+
+/**
+ * 查询操作员列表
+ * @function opUserIndex
+ * @type 'Post'
+ */
+export function opUserIndex(params) {
+  return fetchPost('/opUser/index', params)
 }

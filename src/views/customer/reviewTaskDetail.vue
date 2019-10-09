@@ -1,12 +1,12 @@
 <template>
-  <div class="demandDetail2">
-    <Demand-Detail pageId="demandDetail" :currentId="currentId" :customerInfo="customerInfo" :serviceIntentionList="serviceIntentionList" @getNextData="getNextData" @init="getDetail"></Demand-Detail>
+  <div class="reviewTaskDetail">
+    <Demand-Detail pageId="reviewTaskDetail" :currentId="currentId" :customerInfo="customerInfo" :serviceIntentionList="serviceIntentionList" @getNextData="getNextData" @init="getDetail"></Demand-Detail>
   </div>
 </template>
 <script>
 
 import DemandDetail from '../components/demandDetail/index.vue'
-import { intentionManageDetail } from '@/api/auditManager'
+import { intentionDetail } from '@/api/customer'
 import { intentionNext } from '@/api/demandDetail'
 
 export default {
@@ -27,7 +27,7 @@ export default {
       let params = {
         siId: this.currentId
       }
-      intentionManageDetail(params).then(res => {
+      intentionDetail(params).then(res => {
         if(res.code == 0){
           this.customerInfo = res.data.customerInfo || {}
           this.serviceIntentionList = res.data.serviceIntentionList || []
@@ -78,7 +78,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.demandDetail2 {
+.reviewTaskDetail {
   padding: 20px;
   min-height: calc(100vh - 84px);
 }

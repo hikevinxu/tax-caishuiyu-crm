@@ -1,6 +1,5 @@
 <template>
   <div class="socket">
-
   </div>
 </template>
 <script>
@@ -10,15 +9,21 @@ export default {
       notifications: {}
     }
   },
+  computed: {
+    messageList() {
+      return this.$store.getters.messageList
+    }
+  },
   created() {
     let that = this
     if(window.WebSocket) {
       console.log(that.$store.getters.userId)
+      console.log(process.env.BASE_API.replace(/http/, "ws"))
       // var ws = new WebSocket('ws://127.0.0.1:8001')
-      var ws = new WebSocket('ws://172.100.10.81:8080/websocket/' + that.$store.getters.userId)
+      var ws = new WebSocket(process.env.BASE_API.replace(/http/, "ws") + '/websocket/' + that.$store.getters.userId)
       ws.onopen = function(e){
         console.log("连接服务器成功")
-        ws.send("game2")
+        // ws.send("game2")
       }
       ws.onclose = function(e){
         console.log("服务器关闭")
@@ -27,14 +32,14 @@ export default {
         console.log("连接出错")
       }
       ws.onmessage = function(e){
-        console.log(e)
-        let data = e.data
-        
+        let data = JSON.parse(e.data)
+        data.messageId = data.r
         let messageList = that.$store.getters.messageList
-        messageList.push({
-          id: (new Date()).valueOf(),
-          name: data
-        })
+        // messageList.push({
+        //   id: (new Date()).valueOf(),
+        //   name: data
+        // })
+        messageList.push(data)
         that.$store.dispatch('setMessageList', messageList)
 
         let notify = that.$notify({
@@ -46,7 +51,7 @@ export default {
           dangerouslyUseHTMLString: true,
           message: that.$createElement('div', null,
             [
-              that.$createElement('div', null, [that.$createElement('span', null, `需求为${data}的客户，需要在5分钟内回访请及时处理！`)]),
+              that.$createElement('div', null, [that.$createElement('span', null, `需求为${data.name}的客户，需要在5分钟内回访请及时处理！`)]),
               that.$createElement('div', null,
                 [
                   that.$createElement(
@@ -60,8 +65,18 @@ export default {
                       },
                       on: {
                         click: () => {
-                          alert(133)
-                          that.notifications[data].close()
+                          that.notifications[data.messageId].close()
+                          for(let i=0;i<that.messageList.length;i++) {
+                            if(that.messageList[i].messageId == data.messageId) {
+                              that.messageList.splice(i, 1)
+                            }
+                          }
+                          that.$router.push({
+                            path: '/customer/taskDetail',
+                            query: {
+                              id: data.id
+                            }
+                          })
                         }
                       }
                     },
@@ -73,7 +88,7 @@ export default {
           ),
         })
         console.log(notify)
-        that.notifications[data] = notify
+        that.notifications[data.messageId] = notify
       }
     }
   },

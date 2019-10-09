@@ -43,15 +43,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="业务需求" width="150" align="center">
+        <el-table-column label="业务类型" width="150" align="center">
           <template slot-scope="scope">
             <span><el-tag>{{ scope.row.intention }}</el-tag></span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="需求子类" width="150" align="center">
-          <template slot-scope="scope">
-            <span v-if="scope.row.serviceRequirements"><el-tag>{{ scope.row.serviceRequirements }}</el-tag></span>
           </template>
         </el-table-column>
 
@@ -61,25 +55,25 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="跟进状态" align="center">
+        <el-table-column label="询价单" width="100" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.followUpCount }}次</span>
+            <span>{{ scope.row.distributedCount +  '/' + scope.row.totalCount  }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="联系状态" width="150" align="center">
+        <el-table-column label="需求状态" width="120" align="center">
           <template slot-scope="scope">
-            <span><el-tag type="danger">{{ scope.row.followStatus | followStatusFilter }}</el-tag></span>
+            <span><el-tag type="danger">{{ scope.row.status | demandStatusFilters }}</el-tag></span>
           </template>
         </el-table-column>
 
-        <el-table-column label="分发次数" align="center">
+        <el-table-column label="回访时限" width="100" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.distributeCount }}</span>
+            <span v-if="scope.row.time >= 0"><el-tag type="danger">{{ scope.row.time | timeFilters }}</el-tag></span>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作员" align="center">
+        <el-table-column label="操作员" width="120" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.opName }}</span>
           </template>
@@ -103,7 +97,7 @@ import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import global from '@/utils/global'
 import { intentionReturnVisit } from '@/api/customer'
-import { intentionTrees, addressTrees } from '@/api/global'
+import { intentionTrees, addressGlobalTrees } from '@/api/global'
 
 export default {
   components: { Pagination },
@@ -134,7 +128,8 @@ export default {
       props: {
         value: 'code',
         label: 'name',
-        children: 'childs'
+        children: 'childs',
+        checkStrictly: true
       }
     }
   },
@@ -156,6 +151,15 @@ export default {
         if(res.code == 0){
           this.listData = res.data.items
           for(let i=0;i<this.listData.length;i++) {
+            this.listData[i].time = parseInt(new Date(this.listData[i].expireTime).getTime()/1000 - new Date().getTime()/1000)
+            this.listData[i].timer = setInterval(() => {
+              this.listData[i].time--
+              this.$set(this.listData, i, this.listData[i])
+              if (this.listData[i].time <= 0) {
+                clearInterval(this.listData[i].timer)
+              }
+              this.$forceUpdate()
+            },1000)
             if (this.listData[i].extra && this.listData[i].extra != '') {
               this.listData[i].extraArr = JSON.parse(this.listData[i].extra)
               for(let j=0;j<this.listData[i].extraArr.length;j++){
@@ -195,7 +199,7 @@ export default {
       })
     }, 
     getAddressTrees() {
-      addressTrees().then(res => {
+      addressGlobalTrees().then(res => {
         if(res.code == 0){
           this.areaCodeList = res.data
         }

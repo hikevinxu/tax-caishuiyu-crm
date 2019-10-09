@@ -25,7 +25,7 @@
 
         <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
 
-        <el-table-column label="称呼" width="100px" align="center">
+        <el-table-column label="称呼" width="120px" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
           </template>
@@ -43,15 +43,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="业务需求" align="center">
+        <el-table-column label="业务类型" width="150" align="center">
           <template slot-scope="scope">
             <span><el-tag>{{ scope.row.intention }}</el-tag></span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="需求子类" align="center">
-          <template slot-scope="scope">
-            <span v-if="scope.row.serviceRequirements"><el-tag>{{ scope.row.serviceRequirements }}</el-tag></span>
           </template>
         </el-table-column>
 
@@ -61,25 +55,19 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="跟进状态" align="center">
+        <el-table-column label="询价单" width="100" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.followUpCount }}次</span>
+            <span>{{ scope.row.distributedCount +  '/' + scope.row.totalCount  }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="联系状态" align="center">
+        <el-table-column label="需求状态" width="120" align="center">
           <template slot-scope="scope">
-            <span><el-tag type="danger">{{ scope.row.followStatus | followStatusFilter }}</el-tag></span>
+            <span><el-tag type="danger">{{ scope.row.status | demandStatusFilters }}</el-tag></span>
           </template>
         </el-table-column>
 
-        <el-table-column label="分发次数" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.distributeCount }}次</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="操作员" align="center">
+        <el-table-column label="操作员" width="120" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.opName }}</span>
           </template>
@@ -103,7 +91,7 @@ import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import global from '@/utils/global'
 import { intentionIndex } from '@/api/auditManager'
-import { intentionTrees, addressTrees } from '@/api/global'
+import { intentionTrees, addressGlobalTrees } from '@/api/global'
 
 export default {
   components: { Pagination },
@@ -134,7 +122,8 @@ export default {
       props: {
         value: 'code',
         label: 'name',
-        children: 'childs'
+        children: 'childs',
+        checkStrictly: true
       }
     }
   },
@@ -195,7 +184,7 @@ export default {
       })
     }, 
     getAddressTrees() {
-      addressTrees().then(res => {
+      addressGlobalTrees().then(res => {
         if(res.code == 0){
           this.areaCodeList = res.data
         }
@@ -206,6 +195,7 @@ export default {
       this.getSearchList()
     },
     areaCodeChange(val) {
+      console.log(val)
       this.listQuery.areaCode = val[val.length - 1]
       this.getSearchList()
     },

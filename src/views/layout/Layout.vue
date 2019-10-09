@@ -8,13 +8,14 @@
       <app-main/>
     </div>
     <Socket></Socket>
-    <right-panel v-if="showSettings">
+    <right-panel v-permission="['REVISIT_MA']" v-if="showSettings">
       <Messages />
     </right-panel>
   </div>
 </template>
 
 <script>
+import permission from '@/directive/permission/index.js' // 权限判断指令
 import RightPanel from '@/components/RightPanel'
 import { Navbar, Sidebar, AppMain, TagsView, Socket, Messages } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
@@ -30,6 +31,7 @@ export default {
     RightPanel,
     Messages
   },
+  directives: { permission },
   mixins: [ResizeMixin],
   computed: {
     sidebar() {

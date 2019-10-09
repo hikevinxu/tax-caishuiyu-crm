@@ -1,5 +1,5 @@
 <template>
-  <div class="performanceDetail">
+  <div class="performanceDetailComponent">
     <el-row :gutter="20" class="performanceData">
        <el-col :span="10">
         <el-card class="box-card">
@@ -308,9 +308,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.performanceDetail {
-  padding: 20px;
-  min-height: calc(100vh - 84px);
+.performanceDetailComponent {
   min-width: 1000px;
   .content {
     height: 60px;

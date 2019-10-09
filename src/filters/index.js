@@ -84,9 +84,9 @@ export function validFilters(valid) {
 }
 
 /**
- * 上下架过滤器
+ * 时间过滤器
  * @function statusFilters
- * @param status Number 上下架状态码
+ * @param time Number 时间
  */
 export function timeFilters(time) {
   if(time > 3600) {
@@ -103,39 +103,22 @@ export function timeFilters(time) {
 
 /**
  * 
- * @function goTypeFilters
- * @param goType Number 跳转类型
+ * @function demandStatusFilters
+ * @param demandStatus Number 需求状态
  */
-export function goTypeFilters(goType) {
-  switch (goType) {
+export function demandStatusFilters(demandStatus) {
+  switch (demandStatus) {
     case 1:
-      return 'H5URL'
+      return '商户未响应'
       break;
     case 2:
-      return '原生'
+      return '商户报价中'
       break;
     case 3:
-      return '无跳转'
+      return '需求待分发'
+      break;
+    case 4:
+      return '询价已结束'
       break;
   }
 }
-
-/**
- * 原生页面过滤器
- * @function pageUrlFilters
- * @param status Number 上下架状态码
- */
-export function pageUrlFilters(status) {
-  switch (status) {
-    case "main/home/queryService/company":
-      return '公司详情页'
-      break;
-    case "main/home/queryService/servicer":
-      return '服务详情页'
-      break;
-    default: 
-      return ''
-      break;
-  }
-}
-
