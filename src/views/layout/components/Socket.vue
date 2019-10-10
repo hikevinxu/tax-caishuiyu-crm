@@ -3,6 +3,7 @@
   </div>
 </template>
 <script>
+import checkPermission from '@/utils/permission' // 权限判断函数
 export default {
   data() {
     return {
@@ -16,8 +17,7 @@ export default {
   },
   created() {
     let that = this
-    if(window.WebSocket) {
-      console.log(that.$store.getters.userId)
+    if(that.checkPermission(["REVISIT_MA"]) && window.WebSocket) {
       console.log(process.env.BASE_API.replace(/http/, "ws"))
       // var ws = new WebSocket('ws://127.0.0.1:8001')
       var ws = new WebSocket(process.env.BASE_API.replace(/http/, "ws") + '/websocket/' + that.$store.getters.userId)
@@ -93,7 +93,7 @@ export default {
     }
   },
   methods: {
-
+    checkPermission
   }
 }
 </script>
