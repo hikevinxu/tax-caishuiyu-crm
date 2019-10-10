@@ -87,7 +87,6 @@ export default {
             ]
           ),
         })
-        console.log(notify)
         that.notifications[data.messageId] = notify
       }
     }

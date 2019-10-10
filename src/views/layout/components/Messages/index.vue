@@ -28,7 +28,6 @@ export default {
     }
   },
   created() {
-    console.log(this.$store.getters.messageList)
   },
   methods: {
     deleteMessage(row) {
