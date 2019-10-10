@@ -63,13 +63,18 @@
 
         <el-table-column label="需求状态" width="120" align="center">
           <template slot-scope="scope">
-            <span><el-tag type="danger">{{ scope.row.status | demandStatusFilters }}</el-tag></span>
+            <span>
+              <el-tag v-if="scope.row.status == 1">{{ scope.row.status | demandStatusFilters }}</el-tag>
+              <el-tag v-if="scope.row.status == 2" type="success">{{ scope.row.status | demandStatusFilters }}</el-tag>
+              <el-tag v-if="scope.row.status == 3" type="warning">{{ scope.row.status | demandStatusFilters }}</el-tag>
+              <el-tag v-if="scope.row.status == 4" type="danger">{{ scope.row.status | demandStatusFilters }}</el-tag>
+            </span>
           </template>
         </el-table-column>
 
         <el-table-column label="回访时限" width="100" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.time >= 0"><el-tag type="success">{{ scope.row.time | timeFilters }}</el-tag></span>
+            <span v-if="scope.row.time >= 0"><el-tag type="info">{{ scope.row.time | timeFilters }}</el-tag></span>
           </template>
         </el-table-column>
 
