@@ -3,7 +3,7 @@
     <div class="container">
       <div class="container-title">消息中心</div>
       <div v-for="(item, index) in messageList" :key="index" class="container_item">
-        <h2 class="title">限时任务{{item.id}}</h2>
+        <h2 class="title">限时任务</h2>
         <div class="el-icon-close" @click="deleteMessage(item)"></div>
         <div class="content">
           需求为{{item.name}}的客户，需要在5分钟内回访请及时处理！
