@@ -9,7 +9,7 @@
           需求为{{item.name}}的客户，需要在5分钟内回访请及时处理！
         </div>
         <div class="bottomBtn">
-          <el-button @click="lookDetail(item.id)" size="mini">查看详情</el-button>
+          <el-button @click="lookDetail(item)" size="mini">查看详情</el-button>
         </div>
       </div>
       <div class="noData" v-if="messageList.length == 0">暂无数据</div>
