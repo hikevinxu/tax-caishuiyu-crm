@@ -1208,7 +1208,7 @@ export default {
       label {
         float: left;
         display: block;
-        width: 100px;
+        width: 110px;
         text-align: right;
         margin-right: 20px;
       }
