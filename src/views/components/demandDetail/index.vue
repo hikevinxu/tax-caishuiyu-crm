@@ -1139,6 +1139,7 @@ export default {
       this.distributeForm.merchantId = this.merchantInfo.id
       this.distributeForm.companyName = this.merchantInfo.companyName
       this.distributeForm.enteringFlag = this.merchantInfo.enteringFlag
+
       if (!this.distributeForm.phone || this.distributeForm.phone == '') {
         this.$message({
           message: '手机号不能为空',
@@ -1148,6 +1149,7 @@ export default {
         })
         return
       }
+
       if (this.distributeForm.phone.length != 11) {
         this.$message({
           message: '请输入11位合法手机号',
@@ -1157,9 +1159,20 @@ export default {
         })
         return
       }
+
       if(!this.distributeForm.companyName || this.distributeForm.companyName == '') {
         this.$message({
           message: '请先检索商户',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+
+      if (!this.distributeForm.enteringFlag) {
+        this.$message({
+          message: '该商户未入驻',
           type: 'error',
           showClose: true,
           duration: 1000
