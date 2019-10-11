@@ -41,9 +41,9 @@
                 <svg-icon icon-class="documentation" />
                 <span style="margin-left: 5px;">需求跟进 - {{serviceIntentionItem.intention}} 需求&nbsp;&nbsp;&nbsp;&nbsp;<el-tag v-if="serviceIntentionItem.status && serviceIntentionItem.status != ''">{{serviceIntentionItem.status | demandStatusFilters}}</el-tag></span>
                 <div style="float: right;margin-right: 10px;">
-                  <el-button v-waves size="mini" type="danger" @click.stop="openEndDemandDialog(serviceIntentionItem)">结束需求</el-button>
-                  <el-button v-waves size="mini" type="primary" @click.stop="openTransferDialog(serviceIntentionItem)">转移</el-button>
-                  <el-button v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openAddInquiryDialog(serviceIntentionItem)">新增询价单</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="danger" @click.stop="openEndDemandDialog(serviceIntentionItem)">结束需求</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="primary" @click.stop="openTransferDialog(serviceIntentionItem)">转移</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openAddInquiryDialog(serviceIntentionItem)">新增询价单</el-button>
                 </div>
               </div>
             </template>
@@ -57,8 +57,8 @@
                     <svg-icon icon-class="form" />
                     <span style="margin-left: 5px;">询价单</span>
                     <div style="float: right">
-                      <el-button v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
-                      <el-button v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
+                      <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
+                      <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
                     </div>
                   </div>
                   <div style="margin-bottom:50px;">
