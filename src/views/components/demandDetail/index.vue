@@ -1108,8 +1108,18 @@ export default {
       }
       merchantGetByPhone(params).then(res => {
         if(res.code == 0){
-          this.merchantInfo = res.data
-          this.merchantMark = 3
+          if (res.data) {
+            this.merchantInfo = res.data
+            this.merchantMark = 3
+          } else {
+            this.merchantMark = 2
+            this.$message({
+              message: '未检索到商户信息',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
+          }
         } else {
           this.merchantMark = 2
         }
