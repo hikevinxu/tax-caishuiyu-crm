@@ -33,6 +33,7 @@ export default {
       }
       ws.onmessage = function(e){
         let data = JSON.parse(e.data)
+        console.log(data)
         data.messageId = data.r
         let messageList = that.$store.getters.messageList
         // messageList.push({
