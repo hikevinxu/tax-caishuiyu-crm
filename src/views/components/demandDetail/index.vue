@@ -17,6 +17,10 @@
             <span>{{customerInfo.name}}</span>
           </div>
           <div class="contentItem">
+            <label>客户自留称呼:</label>
+            <span>{{customerInfo.modifyName}}</span>
+          </div>
+          <div class="contentItem">
             <label>电话号码:</label>
             <span>{{customerInfo.phone}}</span>
           </div>
