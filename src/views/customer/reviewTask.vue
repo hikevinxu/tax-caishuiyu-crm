@@ -61,6 +61,7 @@
         <el-table-column label="回访时限" width="100" align="center">
           <template slot-scope="scope">
             <span v-if="scope.row.time >= 0"><el-tag type="info">{{ scope.row.time | timeFilters }}</el-tag></span>
+            <span v-if="scope.row.time == 0"></span>
           </template>
         </el-table-column>
 
@@ -163,6 +164,7 @@ export default {
               this.listData[i].time--
               this.$set(this.listData, i, this.listData[i])
               if (this.listData[i].time <= 0) {
+                this.listData[i].status = 4
                 clearInterval(this.listData[i].timer)
               }
               this.$forceUpdate()
@@ -176,13 +178,6 @@ export default {
               }
             }
           }
-          // this.timer = setInterval(() => {
-          //   for(let i=0;i<this.listData.length;i++) {
-          //     this.listData[i].time--
-          //     this.$set(this.listData, i, this.listData[i])
-          //   }
-          //   this.$forceUpdate()
-          // }, 1000)
           this.total = res.data.total
           this.listLoading = false
         }
