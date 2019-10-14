@@ -109,13 +109,13 @@ export function timeFilters(time) {
 export function demandStatusFilters(demandStatus) {
   switch (demandStatus) {
     case 1:
-      return '商户未响应'
+      return '需求待分发'
       break;
     case 2:
-      return '商户报价中'
+      return '商户未响应'
       break;
     case 3:
-      return '需求待分发'
+      return '商户报价中'
       break;
     case 4:
       return '询价已结束'
