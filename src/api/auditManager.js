@@ -16,9 +16,9 @@ export function intentionIndex(params) {
  * @function intentionSave
  * @type 'Post'
  */
-export function intentionSave(params) {
-  return fetchPost('/intention/save', params)
-}
+// export function intentionSave(params) {
+//   return fetchPost('/intention/save', params)
+// }
 
 /**
  * 管理员需求详情接口
