@@ -110,7 +110,7 @@
                       </div>
                       <div class="contentItem" v-if="item.quotedMerchant">
                         <label>询价状态:</label>
-                        <span>{{item.quotedMerchant.status}}</span>
+                        <span>{{item.quotedMerchant.status | inquiryFilters}}</span>
                       </div>
                       <div class="contentItem" v-if="item.quotedMerchant">
                         <label>询价时间:</label>

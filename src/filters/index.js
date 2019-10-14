@@ -122,3 +122,25 @@ export function demandStatusFilters(demandStatus) {
       break;
   }
 }
+
+/**
+ * 
+ * @function inquiryFilters
+ * @param status Number 询价单状态
+ */
+export function inquiryFilters(status) {
+  switch (status) {
+    case 1:
+      return '报价中'
+      break;
+    case 2:
+      return '超时未报价'
+      break;
+    case 3:
+      return '已购买'
+      break;
+    case 4:
+      return '反馈价格'
+      break;
+  }
+}
