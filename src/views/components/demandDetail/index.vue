@@ -60,9 +60,9 @@
                   <div slot="header" class="clearfix">
                     <svg-icon icon-class="form" />
                     <span style="margin-left: 5px;">询价单</span>
-                    <div style="float: right">
-                      <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
-                      <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
+                    <div style="float: right" v-if="serviceIntentionItem.status != 4">
+                      <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
+                      <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
                     </div>
                   </div>
                   <div style="margin-bottom:50px;">
@@ -403,8 +403,6 @@ export default {
         followStatus: '',
         companyName: '',
         customerIntention: '',
-        phone: '',
-        name: '',
         areaCode: '',
         area: '',
         intentionCode: '',
@@ -787,8 +785,6 @@ export default {
         followStatus: '',
         companyName: '',
         customerIntention: '',
-        phone: '',
-        name: '',
         areaCode: '',
         area: '',
         intentionCode: '',
