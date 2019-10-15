@@ -83,9 +83,9 @@ export default {
       })
     },
     // init() getDetail 刷新当前页面的数据
-    getDetail() {
+    getDetail(siId) {
       let params = {
-        siId: this.serviceIntentionList[0].id
+        siId: siId || this.serviceIntentionList[0].id
       }
       intentionDetail(params).then(res => {
         if(res.code == 0){

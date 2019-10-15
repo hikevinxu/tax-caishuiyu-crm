@@ -776,7 +776,15 @@ export default {
           this.transferLoading = false
           this.transferDialog = false
           if (this.pageId == 'demandPreTrial') {
-            this.$emit('serviceIntentionListChange', [])
+            if (this.serviceIntentionList.length == 1){
+              this.$emit('serviceIntentionListChange', [])
+            } else {
+              if (this.serviceIntentionList[0].id == this.transferForm.siId) {
+                this.init(this.serviceIntentionList[1].id)
+              } else {
+                this.init()
+              }
+            }
           } else {
             if (this.serviceIntentionList.length == 1){
               this.$router.go(-1)
