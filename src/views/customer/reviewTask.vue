@@ -115,7 +115,7 @@
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import global from '@/utils/global'
-import { intentionReturnVisitTask } from '@/api/customer'
+import { intentionReturnVisitTask, intentionVisitConfirm } from '@/api/customer'
 import { intentionTrees, addressTrees } from '@/api/global'
 import { opUserIndex, intentionTransform } from '@/api/demandDetail'
 import { setInterval, clearInterval } from 'timers'
@@ -192,10 +192,17 @@ export default {
     },
     // 查看详情
     lookDetail(row) {
-      this.$router.push({
-        path: '/customer/taskDetail',
-        query: {
-          id: row.id
+      let params = {
+        siId: row.id
+      }
+      intentionVisitConfirm(params).then(res => {
+        if(res.code == 0){
+          this.$router.push({
+            path: '/customer/taskDetail',
+            query: {
+              id: row.id
+            }
+          })
         }
       })
     },

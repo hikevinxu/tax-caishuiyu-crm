@@ -54,3 +54,12 @@ export function performancePersonIndex(params) {
 export function intentionReturnVisitTask(params) {
   return fetchPost('/intention/returnVisitTask', params)
 }
+
+/**
+ * 回访任务确认接口new
+ * @function intentionVisitConfirm
+ * @type 'Post'
+ */
+export function intentionVisitConfirm(params) {
+  return fetchPost('/intention/visit/confirm', params)
+}
