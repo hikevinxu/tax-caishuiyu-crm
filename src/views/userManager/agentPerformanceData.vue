@@ -30,7 +30,7 @@
 
         <el-table-column label="非首次有效分发" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.account }}</span>
+            <span>{{ scope.row.noneFirstValidCount }}</span>
           </template>
         </el-table-column>
 

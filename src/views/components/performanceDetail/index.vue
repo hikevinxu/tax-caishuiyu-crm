@@ -89,25 +89,25 @@
 
               <el-table-column label="首次有效分发" align="center">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.name }}</span>
+                  <span>{{ scope.row.firstValidCount }}</span>
                 </template>
               </el-table-column>
 
               <el-table-column label="非首次有效分发" align="center">
                 <template slot-scope="scope">
-                  <span class="textHidden">{{ scope.row.quanxian }}</span>
+                  <span class="textHidden">{{ scope.row.noneFirstValidCount }}</span>
                 </template>
               </el-table-column>
 
               <el-table-column label="日期" align="center">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.account }}</span>
+                  <span>{{ scope.row.createTime }}</span>
                 </template>
               </el-table-column>
 
               <el-table-column label="目前绩效" align="center">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.phone }}</span>
+                  <span>{{ scope.row.performance }}</span>
                 </template>
               </el-table-column>
 
