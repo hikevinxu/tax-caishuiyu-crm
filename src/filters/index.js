@@ -144,3 +144,28 @@ export function inquiryFilters(status) {
       break;
   }
 }
+
+/**
+ * 
+ * @function endResonFilters
+ * @param endReson Number 询价单状态
+ */
+export function endResonFilters(endReson) {
+  switch (endReson) {
+    case 1:
+      return '已经在对接中'
+      break;
+    case 2:
+      return '已经处理好了'
+      break;
+    case 3:
+      return '目前需要重新考虑'
+      break;
+    case 4:
+      return '目前暂时不需要办理'
+      break;
+    case 5:
+      return '系统关闭'
+      break;
+  }
+}

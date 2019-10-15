@@ -43,7 +43,7 @@
             <template slot="title">
               <div class="header clearfix">
                 <svg-icon icon-class="documentation" />
-                <span style="margin-left: 5px;">需求跟进 - {{serviceIntentionItem.intention}} 需求&nbsp;&nbsp;&nbsp;&nbsp;<el-tag v-if="serviceIntentionItem.status && serviceIntentionItem.status != ''">{{serviceIntentionItem.status | demandStatusFilters}}</el-tag></span>
+                <span style="margin-left: 5px;">需求跟进 - {{serviceIntentionItem.intention}} 需求&nbsp;&nbsp;&nbsp;&nbsp;<el-tag v-if="serviceIntentionItem.status && serviceIntentionItem.status != ''">{{serviceIntentionItem.status | demandStatusFilters}}</el-tag>&nbsp;&nbsp;&nbsp;&nbsp;<el-tag type="danger" v-if="serviceIntentionItem.endReason && serviceIntentionItem.endReason != ''">{{serviceIntentionItem.endReason | endResonFilters }}</el-tag></span>
                 <div style="float: right;margin-right: 10px;">
                   <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="danger" @click.stop="openEndDemandDialog(serviceIntentionItem)">结束需求</el-button>
                   <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="primary" @click.stop="openTransferDialog(serviceIntentionItem)">转移</el-button>
