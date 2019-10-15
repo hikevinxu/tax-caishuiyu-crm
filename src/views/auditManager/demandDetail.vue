@@ -23,9 +23,9 @@ export default {
     this.getDetail()
   },
   methods: {
-    getDetail(){
+    getDetail(siId){
       let params = {
-        siId: this.currentId
+        siId: siId || this.currentId
       }
       intentionManageDetail(params).then(res => {
         if(res.code == 0){

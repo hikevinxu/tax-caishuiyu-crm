@@ -104,19 +104,19 @@
                         <label>跟进状态:</label>
                         <span>{{item.followUpCount ? item.followUpCount : '0' }}次</span>
                       </div>
-                      <div class="contentItem" v-if="item.quotedMerchant">
+                      <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价公司:</label>
                         <span>{{item.quotedMerchant.companyName}}</span>
                       </div>
-                      <div class="contentItem" v-if="item.quotedMerchant">
+                      <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价状态:</label>
                         <span>{{item.quotedMerchant.status | inquiryFilters}}</span>
                       </div>
-                      <div class="contentItem" v-if="item.quotedMerchant">
+                      <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价时间:</label>
                         <span>{{item.quotedMerchant.quotingTime}}</span>
                       </div>
-                      <div class="contentItem" v-if="item.quotedMerchant">
+                      <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价操作:</label>
                         <span>{{item.quotedMerchant.opName}}</span>
                       </div>
@@ -219,7 +219,7 @@
             <el-input v-model="followForm.companyName" placeholder="请输入公司名称"></el-input>
           </el-form-item>
           <el-form-item style="width: 635px;" label="客户意向：">
-            <el-input v-model="followForm.customerIntention" placeholder="请输入客户意向"></el-input>
+            <el-input maxlength="200" v-model="followForm.customerIntention" placeholder="请输入客户意向"></el-input>
           </el-form-item>
           <el-form-item label="备注：">
             <el-input type="textarea" v-model="followForm.remark"></el-input>
@@ -235,7 +235,7 @@
       <el-dialog class="userInfoDialog" title="编辑" :visible.sync="customerInfoDialog" width="500px">
         <el-form :model="customerInfoForm" label-width="120px">
           <el-form-item label="客户称呼：">
-            <el-input v-model="customerInfoForm.name" placeholder="请输入客户称呼"></el-input>
+            <el-input maxlength="10" v-model="customerInfoForm.name" placeholder="请输入客户称呼"></el-input>
           </el-form-item>
           <el-form-item label="微信号：">
             <el-input v-model="customerInfoForm.wechat" placeholder="请输入微信号"></el-input>
@@ -300,7 +300,7 @@
           </el-form-item>
           <el-form-item label="新负责人：">
             <!-- <el-input v-model="transferForm.opTransUserId" placeholder="请输入新负责人"></el-input> -->
-            <el-select style="width: 300px;" v-model="transferForm.opTransUserId" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteSearchTransUserList" :loading="transUserSearchLoading">
+            <el-select style="width: 300px;" v-model="transferForm.opTransUserId" filterable remote reserve-keyword placeholder="请输入正确交接人" :remote-method="remoteSearchTransUserList" :loading="transUserSearchLoading">
               <el-option v-for="item in transUserList" :key="item.id" :label="item.name" :value="item.id">
                 <span style="float: left">{{ item.name }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px">{{ item.email }}</span>
@@ -453,8 +453,13 @@ export default {
     this.getAddressCityTrees()
   },
   methods: {
-    init() {
-      this.$emit('init')
+    init(siId) {
+      if (siId) {
+        this.$emit('init', siId)
+      } else {
+        this.$emit('init')
+      }
+      
     },
     // 获取 省市 两级树状架构
     getAddressCityTrees() {
@@ -770,7 +775,19 @@ export default {
           })
           this.transferLoading = false
           this.transferDialog = false
-          this.$router.go(-1)
+          if (this.pageId == 'demandPreTrial') {
+            this.serviceIntentionList = []
+          } else {
+            if (this.serviceIntentionList.length == 1){
+              this.$router.go(-1)
+            } else {
+              if (this.serviceIntentionList[0].id == this.transferForm.siId) {
+                this.init(this.serviceIntentionList[1].id)
+              } else {
+                this.init()
+              }
+            }
+          }
         }
       }).catch(err => {
         this.transferLoading = false
