@@ -5,7 +5,7 @@
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.phone" clearable placeholder="请输入手机号/四位尾号" />
       <el-cascader class="filter-item" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
       <el-date-picker class="filter-item datePicker" @change="dateChange" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-      <el-cascader class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择需求区域"></el-cascader>
+      <!-- <el-cascader class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择需求区域"></el-cascader> -->
       <!-- <el-select class="filter-item" v-model="listQuery.followUpCount" @change="getSearchList" clearable placeholder="请选择跟进状态">
         <el-option v-for="item in followUpCountList" :key="item.id" :label="item.name" :value="item.id"></el-option>
       </el-select>
@@ -37,11 +37,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="需求区域" align="center">
+        <!-- <el-table-column label="需求区域" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.area }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column label="业务类型" width="150" align="center">
           <template slot-scope="scope">

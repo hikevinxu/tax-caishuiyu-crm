@@ -23,11 +23,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="需求区域" align="center">
+        <!-- <el-table-column label="需求区域" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.area }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column label="业务类型" width="150" align="center">
           <template slot-scope="scope">
