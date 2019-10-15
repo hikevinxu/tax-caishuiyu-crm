@@ -162,7 +162,7 @@ export function endResonFilters(endReson) {
       return '目前需要重新考虑'
       break;
     case 4:
-      return '目前暂时不需要办理'
+      return '目前暂时不需要办理了'
       break;
     case 5:
       return '系统关闭'

@@ -159,16 +159,18 @@ export default {
         if(res.code == 0){
           this.listData = res.data.items
           for(let i=0;i<this.listData.length;i++) {
-            this.listData[i].time = parseInt(new Date(this.listData[i].expireTime).getTime()/1000 - new Date().getTime()/1000)
-            this.listData[i].timer = setInterval(() => {
-              this.listData[i].time--
-              this.$set(this.listData, i, this.listData[i])
-              if (this.listData[i].time <= 0) {
-                this.listData[i].status = 4
-                clearInterval(this.listData[i].timer)
-              }
-              this.$forceUpdate()
-            },1000)
+            if(this.listData[i].status != 4) {
+              this.listData[i].time = parseInt(new Date(this.listData[i].expireTime).getTime()/1000 - new Date().getTime()/1000)
+              this.listData[i].timer = setInterval(() => {
+                this.listData[i].time--
+                this.$set(this.listData, i, this.listData[i])
+                if (this.listData[i].time <= 0) {
+                  this.listData[i].status = 4
+                  clearInterval(this.listData[i].timer)
+                }
+                this.$forceUpdate()
+              },1000)
+            }
             if (this.listData[i].extra && this.listData[i].extra != '') {
               this.listData[i].extraArr = JSON.parse(this.listData[i].extra)
               for(let j=0;j<this.listData[i].extraArr.length;j++){
