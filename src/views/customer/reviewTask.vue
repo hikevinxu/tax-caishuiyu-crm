@@ -37,7 +37,7 @@
 
         <el-table-column label="更新时间" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.modifyTime }}</span>
+            <span>{{ scope.row.lastModifyTime }}</span>
           </template>
         </el-table-column>
 

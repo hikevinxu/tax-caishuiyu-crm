@@ -215,9 +215,9 @@
           <el-form-item style="width: 635px;" label="需求地区：">
             <el-cascader ref="countryTree" v-model="followForm.addressList" style="width: 400px;" class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" clearable placeholder="请选择需求区域"></el-cascader>
           </el-form-item>
-          <el-form-item style="width: 635px;" label="公司名称：">
+          <!-- <el-form-item style="width: 635px;" label="公司名称：">
             <el-input v-model="followForm.companyName" placeholder="请输入公司名称"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item style="width: 635px;" label="客户意向：">
             <el-input maxlength="200" v-model="followForm.customerIntention" placeholder="请输入客户意向"></el-input>
           </el-form-item>
@@ -401,7 +401,7 @@ export default {
         intentionId: '',
         opContent: '',
         followStatus: '',
-        companyName: '',
+        // companyName: '',
         customerIntention: '',
         areaCode: '',
         area: '',
@@ -800,7 +800,7 @@ export default {
         intentionId: '',
         opContent: '',
         followStatus: '',
-        companyName: '',
+        // companyName: '',
         customerIntention: '',
         areaCode: '',
         area: '',
@@ -961,7 +961,7 @@ export default {
       this.inputList = []
       this.followForm.intentionId = item.id
       this.followForm.followStatus = item.followStatus
-      this.followForm.companyName = item.companyName
+      // this.followForm.companyName = item.companyName
       this.followForm.customerIntention = item.customerIntention
       this.followForm.remark = item.remark
       this.followForm.addressList = item.addressList
