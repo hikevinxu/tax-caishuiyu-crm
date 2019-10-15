@@ -776,7 +776,7 @@ export default {
           this.transferLoading = false
           this.transferDialog = false
           if (this.pageId == 'demandPreTrial') {
-            this.serviceIntentionList = []
+            this.$emit('serviceIntentionListChange', [])
           } else {
             if (this.serviceIntentionList.length == 1){
               this.$router.go(-1)

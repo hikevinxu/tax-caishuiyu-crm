@@ -12,7 +12,7 @@
       </div>
     </el-card>
     <div v-if="serviceIntentionList.length > 0" style="margin-top: 20px;">
-      <Demand-Detail pageId="demandPreTrial" :customerInfo="customerInfo" :serviceIntentionList="serviceIntentionList" @getNextData="getNextData" @init="getDetail"></Demand-Detail>
+      <Demand-Detail pageId="demandPreTrial" :customerInfo="customerInfo" :serviceIntentionList="serviceIntentionList" @getNextData="getNextData" @init="getDetail" @serviceIntentionListChange="serviceIntentionListChange"></Demand-Detail>
     </div>
   </div>
 </template>
@@ -144,6 +144,9 @@ export default {
     queryAreaCodeChange(val) {
       this.listQuery.areaCode = val[val.length - 1]
     },
+    serviceIntentionListChange(val) {
+      this.serviceIntentionList = val
+    }
   }
 }
 </script>
