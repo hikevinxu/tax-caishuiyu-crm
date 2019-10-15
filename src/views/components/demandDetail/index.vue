@@ -43,11 +43,12 @@
             <template slot="title">
               <div class="header clearfix">
                 <svg-icon icon-class="documentation" />
-                <span style="margin-left: 5px;">需求跟进 - {{serviceIntentionItem.intention}} 需求&nbsp;&nbsp;&nbsp;&nbsp;<el-tag v-if="serviceIntentionItem.status && serviceIntentionItem.status != ''">{{serviceIntentionItem.status | demandStatusFilters}}</el-tag>&nbsp;&nbsp;&nbsp;&nbsp;<el-tag type="danger" v-if="serviceIntentionItem.endReason && serviceIntentionItem.endReason != ''">{{serviceIntentionItem.endReason | endResonFilters }}</el-tag></span>
+                <span style="margin-left: 5px;">{{serviceIntentionItem.intention ? serviceIntentionItem.intention : '未知需求'}}&nbsp;&nbsp;&nbsp;&nbsp;<el-tag v-if="serviceIntentionItem.status && serviceIntentionItem.status != ''">{{serviceIntentionItem.status | demandStatusFilters}}</el-tag>&nbsp;&nbsp;&nbsp;&nbsp;<el-tag type="danger" v-if="serviceIntentionItem.endReason && serviceIntentionItem.endReason != ''">{{serviceIntentionItem.endReason | endResonFilters }}</el-tag></span>
                 <div style="float: right;margin-right: 10px;">
-                  <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="danger" @click.stop="openEndDemandDialog(serviceIntentionItem)">结束需求</el-button>
-                  <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="primary" @click.stop="openTransferDialog(serviceIntentionItem)">转移</el-button>
-                  <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openAddInquiryDialog(serviceIntentionItem)">新增询价单</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4 && (!serviceIntentionItem.intentionCode || serviceIntentionItem.intentionCode == '')" v-waves size="mini" type="danger" @click.stop="openCompleteDemandDialog(serviceIntentionItem)">完善需求</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')" v-waves size="mini" type="danger" @click.stop="openEndDemandDialog(serviceIntentionItem)">结束需求</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')" v-waves size="mini" type="primary" @click.stop="openTransferDialog(serviceIntentionItem)">转移</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')" v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openAddInquiryDialog(serviceIntentionItem)">新增询价单</el-button>
                 </div>
               </div>
             </template>
@@ -60,17 +61,13 @@
                   <div slot="header" class="clearfix">
                     <svg-icon icon-class="form" />
                     <span style="margin-left: 5px;">询价单</span>
-                    <div style="float: right" v-if="serviceIntentionItem.status != 4">
+                    <div style="float: right" v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
                       <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
                       <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
                     </div>
                   </div>
                   <div style="margin-bottom:50px;">
                     <div class="content" style="margin-bottom: 30px;">
-                      <!-- <div class="contentItem">
-                        <label>公司名称:</label>
-                        <span>{{item.intention}}</span>
-                      </div> -->
                       <div class="contentItem">
                         <label>需求地区:</label>
                         <span>{{item.area}}</span>
@@ -80,8 +77,6 @@
                         <span>
                           <span v-if="a.type == '1'">{{a.valueName}}</span>
                           <span v-if="a.type == '2'">{{a.valueName}}</span>
-                          <!-- <span v-if="a.type == '3'">{{a.valueName}}</span> -->
-                          <!-- <span v-if="a.type == '3'">{{a.valueName.join(',')}}</span> -->
                         </span>
                       </div>
                       <div class="contentItem">
@@ -183,6 +178,18 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="addDemandDialog = false">取 消</el-button>
           <el-button :loading="addDemandLoading" type="primary" @click="addDemand">确 定</el-button>
+        </div>
+      </el-dialog>
+      <!-- 完善需求 -->
+      <el-dialog title="完善需求" :visible.sync="completeDemandDialog" width="720px">
+        <el-form :model="completeDemandForm" label-width="120px">
+          <el-form-item label="客户需求：">
+            <el-cascader v-model="completeDemandForm.serviceCodeList" style="width: 300px" class="filter-item" :options="intentionCodeList" clearable :props="props"  placeholder="请选择业务需求"></el-cascader>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="completeDemandDialog = false">取 消</el-button>
+          <el-button :loading="completeDemandLoading" type="primary" @click="completeDemand">确 定</el-button>
         </div>
       </el-dialog>
       <!-- 新增询价单/新增跟进 -->
@@ -299,7 +306,6 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="新负责人：">
-            <!-- <el-input v-model="transferForm.opTransUserId" placeholder="请输入新负责人"></el-input> -->
             <el-select style="width: 300px;" v-model="transferForm.opTransUserId" filterable remote reserve-keyword placeholder="请输入正确交接人" :remote-method="remoteSearchTransUserList" :loading="transUserSearchLoading">
               <el-option v-for="item in transUserList" :key="item.id" :label="item.name" :value="item.id">
                 <span style="float: left">{{ item.name }}</span>
@@ -321,7 +327,7 @@ import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import global from '@/utils/global'
 import { intentionServiceExtend, intentionTrees, addressGlobalTrees, getAddressCityTrees } from '@/api/global'
-import { intentionFollowUp, userSave, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform } from '@/api/demandDetail'
+import { intentionFollowUp, userSave, serviceUpdate, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform } from '@/api/demandDetail'
 
 export default {
   components: { Pagination },
@@ -444,7 +450,14 @@ export default {
         enteringFlag: ''
       },
       merchantMark: 1,
-      merchantInfo: {}
+      merchantInfo: {},
+      completeDemandForm: {
+        siId: '',
+        serviceCodeList: [],
+        intentionCode: ''
+      },
+      completeDemandDialog: false,
+      completeDemandLoading: false
     }
   },
   created() {
@@ -714,6 +727,60 @@ export default {
         }
       }).catch(err => {
         this.endDemandLoading = false
+      })
+    },
+    // 打开完善需求弹框
+    openCompleteDemandDialog(row) {
+      console.log(row)
+      this.resetCompleteDemandForm()
+      this.completeDemandForm.siId = row.id
+      this.completeDemandDialog = true
+    },
+    // 重置完善需求表单
+    resetCompleteDemandForm() {
+      this.completeDemandForm = {
+        siId: '',
+        serviceCodeList: [],
+        intentionCode: ''
+      }
+    },
+    // 完善需求确定按钮
+    completeDemand() {
+      this.completeDemandForm.intentionCode = ''
+
+      if(this.completeDemandForm.serviceCodeList && this.completeDemandForm.serviceCodeList.length > 0) {
+        this.completeDemandForm.intentionCode = this.completeDemandForm.serviceCodeList[this.completeDemandForm.serviceCodeList.length - 1]
+      }
+
+      if (!this.completeDemandForm.intentionCode || this.completeDemandForm.intentionCode == '') {
+        this.$message({
+          message: '需求类目不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+
+      let params = {
+        siId: this.completeDemandForm.siId,
+        intentionCode: this.completeDemandForm.intentionCode,
+      }
+      this.completeDemandLoading = true
+      serviceUpdate(params).then(res => {
+        if(res.code == 0) {
+          this.$notify({
+            title: '成功',
+            message: '需求完善成功',
+            type: 'success',
+            duration: 1000
+          })
+          this.completeDemandDialog = false
+          this.completeDemandLoading = false
+          this.init()
+        }
+      }).catch(err => {
+        this.completeDemandLoading = false
       })
     },
     // 打开转移弹框

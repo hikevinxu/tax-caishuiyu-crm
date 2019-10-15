@@ -55,6 +55,15 @@ export function servicesSave(params) {
 }
 
 /**
+ * 完善需求接口new
+ * @function serviceUpdate
+ * @type 'Post'
+ */
+export function serviceUpdate(params) {
+  return fetchPost('/service/update', params)
+}
+
+/**
  * 跟进列表
  * @function intentionFollowUp
  * @type 'Get'
