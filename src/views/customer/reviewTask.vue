@@ -73,7 +73,7 @@
 
         <el-table-column align="center" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="openTransferDialog(scope.row)">转移</el-button>
+            <el-button v-if="scope.row.status != 4" size="mini" type="success" @click="openTransferDialog(scope.row)">转移</el-button>
             <el-button size="mini" type="primary" @click="lookDetail(scope.row)">查看详情</el-button>
           </template>
         </el-table-column>
