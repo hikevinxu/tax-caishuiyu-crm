@@ -45,7 +45,7 @@
 
         <el-table-column label="业务类型" width="150" align="center">
           <template slot-scope="scope">
-            <span><el-tag>{{ scope.row.intention }}</el-tag></span>
+            <span><el-tag>{{ (scope.row.intention && scope.row.intention != '') ? scope.row.intention : '未知需求' }}</el-tag></span>
           </template>
         </el-table-column>
 
