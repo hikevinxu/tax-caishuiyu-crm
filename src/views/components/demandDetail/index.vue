@@ -105,7 +105,7 @@
                       </div>
                       <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价状态:</label>
-                        <span>{{item.quotedMerchant.status | inquiryFilters}}</span>
+                        <span>{{item.status | inquiryFilters}}</span>
                       </div>
                       <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价时间:</label>
