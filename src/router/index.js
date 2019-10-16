@@ -100,6 +100,7 @@ export const asyncRouterMap = [
         path: 'agentPerformanceData',
         component: () => import('@/views/userManager/agentPerformanceData'),
         name: 'agentPerformanceData',
+        hidden: true,
         meta: { title: '客服绩效', noCache: true, roles: ['CUSTOMER_PER'] }
       },
       {
@@ -205,6 +206,7 @@ export const asyncRouterMap = [
         path: 'myPerformance',
         component: () => import('@/views/customer/myPerformance'),
         name: 'myPerformance',
+        hidden: true,
         meta: { title: '我的业绩', noCache: true, roles: ['PERSON_PER'] }
       },
       {
