@@ -1326,7 +1326,7 @@ export default {
       span {
         float: left;
         display: block;
-        width: 200px;
+        width: 190px;
       }
     }
   }
