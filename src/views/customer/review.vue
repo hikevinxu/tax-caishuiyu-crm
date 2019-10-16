@@ -74,7 +74,7 @@
 
         <el-table-column label="回访时限" width="100" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.time >= 0"><el-tag type="info">{{ scope.row.time | timeFilters }}</el-tag></span>
+            <span v-if="scope.row.time > 0"><el-tag type="info">{{ scope.row.time | timeFilters }}</el-tag></span>
             <span v-if="scope.row.time == 0"></span>
           </template>
         </el-table-column>
