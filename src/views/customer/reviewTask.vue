@@ -148,6 +148,11 @@ export default {
   },
   methods: {
     getList() {
+      for(let i=0;i<this.listData.length;i++) {
+        window.clearInterval(this.listData[i].timer)
+        this.listData[i].timer = null
+        this.listData[i].time = 0
+      }
       this.listLoading = true
       let params = {}
       for(let key  in this.listQuery){
