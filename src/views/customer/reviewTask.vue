@@ -149,9 +149,11 @@ export default {
   methods: {
     getList() {
       for(let i=0;i<this.listData.length;i++) {
-        window.clearInterval(this.listData[i].timer)
-        this.listData[i].timer = null
-        this.listData[i].time = 0
+        if(this.listData[i].timer) {
+          window.clearInterval(this.listData[i].timer)
+          this.listData[i].timer = null
+          this.listData[i].time = 0
+        }
       }
       this.listLoading = true
       let params = {}
@@ -164,10 +166,6 @@ export default {
         if(res.code == 0){
           this.listData = res.data.items
           for(let i=0;i<this.listData.length;i++) {
-            if (this.listData[i].timer) {
-              clearInterval(this.listData[i].timer)
-              this.listData[i].timer = ''
-            }
             if(this.listData[i].status != 4) {
               this.listData[i].time = parseInt(new Date(this.listData[i].expireTime).getTime()/1000 - new Date().getTime()/1000)
               this.listData[i].timer = setInterval(() => {
