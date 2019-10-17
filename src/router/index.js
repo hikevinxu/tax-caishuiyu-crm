@@ -81,7 +81,7 @@ export const asyncRouterMap = [
     meta: {
       title: '用户管理',
       icon: 'table',
-      roles: ['USER_MA', 'ROLE_MA', 'CUSTOMER_PER']
+      roles: ['USER_MA', 'ROLE_MA']
     },
     children: [
       {
