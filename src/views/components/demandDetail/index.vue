@@ -70,54 +70,54 @@
                     <div class="content" style="margin-bottom: 30px;">
                       <div class="contentItem">
                         <label>需求地区:</label>
-                        <span>{{item.area}}</span>
+                        <span class="contentValue">{{item.area}}</span>
                       </div>
                       <div v-for="(a, b) in item.extraArr" :key="'aa' + b" class="contentItem">
                         <label>{{a.propName}}:</label>
-                        <span>
+                        <span class="contentValue">
                           <span v-if="a.type == '1'">{{a.valueName}}</span>
                           <span v-if="a.type == '2'">{{a.valueName}}</span>
                         </span>
                       </div>
                       <div class="contentItem">
                         <label>联系状态:</label>
-                        <span>{{item.followStatus | followStatusFilter}}</span>
+                        <span class="contentValue">{{item.followStatus | followStatusFilter}}</span>
                       </div>
                       <div class="contentItem">
                         <label>录入时间:</label>
-                        <span>{{item.createTime}}</span>
+                        <span class="contentValue">{{item.createTime}}</span>
                       </div>
                       <div class="contentItem">
                         <label>更新时间:</label>
-                        <span>{{item.modifyTime}}</span>
+                        <span class="contentValue">{{item.modifyTime}}</span>
                       </div>
                       <div class="contentItem">
                         <label>分发次数:</label>
-                        <span>{{item.distributeCount ? item.distributeCount : '0'}}次</span>
+                        <span class="contentValue">{{item.distributeCount ? item.distributeCount : '0'}}次</span>
                       </div>
                       <div class="contentItem">
                         <label>跟进状态:</label>
-                        <span>{{item.followUpCount ? item.followUpCount : '0' }}次</span>
+                        <span class="contentValue">{{item.followUpCount ? item.followUpCount : '0' }}次</span>
                       </div>
                       <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价公司:</label>
-                        <span>{{item.quotedMerchant.companyName}}</span>
+                        <span class="contentValue">{{item.quotedMerchant.companyName}}</span>
                       </div>
                       <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价状态:</label>
-                        <span>{{item.status | inquiryFilters}}</span>
+                        <span class="contentValue">{{item.status | inquiryFilters}}</span>
                       </div>
                       <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价时间:</label>
-                        <span>{{item.quotedMerchant.quotingTime}}</span>
+                        <span class="contentValue">{{item.quotedMerchant.quotingTime}}</span>
                       </div>
                       <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价操作:</label>
-                        <span>{{item.quotedMerchant.opName}}</span>
+                        <span class="contentValue">{{item.quotedMerchant.opName}}</span>
                       </div>
                       <div class="contentItem" v-if="item.customerIntention && item.customerIntention != ''">
                         <label>客户意向:</label>
-                        <span>{{item.customerIntention}}</span>
+                        <span class="contentValue">{{item.customerIntention}}</span>
                       </div>
                     </div>
                     <div class="table" style="padding: 0 40px;">
@@ -1327,7 +1327,7 @@ export default {
         text-align: right;
         margin-right: 20px;
       }
-      span {
+      span.contentValue {
         float: left;
         display: block;
         margin-top: 10px;
