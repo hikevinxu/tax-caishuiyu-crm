@@ -115,6 +115,10 @@
                         <label>询价操作:</label>
                         <span>{{item.quotedMerchant.opName}}</span>
                       </div>
+                      <div class="contentItem" v-if="item.customerIntention && item.customerIntention != ''">
+                        <label>客户意向:</label>
+                        <span>{{item.customerIntention}}</span>
+                      </div>
                     </div>
                     <div class="table" style="padding: 0 40px;">
                       <el-collapse v-model="item.collapseName" @change="getFollowRecords(item, $event)" accordion>
@@ -1326,7 +1330,10 @@ export default {
       span {
         float: left;
         display: block;
-        width: 190px;
+        margin-top: 10px;
+        min-width: 190px;
+        max-width: 80%;
+        line-height: 20px;
       }
     }
   }
