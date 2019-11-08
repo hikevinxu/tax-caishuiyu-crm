@@ -40,3 +40,27 @@ export function validateEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(email)
 }
+
+/* 正整数 */
+export function isInteger (rule, value, callback) {
+  if(!value) {
+    return callback(new Error('请输入0<x<=3000内的正整数'))
+  }
+  setTimeout(() => {
+    if(!Number(value)) {
+      callback(new Error('请输入0<x<=3000内的正整数'))
+    } else {
+      const re = /^[0-9]*[1-9][0-9]*$/
+      const reCheck = re.test(value)
+      if(!reCheck) {
+        callback(new Error('请输入0<x<=3000内的正整数'))
+      }else {
+        if (Number(value) > 3000) {
+          callback(new Error('请输入0<x<=3000内的正整数'))
+        } else {
+          callback()
+        }
+      }
+    }
+  }, 100)
+}

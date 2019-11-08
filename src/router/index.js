@@ -243,5 +243,31 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/customerManager',
+    component: Layout,
+    redirect: '/customerManager/index',
+    name: 'merchants',
+    meta: {
+      title: '客户管理',
+      icon: 'table',
+      roles: ['USER_MA', 'ROLE_MA']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/customerManager/customerList'),
+        name: 'customerList',
+        meta: { title: '客户管理列表', noCache: true, roles: ['USER_MA'] }
+      },
+      {
+        path: 'detail',
+        component: () => import('@/views/customerManager/customerManager'),
+        name: 'customerManager',
+        hidden: true,
+        meta: { title: '客户详情', noCache: true, roles: ['USER_MA'], path: '/customerManager/index' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]

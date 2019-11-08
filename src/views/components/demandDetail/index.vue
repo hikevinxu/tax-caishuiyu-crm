@@ -62,6 +62,7 @@
                     <svg-icon icon-class="form" />
                     <span style="margin-left: 5px;">询价单</span>
                     <div style="float: right" v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
+                      <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openAKeyDistributeDialog(item)">一键分发</el-button>
                       <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
                       <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
                     </div>
@@ -260,9 +261,25 @@
           <el-button type="primary" @click="saveCustomerInfo">确 定</el-button>
         </div>
       </el-dialog>
+      <!-- 一键分发 -->
+      <el-dialog class="distributeDialog" title="一键分发" :visible.sync="aKeyDistributeDialog" width="500px">
+        <el-form ref="aKeyDistributeRef" :model="aKeyDistributeForm" :rules="aKeyDistributeRules" label-width="120px">
+          <p style="color: red; margin-left: 15px;">*一键分发会对满足相关需求的商户全部推送询价单</p>
+          <el-form-item label="询价单定价：" prop="price">
+            <el-input style="float: left; width: 300px;" type="number" v-model.trim="aKeyDistributeForm.price" placeholder="请输入询价单定价"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="aKeyDistributeDialog = false">取 消</el-button>
+          <el-button :loading="aKeyDistributeLoading" type="primary" @click="aKeyDistribute">发 送</el-button>
+        </div>
+      </el-dialog>
       <!-- 分发 -->
       <el-dialog class="distributeDialog" title="分发" :visible.sync="distributeDialog" width="500px">
-        <el-form :model="distributeForm" label-width="120px">
+        <el-form ref="distributeRef" :model="distributeForm" :rules="distributeRules" label-width="120px">
+          <el-form-item label="询价单定价：" prop="price">
+            <el-input style="float: left; width: 300px;" type="number" v-model.trim="distributeForm.price" placeholder="请输入询价单定价"></el-input>
+          </el-form-item>
           <el-form-item label="商户账户：">
             <el-input style="float: left; width: 200px;" type="tel" maxlength="11" @input="distributePhoneChange" v-model.trim="distributeForm.phone" placeholder="请输入商户手机号"></el-input>
             <el-button style="float: left; margin-left: 10px;" v-waves type="success" icon="el-icon-search" @click.stop="retrieveCompany">检索</el-button>
@@ -330,8 +347,9 @@
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import global from '@/utils/global'
+import { isInteger } from '@/utils/validate'
 import { intentionServiceExtend, intentionTrees, addressGlobalTrees, getAddressCityTrees } from '@/api/global'
-import { intentionFollowUp, userSave, serviceUpdate, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform } from '@/api/demandDetail'
+import { intentionFollowUp, userSave, serviceUpdate, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform, intentionDistributeGroup } from '@/api/demandDetail'
 
 export default {
   components: { Pagination },
@@ -451,10 +469,32 @@ export default {
         phone: '',
         merchantId: '',
         companyName: '',
-        enteringFlag: ''
+        enteringFlag: '',
+        price: 200
       },
       merchantMark: 1,
       merchantInfo: {},
+      distributeRules: {
+        price: [
+          {required: true, message: '请输入0<x<=3000内的正整数', trigger: 'blur' },
+          {validator: isInteger, trigger: 'change'},
+          {validator: isInteger, trigger: 'blur'}
+        ]
+      },
+      // 一键分发
+      aKeyDistributeDialog: false,
+      aKeyDistributeLoading: false,
+      aKeyDistributeForm: {
+        intentionId: '',
+        price: 200
+      },
+      aKeyDistributeRules: {
+        price: [
+          {required: true, message: '请输入0<x<=3000内的正整数', trigger: 'blur' },
+          {validator: isInteger, trigger: 'change'},
+          {validator: isInteger, trigger: 'blur'}
+        ]
+      },
       completeDemandForm: {
         siId: '',
         serviceCodeList: [],
@@ -1157,6 +1197,48 @@ export default {
         this.addFollowRecordsLoading = false
       })
     },
+    // 打开一键分发弹框
+    openAKeyDistributeDialog(item) {
+      this.resetAKeyDistributeForm()
+      this.aKeyDistributeForm.intentionId = item.id
+      this.aKeyDistributeDialog = true
+    },
+    // 重置一键分发表单
+    resetAKeyDistributeForm() {
+      this.aKeyDistributeForm = {
+        intentionId: '',
+        price: 200
+      }
+    },
+    // 一键分发
+    aKeyDistribute() {
+      this.$refs['aKeyDistributeRef'].validate((valid) => {
+        if (valid) {
+          let params = {
+            intentionId: this.aKeyDistributeForm.intentionId,
+            price: this.aKeyDistributeForm.price
+          }
+          this.aKeyDistributeLoading = true
+          intentionDistributeGroup(this.aKeyDistributeForm).then(res => {
+            if(res.code == 0){
+              this.$notify({
+                title: '成功',
+                message: '分发成功',
+                type: 'success',
+                duration: 1000
+              })
+              this.aKeyDistributeLoading = false
+              this.aKeyDistributeDialog = false
+              this.init()
+            }
+          }).catch(err => {
+            this.aKeyDistributeLoading = false
+          })
+        } else {
+          return false
+        }
+      })
+    },
     // 打开分发弹框
     openDistributeDialog(item) {
       this.merchantMark = 1
@@ -1172,7 +1254,8 @@ export default {
         phone: '',
         merchantId: '',
         companyName: '',
-        enteringFlag: ''
+        enteringFlag: '',
+        price: 200
       }
     },
     // 检索商户
@@ -1271,33 +1354,38 @@ export default {
         })
         return
       }
-
-      this.$confirm('是否确定向“' + this.distributeForm.companyName + '”发送此询价单, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.distributeLoading = true
-        intentionDistribute(this.distributeForm).then(res => {
-          if(res.code == 0){
-            this.$notify({
-              title: '成功',
-              message: '分发成功',
-              type: 'success',
-              duration: 1000
+      this.$refs['distributeRef'].validate((valid) => {
+        if (valid) {
+          this.$confirm('是否确定向“' + this.distributeForm.companyName + '”发送此询价单, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.distributeLoading = true
+            intentionDistribute(this.distributeForm).then(res => {
+              if(res.code == 0){
+                this.$notify({
+                  title: '成功',
+                  message: '分发成功',
+                  type: 'success',
+                  duration: 1000
+                })
+                this.distributeLoading = false
+                this.distributeDialog = false
+                this.init()
+              }
+            }).catch(err => {
+              this.distributeLoading = false
             })
-            this.distributeLoading = false
-            this.distributeDialog = false
-            this.init()
-          }
-        }).catch(err => {
-          this.distributeLoading = false
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消分发'
-        })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消分发'
+            })
+          })
+        } else {
+          return false
+        }
       })
     },
     // 输入框改变视图
@@ -1318,6 +1406,7 @@ export default {
     overflow: hidden;
     .contentItem {
       float: left;
+      min-width: 25%;
       overflow: hidden;
       line-height: 40px;
       label {

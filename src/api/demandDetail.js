@@ -100,6 +100,15 @@ export function intentionDistribute(params) {
 }
 
 /**
+ * 需求一键分发接口new
+ * @function intentionDistributeGroup
+ * @type 'Post'
+ */
+export function intentionDistributeGroup(params) {
+  return fetchPost('/intention/v2/distributeGroup', params)
+}
+
+/**
  * 查询操作员列表
  * @function opUserIndex
  * @type 'Post'

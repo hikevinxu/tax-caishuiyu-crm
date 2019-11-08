@@ -1,8 +1,8 @@
 const global = {
   followStatusList: [
     {name: '很有兴趣', id: 1},
-    {name: '较感兴趣', id: 2},
-    {name: '一般/可继续跟进', id: 3},
+    {name: '较感兴趣/后续有需要/可加微信保持沟通', id: 2},
+    {name: '晚点联系', id: 3},
     {name: '挂断/不回复/强硬抵触', id: 4},
     {name: '关机/未接通/可再拨打', id: 5},
     {name: '空号/无效/资料不符', id: 6},

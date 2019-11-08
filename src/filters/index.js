@@ -9,10 +9,10 @@ export function followStatusFilter(followStatus) {
       return '很有兴趣'
       break;
     case 2:
-      return '较感兴趣'
+      return '较感兴趣/后续有需要/可加微信保持沟通'
       break;
     case 3:
-      return '一般/可继续跟进'
+      return '晚点联系'
       break;
     case 4:
       return '挂断/不回复/强硬抵触'
