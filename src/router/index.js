@@ -248,6 +248,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/customerManager/index',
     name: 'merchants',
+    hidden: true,
     meta: {
       title: '客户管理',
       icon: 'table',
