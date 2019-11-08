@@ -62,8 +62,8 @@
                     <svg-icon icon-class="form" />
                     <span style="margin-left: 5px;">询价单</span>
                     <div style="float: right" v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
-                      <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
-                      <el-button v-if="JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
+                      <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
+                      <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
                     </div>
                   </div>
                   <div style="margin-bottom:50px;">
@@ -99,19 +99,19 @@
                         <label>跟进状态:</label>
                         <span class="contentValue">{{item.followUpCount ? item.followUpCount : '0' }}次</span>
                       </div>
-                      <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
+                      <div class="contentItem" v-if="item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价公司:</label>
                         <span class="contentValue">{{item.quotedMerchant.companyName}}</span>
                       </div>
-                      <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
+                      <div class="contentItem" v-if="item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价状态:</label>
                         <span class="contentValue">{{item.status | inquiryFilters}}</span>
                       </div>
-                      <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
+                      <div class="contentItem" v-if="item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价时间:</label>
                         <span class="contentValue">{{item.quotedMerchant.quotingTime}}</span>
                       </div>
-                      <div class="contentItem" v-if="JSON.stringify(item.quotedMerchant) != '{}'">
+                      <div class="contentItem" v-if="item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价操作:</label>
                         <span class="contentValue">{{item.quotedMerchant.opName}}</span>
                       </div>
@@ -1320,6 +1320,7 @@ export default {
       float: left;
       overflow: hidden;
       line-height: 40px;
+      min-width: 25%;
       label {
         float: left;
         display: block;
