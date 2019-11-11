@@ -244,11 +244,38 @@ export const asyncRouterMap = [
     ]
   },
   {
+    path: '/enquiryManager',
+    component: Layout,
+    redirect: '/enquiryManager/index',
+    name: 'enquiryManager',
+    hidden: true,
+    meta: {
+      title: '询价单管理',
+      icon: 'table',
+      roles: ['USER_MA', 'ROLE_MA']
+    },
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/enquiryManager/enquiryManager'),
+        name: 'enquiryManagerIndex',
+        meta: { title: '询价单管理列表', noCache: true, roles: ['USER_MA'] }
+      },
+      {
+        path: 'detail',
+        component: () => import('@/views/enquiryManager/enquiryDetail'),
+        name: 'customerManager',
+        hidden: true,
+        meta: { title: '询价单详情', noCache: true, roles: ['USER_MA'], path: '/enquiryManager/index' }
+      }
+    ]
+  },
+  {
     path: '/customerManager',
     component: Layout,
     redirect: '/customerManager/index',
-    name: 'merchants',
     hidden: true,
+    name: 'merchants',
     meta: {
       title: '客户管理',
       icon: 'table',

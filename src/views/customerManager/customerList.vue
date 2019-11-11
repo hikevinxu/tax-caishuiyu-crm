@@ -29,37 +29,37 @@
 
         <el-table-column label="进行中需求数" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.account }}</span>
+            <span>{{ scope.row.needingAmount }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="总需求数" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.phone }}</span>
+            <span>{{ scope.row.allNeedAmount }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="被购买询价单数" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.phone }}</span>
+            <span>{{ scope.row.inquiryBuyAmount }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="总询价单数" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.phone }}</span>
+            <span>{{ scope.row.allInquiryAmount }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="产生价值" align="center">
+        <el-table-column label="产生价值(元)" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.phone }}</span>
+            <span>{{ scope.row.totalAmount / 100 }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="账户创建时间" width="200px" align="center">
           <template slot-scope="scope">
-            <el-tag>{{ scope.row.time }}</el-tag>
+            <el-tag>{{ scope.row.userCreated }}</el-tag>
           </template>
         </el-table-column>
 
@@ -71,13 +71,14 @@
 
       </el-table>
 
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageIndex" :limit.sync="listQuery.pageSize" @pagination="getList" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
   </div>
 </template>
 <script>
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { customerList } from '@/api/customerManager'
 export default {
   components: { Pagination },
   directives: { waves },
@@ -89,22 +90,29 @@ export default {
         phone: ''
       },
       listLoading: false,
-      listData: [
-        {
-          id: 1,
-          name: '小明',
-          quanxian: '123',
-          account: '536',
-          phone: '15515268707',
-          time: '2020-08-24 23:59:59'
-        }
-      ],
+      listData: [],
       total: 0
     }
   },
+  created() {
+    this.getList()
+  },
   methods: {
     getList() {
-      console.log(123)
+      let params = {}
+      for(let key  in this.listQuery){
+        if(this.listQuery[key] !== '') {
+          params[key] = this.listQuery[key]
+        }
+      }
+      this.listLoading = true
+      customerList(params).then(res => {
+        if(res.code == 0) {
+          this.listLoading = false
+          this.listData = res.data.items
+          this.total = res.data.total
+        }
+      })
     },
     getSearchList() {
       this.listQuery.pageNum = 1
