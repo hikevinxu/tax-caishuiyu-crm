@@ -63,7 +63,7 @@
                     <span style="margin-left: 5px;">询价单</span>
                     <div style="float: right" v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
                       <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openAKeyDistributeDialog(item)">一键分发</el-button>
-                      <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">去分发</el-button>
+                      <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">指定分发</el-button>
                       <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
                     </div>
                   </div>
@@ -266,7 +266,8 @@
         <el-form ref="aKeyDistributeRef" :model="aKeyDistributeForm" :rules="aKeyDistributeRules" label-width="120px">
           <p style="color: red; margin-left: 15px;">*一键分发会对满足相关需求的商户全部推送询价单</p>
           <el-form-item label="询价单定价：" prop="price">
-            <el-input style="float: left; width: 300px;" type="number" v-model.trim="aKeyDistributeForm.price" placeholder="请输入询价单定价"></el-input>
+            <el-input style="float: left; width: 260px;" type="tel" @keyup.native="number" v-model.trim="aKeyDistributeForm.price" placeholder="请输入询价单定价"></el-input>
+            <span>&nbsp;&nbsp;元&nbsp;</span>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -275,10 +276,11 @@
         </div>
       </el-dialog>
       <!-- 分发 -->
-      <el-dialog class="distributeDialog" title="分发" :visible.sync="distributeDialog" width="500px">
+      <el-dialog class="distributeDialog" title="指定分发" :visible.sync="distributeDialog" width="500px">
         <el-form ref="distributeRef" :model="distributeForm" :rules="distributeRules" label-width="120px">
           <el-form-item label="询价单定价：" prop="price">
-            <el-input style="float: left; width: 300px;" type="number" v-model.trim="distributeForm.price" placeholder="请输入询价单定价"></el-input>
+            <el-input style="float: left; width: 260px;" @keyup.native="number" type="tel" v-model.trim="distributeForm.price" placeholder="请输入询价单定价"></el-input>
+            <span>&nbsp;&nbsp;元&nbsp;</span>
           </el-form-item>
           <el-form-item label="商户账户：">
             <el-input style="float: left; width: 200px;" type="tel" maxlength="11" @input="distributePhoneChange" v-model.trim="distributeForm.phone" placeholder="请输入商户手机号"></el-input>
@@ -1394,7 +1396,13 @@ export default {
     },
     itemChange() {
       this.$forceUpdate()
-    }
+    },
+    number(){
+      this.aKeyDistributeForm.price=this.aKeyDistributeForm.price.replace(/[^\.\d]/g,'')
+      this.aKeyDistributeForm.price=this.aKeyDistributeForm.price.replace('.','')
+      this.distributeForm.price=this.distributeForm.price.replace(/[^\.\d]/g,'')
+      this.distributeForm.price=this.distributeForm.price.replace('.','')
+　　}
   }
 }
 </script>
