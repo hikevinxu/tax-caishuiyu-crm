@@ -6,25 +6,22 @@
 export function followStatusFilter(followStatus) {
   switch (followStatus) {
     case 1:
-      return '很有兴趣'
+      return '六级：很有兴趣'
       break;
     case 2:
-      return '较感兴趣/后续有需要/可加微信保持沟通'
+      return '五级：较感兴趣/后续有需要/可加微信保持沟通'
       break;
     case 3:
-      return '晚点联系'
+      return '四级：晚点联系'
       break;
     case 4:
-      return '挂断/不回复/强硬抵触'
+      return '二级：挂断/不回复/强硬抵触'
       break;
     case 5:
-      return '关机/未接通/可再拨打'
+      return '三级：关机/未接通/可再拨打'
       break;
     case 6:
-      return '空号/无效/资料不符'
-      break;
-    case 7:
-      return '完结需求'
+      return '一级：空号/无效/资料不符'
       break;
     default: 
       return '无'
