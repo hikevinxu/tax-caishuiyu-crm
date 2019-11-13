@@ -266,7 +266,7 @@
         <el-form ref="aKeyDistributeRef" :model="aKeyDistributeForm" :rules="aKeyDistributeRules" label-width="120px">
           <p style="color: red; margin-left: 15px;">*一键分发会对满足相关需求的商户全部推送询价单</p>
           <el-form-item label="询价单定价：" prop="price">
-            <el-input style="float: left; width: 260px;" type="tel" @keyup.native="number" v-model.trim="aKeyDistributeForm.price" placeholder="请输入询价单定价"></el-input>
+            <el-input style="float: left; width: 260px;" type="tel" @keyup.native="aKeyDistributePriceChange" v-model.trim="aKeyDistributeForm.price" placeholder="请输入询价单定价"></el-input>
             <span>&nbsp;&nbsp;元&nbsp;</span>
           </el-form-item>
         </el-form>
@@ -279,7 +279,7 @@
       <el-dialog class="distributeDialog" title="指定分发" :visible.sync="distributeDialog" width="500px">
         <el-form ref="distributeRef" :model="distributeForm" :rules="distributeRules" label-width="120px">
           <el-form-item label="询价单定价：" prop="price">
-            <el-input style="float: left; width: 260px;" @keyup.native="number" type="tel" v-model.trim="distributeForm.price" placeholder="请输入询价单定价"></el-input>
+            <el-input style="float: left; width: 260px;" @keyup.native="distributePriceChange" type="tel" v-model.trim="distributeForm.price" placeholder="请输入询价单定价"></el-input>
             <span>&nbsp;&nbsp;元&nbsp;</span>
           </el-form-item>
           <el-form-item label="商户账户：">
@@ -1397,11 +1397,13 @@ export default {
     itemChange() {
       this.$forceUpdate()
     },
-    number(){
-      this.aKeyDistributeForm.price=this.aKeyDistributeForm.price.replace(/[^\.\d]/g,'')
-      this.aKeyDistributeForm.price=this.aKeyDistributeForm.price.replace('.','')
-      this.distributeForm.price=this.distributeForm.price.replace(/[^\.\d]/g,'')
-      this.distributeForm.price=this.distributeForm.price.replace('.','')
+    aKeyDistributePriceChange(){
+      this.aKeyDistributeForm.price = this.aKeyDistributeForm.price.replace(/[^\.\d]/g,'')
+      this.aKeyDistributeForm.price = this.aKeyDistributeForm.price.replace('.','')
+    },
+    distributePriceChange(){
+      this.distributeForm.price = this.distributeForm.price.replace(/[^\.\d]/g,'')
+      this.distributeForm.price = this.distributeForm.price.replace('.','')
 　　}
   }
 }
