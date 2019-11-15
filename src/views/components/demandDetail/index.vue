@@ -216,8 +216,8 @@
             </el-select>
           </el-form-item>
           <el-form-item v-for="(item, index) in inputList" :key="'input' + index"  :label="item.name + '：'">
-            <el-input v-if="item.type == 1" v-model="item.value" :placeholder="'请输入' + item.name"></el-input>
-            <el-select v-if="item.type == 2" v-model="item.value" :placeholder="'请选择' + item.name">
+            <el-input v-if="item.type == 1" v-model="item.value" :placeholder="'请输入' + item.name" @input="itemChange"></el-input>
+            <el-select v-if="item.type == 2" v-model="item.value" :placeholder="'请选择' + item.name" @change="itemChange">
               <el-option v-for="(k, i) in item.valueTrees" :key="k.name + i" :label="k.name" :value="k.code"></el-option>
             </el-select>
             <!-- <el-select v-if="item.type == 3" v-model="item.value" multiple collapse-tags @change="itemChange" :placeholder="'请选择' + item.name">
