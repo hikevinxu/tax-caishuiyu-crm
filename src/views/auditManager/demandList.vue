@@ -3,7 +3,7 @@
     <div class="filter-container">
       <!-- <el-input class="filter-item" style="width: 250px" v-model="listQuery.name" clearable placeholder="请输入客户称呼" /> -->
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.phone" clearable placeholder="请输入手机号/四位尾号" />
-      <el-cascader class="filter-item" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
+      <el-cascader class="filter-item" v-model="listQuery.intentionCodeList" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
       <el-date-picker class="filter-item datePicker" @change="dateChange" v-model="listQuery.date" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" :editable="false" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       <!-- <el-cascader class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择需求区域"></el-cascader> -->
       <!-- <el-select class="filter-item" v-model="listQuery.followUpCount" @change="getSearchList" clearable placeholder="请选择跟进状态">
@@ -106,15 +106,13 @@ export default {
       listQuery: {
         pageNum: 1,
         pageSize: 10,
-        // name: '',
         phone: '',
         date: '',
         startDate: '',
         endDate: '',
+        intentionCodeList: [],
         intentionCode: '',
         areaCode: ''
-        // followStatus: '',
-        // followUpCount: ''
       },
       listLoading: false,
       listData: [],
@@ -133,13 +131,15 @@ export default {
     }
   },
   created() {
-    this.getSearchList()
+    this.listQuery = this.$store.getters.demandPageQuery
+    this.getList()
     this.getIntentionTrees()
     this.getAddressTrees()
   },
   methods: {
     getList() {
       this.listLoading = true
+      this.$store.dispatch('saveDemandPageQueryInfo', this.listQuery)
       let params = {}
       for(let key  in this.listQuery){
         if(this.listQuery[key] !== '') {
@@ -196,6 +196,7 @@ export default {
       })
     },
     intentionCodeChange(val) {
+      this.listQuery.intentionCodeList = val
       this.listQuery.intentionCode = val[val.length - 1]
       this.getSearchList()
     },

@@ -18,6 +18,12 @@ const getters = {
   permission_routers: state => state.permission.routers,
   addRouters: state => state.permission.addRouters,
   errorLogs: state => state.errorLog.logs,
-  messageList: state => state.sysMessages.messageList
+  messageList: state => state.sysMessages.messageList,
+  // 需求线索池页面
+  demandPageQuery: state => state.searchParams.demandPageQuery,
+  // 历史回访记录页面搜索
+  historyReviewPageQuery: state => state.searchParams.historyReviewPageQuery,
+  // 限时回访记录页面搜索
+  timeReviewPageQuery: state => state.searchParams.timeReviewPageQuery
 }
 export default getters

@@ -144,7 +144,8 @@ export default {
     }
   },
   created() {
-    this.getSearchList()
+    this.listQuery = this.$store.getters.timeReviewPageQuery
+    this.getList()
   },
   methods: {
     getList() {
@@ -156,6 +157,7 @@ export default {
         }
       }
       this.listLoading = true
+      this.$store.dispatch('saveTimeReviewPageQueryInfo', this.listQuery)
       let params = {}
       for(let key  in this.listQuery){
         if(this.listQuery[key] !== '') {
