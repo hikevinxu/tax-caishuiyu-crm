@@ -1,12 +1,12 @@
 <template>
-  <div class="enquiryDetail">
-    <Demand-Detail pageId="enquiryDetail" :currentId="currentId" :customerInfo="customerInfo" :serviceIntentionList="serviceIntentionList" @getNextData="getNextData" @init="getDetail"></Demand-Detail>
+  <div class="customerDemandDetail">
+    <Demand-Detail pageId="customerDemandDetail" :currentId="currentId" :customerInfo="customerInfo" :serviceIntentionList="serviceIntentionList" @getNextData="getNextData" @init="getDetail"></Demand-Detail>
   </div>
 </template>
 <script>
 
 import DemandDetail from '../components/demandDetail/index.vue'
-import { enquiryManageDetail, intentionNextManage } from '@/api/enquiryManager'
+import { customerDetailManage, customerNext } from '@/api/customerManager'
 
 export default {
   components: { DemandDetail },
@@ -24,9 +24,9 @@ export default {
   methods: {
     getDetail(siId){
       let params = {
-        intentionId: siId || this.currentId
+        siid: siId || this.currentId
       }
-      enquiryManageDetail(params).then(res => {
+      customerDetailManage(params).then(res => {
         if(res.code == 0){
           this.customerInfo = res.data.customerInfo || {}
           this.serviceIntentionList = res.data.serviceIntentionList || []
@@ -45,7 +45,7 @@ export default {
     },
     // 下一条
     getNextData(params) {
-      intentionNextManage(params).then(res => {
+      customerNext(params).then(res => {
         if(res.code == 0){
           if (JSON.stringify(res.data) != "{}") {
             this.serviceIntentionList = []
@@ -77,7 +77,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.enquiryDetail {
+.customerDemandDetail {
   padding: 20px;
   min-height: calc(100vh - 84px);
 }

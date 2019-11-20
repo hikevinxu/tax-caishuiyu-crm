@@ -164,5 +164,17 @@ export function endResonFilters(endReson) {
     case 5:
       return '系统关闭'
       break;
+    case 6:
+      return '关机/停机/空号'
+      break;
+    case 7:
+      return '入驻服务商'
+      break;
+    case 8:
+      return '内部测试'
+      break;
+    case 9:
+      return '表明来意被挂断'
+      break;
   }
 }

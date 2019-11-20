@@ -3,8 +3,9 @@
     <div class="filter-container">
       <el-input class="filter-item" style="width: 200px" v-model="listQuery.phone" clearable @clear="getSearchList" placeholder="请输入客户手机号" />
       <el-input class="filter-item" style="width: 200px" v-model="listQuery.companyNames" clearable @clear="getSearchList" placeholder="请输入绑定商户名称" />
-      <el-cascader class="filter-item" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务类型"></el-cascader>
-      <el-cascader class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择需求区域"></el-cascader>
+      <el-cascader class="filter-item" v-model="listQuery.intentionCodeList" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务类型"></el-cascader>
+      <el-cascader class="filter-item" v-model="listQuery.areaCodeList" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择需求区域"></el-cascader>
+      <el-input v-permission="['OPNAME_SCREEN_BUT']" class="filter-item" style="width: 200px" v-model="listQuery.opUserName" clearable @clear="getSearchList" placeholder="请输入操作员姓名" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
     </div>
     <div class="table">
@@ -38,7 +39,8 @@
 
         <el-table-column label="需求区域" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.area }}</span>
+            <span v-if="scope.row.area">{{ scope.row.area }}</span>
+            <span v-else>-</span>
           </template>
         </el-table-column>
 
@@ -48,9 +50,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="询价单价格" align="center">
+        <el-table-column label="询价单价格(金币)" width="100px" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.price">¥ {{ scope.row.price / 100 }}</span>
+            <span v-if="scope.row.price">{{ scope.row.price }}</span>
+            <span v-else>-</span>
           </template>
         </el-table-column>
 
@@ -77,6 +80,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="操作员" width="120" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.opUserName }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column align="center" label="操作"  width="120">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="lookDetail(scope.row)">查看详情</el-button>
@@ -92,6 +101,7 @@
 <script>
 
 import waves from '@/directive/waves' // Waves directive
+import permission from '@/directive/permission/index.js' // 权限判断指令
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import global from '@/utils/global'
 import { intentionManageList } from '@/api/enquiryManager'
@@ -100,7 +110,7 @@ import { intentionTrees, addressGlobalTrees } from '@/api/global'
 
 export default {
   components: { Pagination },
-  directives: { waves },
+  directives: { waves, permission },
   data() {
     return {
       listLoading: false,
@@ -110,7 +120,10 @@ export default {
         phone: '',
         companyNames: '',
         intentionCode: '',
-        areaCode: ''
+        intentionCodeList: [],
+        areaCodeList: [],
+        areaCode: '',
+        opUserName: ''
       },
       listData: [],
       intentionCodeList: [],
@@ -126,21 +139,24 @@ export default {
     }
   },
   created() {
-    this.getSearchList()
+    this.listQuery = this.$store.getters.enquiryManagerPageQuery
+    this.getList()
     this.getIntentionTrees()
     this.getAddressTrees()
   },
   methods: {
     getList() {
-      console.log(123)
       let params = {}
       for(let key  in this.listQuery){
         if(this.listQuery[key] !== '') {
           params[key] = this.listQuery[key]
         }
       }
+      this.listLoading = true
+      this.$store.dispatch('saveEnquiryManagerPageQueryInfo', this.listQuery)
       intentionManageList(params).then(res => {
         if(res.code == 0){
+          this.listLoading = false
           this.listData = res.data.items
           this.total = res.data.total
         } 
@@ -176,10 +192,12 @@ export default {
       })
     },
     intentionCodeChange(val) {
+      this.listQuery.intentionCodeList = val
       this.listQuery.intentionCode = val[val.length - 1]
       this.getSearchList()
     },
     areaCodeChange(val) {
+      this.listQuery.areaCodeList = val
       this.listQuery.areaCode = val[val.length - 1]
       this.getSearchList()
     },

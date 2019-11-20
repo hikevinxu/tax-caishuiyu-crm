@@ -2,7 +2,7 @@ import { fetchGet, fetchPost } from './request'
 import qs from 'qs'
 
 /**
- * 需求预审接口 
+ * 询价单列表
  * @function intentionManageList
  * @type 'Post'
  */
@@ -11,16 +11,16 @@ export function intentionManageList(params) {
 }
 
 /**
- * 客户管理详情
+ * 询价单列表详情
  * @function intentionManageDetail
  * @type 'Post'
  */
-export function intentionManageDetail(params) {
+export function enquiryManageDetail(params) {
   return fetchPost('/intention/manage/detail', params)
 }
 
 /**
- * 客户管理详情
+ * 询价单列表详情下一条
  * @function intentionNextManage
  * @type 'Post'
  */

@@ -1,7 +1,7 @@
 <template>
   <div class="customerList">
     <div class="filter-container">
-      <el-input class="filter-item" type="tel" style="width: 250px" v-model="listQuery.phone" placeholder="请输入客户电话号码" />
+      <el-input class="filter-item" type="tel" style="width: 250px" v-model="listQuery.phone" clearable @clear="getSearchList" placeholder="请输入客户电话号码" />
       <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
     </div>
     <div class="table">
@@ -51,9 +51,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="产生价值(元)" align="center">
+        <el-table-column label="产生价值(金币)" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.totalAmount / 100 }}</span>
+            <span>{{ scope.row.totalAmount }}</span>
           </template>
         </el-table-column>
 
@@ -95,6 +95,7 @@ export default {
     }
   },
   created() {
+    this.listQuery = this.$store.getters.customerManagerPageQuery
     this.getList()
   },
   methods: {
@@ -106,6 +107,7 @@ export default {
         }
       }
       this.listLoading = true
+      this.$store.dispatch('saveCustomerManagerPageQueryInfo', this.listQuery)
       customerList(params).then(res => {
         if(res.code == 0) {
           this.listLoading = false
@@ -123,7 +125,8 @@ export default {
       this.$router.push({
         path: '/customerManager/detail',
         query: {
-          id: row.id
+          siid: row.siid,
+          userId: row.userId
         }
       })
     }

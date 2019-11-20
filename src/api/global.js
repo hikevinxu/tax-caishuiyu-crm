@@ -46,3 +46,11 @@ export function intentionServiceExtend(params) {
   return fetchGet('/intention/service/extend', params)
 }
 
+/**
+ * 获取公司列表
+ * @function companySearch
+ * @type 'post'
+ */
+export function companySearch(params) {
+  return fetchPost('/company/search', params)
+}

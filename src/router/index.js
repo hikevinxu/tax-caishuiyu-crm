@@ -248,25 +248,24 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/enquiryManager/index',
     name: 'enquiryManager',
-    hidden: true,
     meta: {
       title: '询价单管理',
       icon: 'table',
-      roles: ['USER_MA', 'ROLE_MA']
+      roles: ['INQUIRY_MA']
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/enquiryManager/enquiryManager'),
         name: 'enquiryManagerIndex',
-        meta: { title: '询价单管理列表', noCache: true, roles: ['USER_MA'] }
+        meta: { title: '询价单管理列表', noCache: true, roles: ['INQUIRY_MA'] }
       },
       {
         path: 'detail',
         component: () => import('@/views/enquiryManager/enquiryDetail'),
         name: 'customerManager',
         hidden: true,
-        meta: { title: '询价单详情', noCache: true, roles: ['USER_MA'], path: '/enquiryManager/index' }
+        meta: { title: '询价单详情', noCache: true, roles: ['INQUIRY_MA'], path: '/enquiryManager/index' }
       }
     ]
   },
@@ -274,26 +273,32 @@ export const asyncRouterMap = [
     path: '/customerManager',
     component: Layout,
     redirect: '/customerManager/index',
-    hidden: true,
     name: 'merchants',
     meta: {
       title: '客户管理',
       icon: 'table',
-      roles: ['USER_MA', 'ROLE_MA']
+      roles: ['CUSTOMER_MA']
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/customerManager/customerList'),
         name: 'customerList',
-        meta: { title: '客户管理列表', noCache: true, roles: ['USER_MA'] }
+        meta: { title: '客户管理列表', noCache: true, roles: ['CUSTOMER_MA'] }
       },
       {
         path: 'detail',
         component: () => import('@/views/customerManager/customerManager'),
         name: 'customerManager',
         hidden: true,
-        meta: { title: '客户详情', noCache: true, roles: ['USER_MA'], path: '/customerManager/index' }
+        meta: { title: '客户详情', noCache: true, roles: ['CUSTOMER_MA'], path: '/customerManager/index' }
+      },
+      {
+        path: 'DemandDetail',
+        component: () => import('@/views/customerManager/customerDemandDetail'),
+        name: 'customerManagerDemandDetail',
+        hidden: true,
+        meta: { title: '需求详情', noCache: true, roles: ['CUSTOMER_MA'], path: '/customerManager/index' }
       }
     ]
   },

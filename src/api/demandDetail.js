@@ -116,3 +116,30 @@ export function intentionDistributeGroup(params) {
 export function opUserIndex(params) {
   return fetchPost('/opUser/index', params)
 }
+
+/**
+ * 获取最近一次询价单数据
+ * @function intentionObtainPrevious
+ * @type 'Post'
+ */
+export function intentionObtainPrevious (params) {
+  return fetchPost('/intention/obtain/previous', params)
+}
+
+/**
+ * 补充询价单
+ * @function intentionReplenish
+ * @type 'Post'
+ */
+export function intentionReplenish(params) {
+  return fetchPost('/intention/replenish', params)
+}
+
+/**
+ * 操作记录
+ * @function operationRecordList
+ * @type 'Post'
+ */
+export function operationRecordList(params) {
+  return fetchPost('/operation/record/list', params)
+}

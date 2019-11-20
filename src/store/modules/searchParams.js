@@ -28,6 +28,24 @@ const searchParams = {
     timeReviewPageQuery: {
       pageNum: 1,
       pageSize: 10
+    },
+    // 询价单管理列表页面搜索
+    enquiryManagerPageQuery: {
+      pageNum: 1,
+      pageSize: 10,
+      phone: '',
+      companyNames: '',
+      intentionCode: '',
+      intentionCodeList: [],
+      areaCodeList: [],
+      areaCode: '',
+      opUserName: ''
+    },
+    // 客户管理列表页面搜索
+    customerManagerPageQuery: {
+      pageNum: 1,
+      pageSize: 10,
+      phone: ''
     }
   },
   mutations: {
@@ -42,6 +60,14 @@ const searchParams = {
     // 限时回访任务页面搜索
     SAVE_TIMEREVIEWPAGE_QUERY_INFO: (state, queryInfo) => {
       state.historyReviewPageQuery = queryInfo
+    },
+    // 询价单管理列表页面搜索
+    SAVE_ENQUIRYMANAGERPAGE_QUERY_INFO: (state, queryInfo) => {
+      state.enquiryManagerPageQuery = queryInfo
+    },
+    // 客户管理列表页面搜索
+    SAVE_CUSTOMERMANAGERPAGE_QUERY_INFO: (state, queryInfo) => {
+      state.customerManagerPageQuery = queryInfo
     }
   },
   actions: {
@@ -57,6 +83,14 @@ const searchParams = {
     saveTimeReviewPageQueryInfo({ commit }, queryInfo) {
       commit('SAVE_TIMEREVIEWPAGE_QUERY_INFO', queryInfo)
     },
+    // 询价单管理列表页面搜索
+    saveEnquiryManagerPageQueryInfo({ commit }, queryInfo) {
+      commit('SAVE_ENQUIRYMANAGERPAGE_QUERY_INFO', queryInfo)
+    },
+    // 客户管理列表页面搜索
+    saveCustomerManagerPageQueryInfo({ commit }, queryInfo) {
+      commit('SAVE_CUSTOMERMANAGERPAGE_QUERY_INFO', queryInfo)
+    }
   }
 }
 

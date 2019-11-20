@@ -24,6 +24,10 @@ const getters = {
   // 历史回访记录页面搜索
   historyReviewPageQuery: state => state.searchParams.historyReviewPageQuery,
   // 限时回访记录页面搜索
-  timeReviewPageQuery: state => state.searchParams.timeReviewPageQuery
+  timeReviewPageQuery: state => state.searchParams.timeReviewPageQuery,
+  // 询价单管理列表页面搜索
+  enquiryManagerPageQuery: state => state.searchParams.enquiryManagerPageQuery,
+  // 客户管理列表页面搜索
+  customerManagerPageQuery: state => state.searchParams.customerManagerPageQuery
 }
 export default getters

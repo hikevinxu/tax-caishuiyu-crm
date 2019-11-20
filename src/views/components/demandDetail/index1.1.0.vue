@@ -7,7 +7,7 @@
           <span style="margin-left: 5px;">客户信息</span>
           <div style="float: right">
             <el-button v-if="pageId != 'demandPreTrial'" v-waves size="mini" type="danger" @click.stop="getNextData">下一条</el-button>
-            <el-button v-if="pageId != 'enquiryDetail' && pageId != 'customerDemandDetail'" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openAddDemandDialog">添加新需求</el-button>
+            <el-button v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openAddDemandDialog">添加新需求</el-button>
             <el-button v-waves size="mini" icon="el-icon-edit" type="primary" @click="openCustomerInfoDialog">编辑</el-button>
           </div>
         </div>
@@ -45,42 +45,14 @@
                 <svg-icon icon-class="documentation" />
                 <span style="margin-left: 5px;">{{serviceIntentionItem.intention ? serviceIntentionItem.intention : '未知需求'}}&nbsp;&nbsp;&nbsp;&nbsp;<el-tag v-if="serviceIntentionItem.status && serviceIntentionItem.status != ''">{{serviceIntentionItem.status | demandStatusFilters}}</el-tag>&nbsp;&nbsp;&nbsp;&nbsp;<el-tag type="danger" v-if="serviceIntentionItem.endReason && serviceIntentionItem.endReason != ''">{{serviceIntentionItem.endReason | endResonFilters }}</el-tag></span>
                 <div style="float: right;margin-right: 10px;">
-                  <el-button v-waves size="mini" type="info" @click.stop="lookFollowUpRecord(serviceIntentionItem)">操作记录</el-button>
                   <el-button v-if="serviceIntentionItem.status != 4 && (!serviceIntentionItem.intentionCode || serviceIntentionItem.intentionCode == '')" v-waves size="mini" type="danger" @click.stop="openCompleteDemandDialog(serviceIntentionItem)">完善需求</el-button>
-                  <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="danger" @click.stop="openEndDemandDialog(serviceIntentionItem)">结束需求</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')" v-waves size="mini" type="danger" @click.stop="openEndDemandDialog(serviceIntentionItem)">结束需求</el-button>
                   <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')" v-waves size="mini" type="primary" @click.stop="openTransferDialog(serviceIntentionItem)">转移</el-button>
-                  <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '') && pageId != 'enquiryDetail'" v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openAddInquiryDialog(serviceIntentionItem)">新增询价单</el-button>
-                  <el-button v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openFollowUpDialog(serviceIntentionItem)">新增跟进</el-button>
+                  <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')" v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openAddInquiryDialog(serviceIntentionItem)">新增询价单</el-button>
                 </div>
               </div>
             </template>
             <div class="demandList">
-              <div class="demandAttribute">
-                <div class="contentItem">
-                  <label>联系状态:</label>
-                  <span class="contentValue">{{serviceIntentionItem.followStatus | followStatusFilter}}</span>
-                </div>
-                <div class="contentItem">
-                  <label>联系方式:</label>
-                  <span class="contentValue">{{serviceIntentionItem.phone}}</span>
-                </div>
-                <div class="contentItem">
-                  <label>跟进状态:</label>
-                  <span class="contentValue">{{serviceIntentionItem.followUpCount ? serviceIntentionItem.followUpCount : '0' }}次</span>
-                </div>
-                <div class="contentItem">
-                  <label>分发总次数:</label>
-                  <span class="contentValue">{{serviceIntentionItem.distributedAmount ? serviceIntentionItem.distributedAmount : '0'}}次</span>
-                </div>
-                <div class="contentItem">
-                  <label>客服分发次数:</label>
-                  <span class="contentValue">{{serviceIntentionItem.serviceDistributedAmount ? serviceIntentionItem.serviceDistributedAmount : '0' }}次</span>
-                </div>
-                <div class="contentItem" v-if="serviceIntentionItem.remark && serviceIntentionItem.remark != ''">
-                  <label>备注:</label>
-                  <span class="contentValue">{{serviceIntentionItem.remark}}</span>
-                </div>
-              </div>
               <div style="text-align: center;" v-if="!serviceIntentionItem.intentionInfoList || serviceIntentionItem.intentionInfoList.length == 0">
                 暂无询价单
               </div>
@@ -88,14 +60,11 @@
                 <el-card  class="box-card intentionInfoList">
                   <div slot="header" class="clearfix">
                     <svg-icon icon-class="form" />
-                    <span style="margin-left: 5px;">询价单{{item.price ? '（价格：' +  item.price / 100 + '金币）' : ''}}</span>
-                    <div style="float: right">
-                      <el-button style="margin-right: 10px;" v-waves size="mini" type="info" @click="lookFollowUpRecord(item)">操作记录</el-button>
-                      <span v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
-                        <el-button v-if="(!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}') || (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openAKeyDistributeDialog(item, serviceIntentionItem)">一键分发</el-button>
-                        <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' || (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openDistributeDialog(item, serviceIntentionItem)">指定分发</el-button>
-                        <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' || (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="warning" @click="editEnquiryFrom(item, serviceIntentionItem)">补充询价单</el-button>
-                      </span>
+                    <span style="margin-left: 5px;">询价单</span>
+                    <div style="float: right" v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
+                      <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openAKeyDistributeDialog(item)">一键分发</el-button>
+                      <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" type="danger" @click="openDistributeDialog(item)">指定分发</el-button>
+                      <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}'" v-waves size="mini" icon="el-icon-circle-plus" type="warning" @click="openRecordDialog(item)">新增跟进</el-button>
                     </div>
                   </div>
                   <div style="margin-bottom:50px;">
@@ -111,8 +80,7 @@
                           <span v-if="a.type == '2'">{{a.valueName}}</span>
                         </span>
                       </div>
-                      <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <div class="contentItem" v-if="item.followStatus">
+                      <div class="contentItem">
                         <label>联系状态:</label>
                         <span class="contentValue">{{item.followStatus | followStatusFilter}}</span>
                       </div>
@@ -124,33 +92,27 @@
                         <label>更新时间:</label>
                         <span class="contentValue">{{item.modifyTime}}</span>
                       </div>
-                      <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <div class="contentItem" v-if="item.distributeCount && item.distributeCount != 0">
+                      <div class="contentItem">
                         <label>分发次数:</label>
                         <span class="contentValue">{{item.distributeCount ? item.distributeCount : '0'}}次</span>
                       </div>
-                      <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <div class="contentItem" v-if="item.followUpCount && item.followUpCount != 0">
+                      <div class="contentItem">
                         <label>跟进状态:</label>
                         <span class="contentValue">{{item.followUpCount ? item.followUpCount : '0' }}次</span>
                       </div>
-                      <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <div class="contentItem" v-if="(item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}') && !item.quotedMerchantDistributeVo">
+                      <div class="contentItem" v-if="item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价公司:</label>
                         <span class="contentValue">{{item.quotedMerchant.companyName}}</span>
                       </div>
-                      <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <div class="contentItem" v-if="(item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}') && !item.quotedMerchantDistributeVo">
+                      <div class="contentItem" v-if="item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价状态:</label>
                         <span class="contentValue">{{item.status | inquiryFilters}}</span>
                       </div>
-                      <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <div class="contentItem" v-if="(item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}') && !item.quotedMerchantDistributeVo">
+                      <div class="contentItem" v-if="item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价时间:</label>
                         <span class="contentValue">{{item.quotedMerchant.quotingTime}}</span>
                       </div>
-                      <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <div class="contentItem" v-if="(item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}') && !item.quotedMerchantDistributeVo">
+                      <div class="contentItem" v-if="item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}'">
                         <label>询价操作:</label>
                         <span class="contentValue">{{item.quotedMerchant.opName}}</span>
                       </div>
@@ -159,47 +121,38 @@
                         <span class="contentValue">{{item.customerIntention}}</span>
                       </div>
                     </div>
-                    <div class="list_body" v-if="item.quotedMerchantDistributeVo && JSON.stringify(item.quotedMerchantDistributeVo) != '{}'">
-                      <div class="list_body_table">
-                        <div class="list_body_table_row">
-                          <div class="list_body_table_col">
-                            <span class="leftTitle">已购买（{{(!item.quotedMerchantDistributeVo.buyMerchant || item.quotedMerchantDistributeVo.buyMerchant.length == 0) ? 0 : item.quotedMerchantDistributeVo.buyMerchant.length}}）</span>
-                          </div>
-                          <div class="list_body_table_col">
-                            <span v-if="item.quotedMerchantDistributeVo.buyMerchant && item.quotedMerchantDistributeVo.buyMerchant.length != 0">
-                              <el-tag style="margin: 5px;" v-for="(merchant, index) in item.quotedMerchantDistributeVo.buyMerchant" :key="'buyMerchant'+index">{{merchant}}</el-tag>
-                            </span>
-                            <span v-else>-</span>
-                          </div>
-                        </div>
-                        <div class="list_body_table_row">
-                          <div class="list_body_table_col">
-                            <span class="leftTitle">未购买（{{(!item.quotedMerchantDistributeVo.distributeMerchant || item.quotedMerchantDistributeVo.distributeMerchant.length == 0) ? 0 : item.quotedMerchantDistributeVo.distributeMerchant.length}}）</span>
-                          </div>
-                          <div class="list_body_table_col">
-                            <span v-if="item.quotedMerchantDistributeVo.distributeMerchant && item.quotedMerchantDistributeVo.distributeMerchant.length != 0">
-                              <el-tag style="margin: 5px;" v-for="(merchant, index) in item.quotedMerchantDistributeVo.distributeMerchant" :key="'distributeMerchant'+index">{{merchant}}</el-tag>
-                            </span>
-                            <span v-else>-</span>
-                          </div>
-                        </div>
-                        <div class="list_body_table_row">
-                          <div class="list_body_table_col">
-                            <span class="leftTitle">询价时间</span>
-                          </div>
-                          <div class="list_body_table_col">
-                            <span>{{ (!item.quotedMerchantDistributeVo.inquiryTime) ? '-' : item.quotedMerchantDistributeVo.inquiryTime }}</span>
-                          </div>
-                        </div>
-                        <div class="list_body_table_row">
-                          <div class="list_body_table_col">
-                            <span class="leftTitle">询价操作</span>
-                          </div>
-                          <div class="list_body_table_col">
-                            <span>{{ (!item.quotedMerchantDistributeVo.opName) ? '-' : item.quotedMerchantDistributeVo.opName }}</span>
-                          </div>
-                        </div>
-                      </div>
+                    <div class="table" style="padding: 0 40px;">
+                      <el-collapse v-model="item.collapseName" @change="getFollowRecords(item, $event)" accordion>
+                        <el-collapse-item title="跟进记录" name="跟进记录">
+                          <el-table
+                            :data="item.recordList"
+                            border
+                            fit
+                            highlight-current-row
+                            style="width: 100%;">
+
+                            <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
+
+                            <el-table-column label="内容记录" align="center">
+                              <template slot-scope="scope">
+                                <span>{{ scope.row.opContent }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column label="操作者" width="200px" align="center">
+                              <template slot-scope="scope">
+                                <span>{{ scope.row.opName }}</span>
+                              </template>
+                            </el-table-column>
+
+                            <el-table-column label="时间" width="200px" align="center">
+                              <template slot-scope="scope">
+                                <span>{{ scope.row.createTime }}</span>
+                              </template>
+                            </el-table-column>
+                          </el-table>
+                        </el-collapse-item>
+                      </el-collapse>
                     </div>
                   </div>
                 </el-card>
@@ -215,6 +168,15 @@
       <el-dialog title="添加新需求" :visible.sync="addDemandDialog" width="720px">
         <el-form :model="demandForm" label-width="120px">
           <el-form-item label="客户需求：">
+            <!-- <el-select v-model="firstCode" style="width: 150px; margin-right: 10px;" @change="firstCodeChange" placeholder="请选择客户需求">
+              <el-option v-for="(item, index) in firstCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
+            </el-select>
+            <el-select v-if="secondCodeList.length != 0" v-model="secondCode" style="width: 150px;margin-right: 10px;" @change="secondCodeChange" placeholder="请选择客户需求">
+              <el-option v-for="(item, index) in secondCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
+            </el-select>
+            <el-select  v-if="intentionCodeList.length != 0" v-model="followForm.intentionCode" style="width: 150px; margin-right: 10px;" @change="intentionCodeChange" placeholder="请选择客户需求">
+              <el-option v-for="(item, index) in intentionCodeList" :key="item.name + index" :label="item.name" :value="item.code"></el-option>
+            </el-select> -->
             <el-cascader v-model="demandForm.serviceCodeList" style="width: 300px" class="filter-item" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
           </el-form-item>
         </el-form>
@@ -235,48 +197,8 @@
           <el-button :loading="completeDemandLoading" type="primary" @click="completeDemand">确 定</el-button>
         </div>
       </el-dialog>
-      <!-- 新增询价单/ 补充询价单 -->
-      <el-dialog class="enquiryFormDialog" :title="dialogTitle" :visible.sync="dialogEnquiryFormVisible" width="720px">
-        <el-form :model="enquiryForm" :rules="enquiryFormRules" label-width="120px">
-          <!-- <el-form-item v-if="dialogTitle == '新增询价单'" label="联系方式：" prop="opContent">
-            <el-select v-model="enquiryForm.opContent" placeholder="请选择联系方式">
-              <el-option label="手机" value="手机"></el-option>
-              <el-option label="微信" value="微信"></el-option>
-              <el-option label="QQ" value="QQ"></el-option>
-              <el-option label="财税鱼官方IM" value="财税鱼官方IM"></el-option>
-              <el-option label="邮件" value="邮件"></el-option>
-              <el-option label="其他" value="其他"></el-option>
-            </el-select>
-          </el-form-item> -->
-          <!-- <el-form-item v-if="dialogTitle == '新增询价单'" label="联系状态：" prop="followStatus">
-            <el-select v-model="enquiryForm.followStatus" placeholder="请选择联系状态">
-              <el-option v-for="item in followStatusList" :key="item.name + item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-          </el-form-item> -->
-          <el-form-item v-for="(item, index) in inputList" :key="'input' + index"  :label="item.name + '：'">
-            <el-input v-if="item.type == 1" v-model="item.value" :placeholder="'请输入' + item.name" @input="itemChange"></el-input>
-            <el-select v-if="item.type == 2" v-model="item.value" :placeholder="'请选择' + item.name" @change="itemChange">
-              <el-option v-for="(k, i) in item.valueTrees" :key="k.name + i" :label="k.name" :value="k.code"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item style="width: 635px;" label="需求地区：">
-            <el-cascader ref="countryTree" v-model="enquiryForm.addressList" style="width: 400px;" class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" clearable placeholder="请选择需求区域"></el-cascader>
-          </el-form-item>
-          <el-form-item style="width: 635px;" label="客户意向：">
-            <el-input maxlength="200" v-model="enquiryForm.customerIntention" placeholder="请输入客户意向"></el-input>
-          </el-form-item>
-          <!-- <el-form-item v-if="dialogTitle == '新增询价单'" label="备注：">
-            <el-input type="textarea" v-model="enquiryForm.remark"></el-input>
-          </el-form-item> -->
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogEnquiryFormVisible = false">取 消</el-button>
-          <el-button type="primary" v-if="dialogTitle == '新增询价单'" :loading="addInquiryLoading" @click="addInquiry">确 定</el-button>
-          <el-button type="primary" v-else :loading="addEnquiryFromLoading" @click="editEnquirySheet">确 定</el-button>
-        </div>
-      </el-dialog>
-      <!-- 新增跟进 -->
-      <el-dialog class="followFormDialog" title="新增跟进" :visible.sync="dialogfollowFormVisible" width="720px">
+      <!-- 新增询价单/新增跟进 -->
+      <el-dialog class="followFormDialog" :title="'新增' + dialogTitle" :visible.sync="dialogfollowFormVisible" width="720px">
         <el-form :model="followForm" :rules="followFormRules" label-width="120px">
           <el-form-item label="联系方式：" prop="opContent">
             <el-select v-model="followForm.opContent" placeholder="请选择联系方式">
@@ -293,13 +215,32 @@
               <el-option v-for="item in followStatusList" :key="item.name + item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item v-for="(item, index) in inputList" :key="'input' + index"  :label="item.name + '：'">
+            <el-input v-if="item.type == 1" v-model="item.value" :placeholder="'请输入' + item.name" @input="itemChange"></el-input>
+            <el-select v-if="item.type == 2" v-model="item.value" :placeholder="'请选择' + item.name" @change="itemChange">
+              <el-option v-for="(k, i) in item.valueTrees" :key="k.name + i" :label="k.name" :value="k.code"></el-option>
+            </el-select>
+            <!-- <el-select v-if="item.type == 3" v-model="item.value" multiple collapse-tags @change="itemChange" :placeholder="'请选择' + item.name">
+              <el-option v-for="(k, i) in item.valueTrees" :key="k.name + i" :label="k.name" :value="k.code"></el-option>
+            </el-select> -->
+          </el-form-item>
+          <el-form-item style="width: 635px;" label="需求地区：">
+            <el-cascader ref="countryTree" v-model="followForm.addressList" style="width: 400px;" class="filter-item" @change="areaCodeChange" :options="areaCodeList" :props="props" clearable placeholder="请选择需求区域"></el-cascader>
+          </el-form-item>
+          <!-- <el-form-item style="width: 635px;" label="公司名称：">
+            <el-input v-model="followForm.companyName" placeholder="请输入公司名称"></el-input>
+          </el-form-item> -->
+          <el-form-item style="width: 635px;" label="客户意向：">
+            <el-input maxlength="200" v-model="followForm.customerIntention" placeholder="请输入客户意向"></el-input>
+          </el-form-item>
           <el-form-item label="备注：">
             <el-input type="textarea" v-model="followForm.remark"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogfollowFormVisible = false">取 消</el-button>
-          <el-button type="primary" :loading="addFollowRecordsLoading" @click="addFollowUpRecords">确 定</el-button>
+          <el-button type="primary" :loading="addFollowRecordsLoading" v-if="dialogTitle == '跟进'" @click="addFollowRecords">确 定</el-button>
+          <el-button type="primary" :loading="addInquiryLoading" v-else @click="addInquiry">确 定</el-button>
         </div>
       </el-dialog>
       <!-- 编辑客户信息 -->
@@ -334,18 +275,18 @@
           <el-button :loading="aKeyDistributeLoading" type="primary" @click="aKeyDistribute">发 送</el-button>
         </div>
       </el-dialog>
-      <!-- 指定分发 -->
-      <el-dialog class="distributeDialog" title="指定分发" :visible.sync="distributeDialog" width="800px">
+      <!-- 分发 -->
+      <el-dialog class="distributeDialog" title="指定分发" :visible.sync="distributeDialog" width="500px">
         <el-form ref="distributeRef" :model="distributeForm" :rules="distributeRules" label-width="120px">
           <el-form-item label="询价单定价：" prop="price">
             <el-input style="float: left; width: 260px;" @keyup.native="distributePriceChange" type="tel" v-model.trim="distributeForm.price" placeholder="请输入询价单定价"></el-input>
             <span>&nbsp;&nbsp;元&nbsp;</span>
           </el-form-item>
-          <!-- <el-form-item label="商户账户：">
+          <el-form-item label="商户账户：">
             <el-input style="float: left; width: 200px;" type="tel" maxlength="11" @input="distributePhoneChange" v-model.trim="distributeForm.phone" placeholder="请输入商户手机号"></el-input>
             <el-button style="float: left; margin-left: 10px;" v-waves type="success" icon="el-icon-search" @click.stop="retrieveCompany">检索</el-button>
-          </el-form-item> -->
-          <!-- <div v-if="merchantMark == 3">
+          </el-form-item>
+          <div v-if="merchantMark == 3">
             <el-form-item label="公司名称：">{{merchantInfo.companyName}}</el-form-item>
             <el-form-item label="入驻状态：">
               <el-tag v-if="merchantInfo.certified">已入驻</el-tag>
@@ -353,31 +294,9 @@
             </el-form-item>
             <el-form-item label="联系人称呼：">{{merchantInfo.contactName}}</el-form-item>
             <el-form-item label="联系电话：">{{merchantInfo.loginPhone}}</el-form-item>
-          </div> -->
-          <!-- <div v-if="merchantMark == 2">
+          </div>
+          <div v-if="merchantMark == 2">
             <el-form-item label=""><el-tag type="danger">未找到当前手机号对应的商户信息</el-tag></el-form-item>
-          </div> -->
-          <el-form-item label="商户账户：">
-            <el-select style="width: 300px;" v-model="distributeForm.currentMerchant" @change="addDistributeCompany" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="searchCompanyRemoteMethod" :loading="searchCompanyLoading">
-              <el-option v-for="item in merchantInfoList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-          </el-form-item>
-          <div class="merchantInfoList" v-if="selectMerchants.length > 0">
-            <el-table :data="selectMerchants" stripe style="width: 100%">
-              <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
-              <el-table-column align="center" prop="name" label="商户名称">
-              </el-table-column>
-              <el-table-column label="微信绑定" align="center" width="150">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.bindWx ? '已绑定' : '未绑定' }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column align="center" label="操作" width="120">
-                <template slot-scope="scope">
-                  <el-button size="mini" type="success" @click="deleteCurrentCompanyRow(scope.row)">移除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
           </div>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -423,37 +342,6 @@
           <el-button :loading="transferLoading" type="primary" @click="transfer">确 定</el-button>
         </div>
       </el-dialog>
-      <!-- 操作记录 -->
-      <el-dialog title="操作记录" :visible.sync="lookFollowUpRecordDialog">
-        <el-table
-          :data="recordList"
-          border
-          fit
-          highlight-current-row
-          style="width: 100%;">
-
-          <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
-
-          <el-table-column label="内容记录" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.info }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="操作者" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.opUserName }}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="时间" width="200px" align="center">
-            <template slot-scope="scope">
-              <span>{{ scope.row.createTime }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-        <pagination v-show="operationTotal>0" :total="operationTotal" :page.sync="operationRecordQuery.pageNum" :limit.sync="operationRecordQuery.pageSize" @pagination="getOperationList" />
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -462,8 +350,8 @@ import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import global from '@/utils/global'
 import { isInteger } from '@/utils/validate'
-import { intentionServiceExtend, intentionTrees, addressGlobalTrees, getAddressCityTrees, companySearch } from '@/api/global'
-import { intentionFollowUp, userSave, serviceUpdate, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform, intentionDistributeGroup, operationRecordList, intentionReplenish, intentionObtainPrevious } from '@/api/demandDetail'
+import { intentionServiceExtend, intentionTrees, addressGlobalTrees, getAddressCityTrees } from '@/api/global'
+import { intentionFollowUp, userSave, serviceUpdate, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform, intentionDistributeGroup } from '@/api/demandDetail'
 
 export default {
   components: { Pagination },
@@ -535,12 +423,15 @@ export default {
       transferLoading: false,
       transUserSearchLoading: false,
       dialogTitle: '',
-      dialogEnquiryFormVisible: false,
-      addEnquiryFromLoading: false,
+      dialogfollowFormVisible: false,
+      addFollowRecordsLoading: false,
       addInquiryLoading: false,
-      enquiryForm: {
+      followForm: {
         siId: '',
         intentionId: '',
+        opContent: '',
+        followStatus: '',
+        // companyName: '',
         customerIntention: '',
         areaCode: '',
         area: '',
@@ -551,7 +442,7 @@ export default {
         addressList: [],
         serviceCodeList: []
       },
-      enquiryFormRules: {
+      followFormRules: {
         opContent: [
           { required: true, message: '请选择联系方式', trigger: 'blur' }
         ],
@@ -573,14 +464,14 @@ export default {
         leaf: 'leafNode'
       },
       inputList: [],
-      // 指定分发
       distributeDialog: false,
       distributeLoading: false,
       distributeForm: {
-        siId: '',
         intentionId: '',
+        phone: '',
         merchantId: '',
-        currentMerchant: '',
+        companyName: '',
+        enteringFlag: '',
         price: 200
       },
       merchantMark: 1,
@@ -592,15 +483,10 @@ export default {
           {validator: isInteger, trigger: 'blur'}
         ]
       },
-      searchCompanyLoading: false,
-      merchantInfoList: [],
-      selectMerchants: [],
-      currentMerchant: '',
       // 一键分发
       aKeyDistributeDialog: false,
       aKeyDistributeLoading: false,
       aKeyDistributeForm: {
-        siId: '',
         intentionId: '',
         price: 200
       },
@@ -617,34 +503,7 @@ export default {
         intentionCode: ''
       },
       completeDemandDialog: false,
-      completeDemandLoading: false,
-      // 查看操作记录
-      lookFollowUpRecordDialog: false,
-      recordList: [],
-      operationRecordQuery: {
-        operationId: '',
-        operationName: '询价单',
-        pageNum: 1,
-        pageSize: 10
-      },
-      operationTotal: 0,
-      // 新增跟进
-      dialogfollowFormVisible: false,
-      addFollowRecordsLoading: false,
-      followForm: {
-        siId: '',
-        opContent: '',
-        followStatus: '',
-        remark: ''
-      },
-      followFormRules: {
-        opContent: [
-          { required: true, message: '请选择联系方式', trigger: 'blur' }
-        ],
-        followStatus: [
-          { required: true, message: '请选择联系状态', trigger: 'blur' }
-        ]
-      }
+      completeDemandLoading: false
     }
   },
   created() {
@@ -729,7 +588,7 @@ export default {
       console.log(val)
       console.log(this.$refs.countryTree.getCheckedNodes()[0])
       let arr = []
-      this.enquiryForm.areaCode = val[val.length - 1]
+      this.followForm.areaCode = val[val.length - 1]
       if(val.length > 0) {
         for(let i=0;i<this.areaCodeList.length;i++){
           if(this.areaCodeList[i].code == val[0]) {
@@ -759,7 +618,7 @@ export default {
         }
       }
       console.log(arr)
-      this.enquiryForm.area = arr.join('-')
+      this.followForm.area = arr.join('-')
     },
     // 下一条
     getNextData() {
@@ -821,7 +680,7 @@ export default {
           })
           this.addDemandLoading = false
           this.addDemandDialog = false
-          this.init(res.data)
+          this.init()
         }
       }).catch(err => {
         this.addDemandLoading = false
@@ -1056,10 +915,13 @@ export default {
       })
     },
     // 询价单表单 重置
-    resetEnquiryForm() {
-      this.enquiryForm = {
+    resetFollowForm() {
+      this.followForm = {
         siId: '',
         intentionId: '',
+        opContent: '',
+        followStatus: '',
+        // companyName: '',
         customerIntention: '',
         areaCode: '',
         area: '',
@@ -1074,13 +936,13 @@ export default {
     // 打开新增询价单弹框
     openAddInquiryDialog(item) {
       console.log(item)
-      this.resetEnquiryForm()
-      this.enquiryForm.siId = item.id
-      this.enquiryForm.intentionCode = item.intentionCode
-      this.enquiryForm.intention = item.intention
+      this.resetFollowForm()
+      this.followForm.siId = item.id
+      this.followForm.intentionCode = item.intentionCode
+      this.followForm.intention = item.intention
       this.inputList = []
-      this.dialogEnquiryFormVisible = true
-      this.dialogTitle = '新增询价单'
+      this.dialogfollowFormVisible = true
+      this.dialogTitle = '询价单'
       this.getIntentionServiceExtend(item.intentionCode, () => {
         if (item.extra && item.extra != '') {
           let arr = JSON.parse(item.extra)
@@ -1092,36 +954,31 @@ export default {
             }
           }
         }
-        let params = {
-          siId: item.id
-        }
-        intentionObtainPrevious(params).then(res => {
-          if(res.code == 0){
-            if(res.data) {
-              this.enquiryForm.customerIntention = res.data.customerIntention
-              this.enquiryForm.areaCode = res.data.areaCode
-              this.enquiryForm.area = res.data.area
-              this.enquiryForm.addressList = res.data.addressList || []
-              let extra = res.data.extra
-              if (extra && extra != '') {
-                let arr = JSON.parse(extra)
-                for(let i=0;i<arr.length;i++){
-                  for(let j=0; j<this.inputList.length;j++){
-                    if(arr[i].propCode == this.inputList[j].code){
-                      this.inputList[j].value = arr[i].valueCode
-                      this.inputList[j].valueCode = arr[i].valueName
-                    }
-                  }
-                }
-              }
-            }
-          }
-        })
       })
     },
     // 新增询价单
     addInquiry() {
-      console.log(this.enquiryForm)
+      console.log(this.followForm)
+      if (!this.followForm.opContent || this.followForm.opContent == '') {
+        this.$message({
+          message: '联系方式不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+
+      if (!this.followForm.followStatus || this.followForm.followStatus == '') {
+        this.$message({
+          message: '联系状态不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+
       // extra 字段 数据处理
       let arr = []
       if (this.inputList && this.inputList.length > 0) {
@@ -1148,20 +1005,61 @@ export default {
                 }
               }
             }
+            // else if(this.inputList[i].type == 3) {
+            //   console.log(this.inputList[i].value)
+            //   let valueName = []
+            //   if(this.inputList[i].value && this.inputList[i].value !='' && this.inputList[i].value.length > 0) {
+            //     for(let j=0;j<this.inputList[i].value.length;j++) {
+            //       for(let k=0;k<this.inputList[i].valueTrees.length;k++) {
+            //         if (this.inputList[i].valueTrees[k].code == this.inputList[i].value[j]) {
+            //            valueName.push(this.inputList[i].valueTrees[k].name)
+            //         }
+            //       }
+            //     }
+            //     arr.push({
+            //       valueCode: this.inputList[i].value,
+            //       valueName: valueName,
+            //       propCode: this.inputList[i].code,
+            //       propName: this.inputList[i].name,
+            //       type: this.inputList[i].type
+            //     })
+            //   }
+            // }
           }
         }
       }
       console.log(arr)
-      this.enquiryForm.extra = JSON.stringify(arr)
+      this.followForm.extra = JSON.stringify(arr)
 
-      this.enquiryForm.userId = this.customerInfo.userId
-      if (this.enquiryForm.addressList && this.enquiryForm.addressList.length > 0) {
-        this.enquiryForm.areaCode = this.enquiryForm.addressList[this.enquiryForm.addressList.length - 1]
+      this.followForm.userId = this.customerInfo.userId
+      if (this.followForm.addressList && this.followForm.addressList.length > 0) {
+        this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
       }
-
-      console.log(this.enquiryForm)
+      // if (this.followForm.serviceCodeList && this.followForm.serviceCodeList.length > 0) {
+      //   this.followForm.intentionCode = this.followForm.serviceCodeList[this.followForm.serviceCodeList.length - 1]
+      // }
+      // if (this.intentionCodeList && this.intentionCodeList.length > 0) {
+      //   for(let i=0;i<this.intentionCodeList.length;i++){
+      //     if(this.followForm.serviceCodeList[0] == this.intentionCodeList[i].code){
+      //       for(let j=0;j<this.intentionCodeList[i].childs.length;j++){
+      //         if(this.intentionCodeList[i].childs[j].code == this.followForm.serviceCodeList[1]) {
+      //           if (this.intentionCodeList[i].childs[j].leafNode) {
+      //             this.followForm.intention = this.intentionCodeList[i].childs[j].name
+      //           } else {
+      //             for(let k=0;k<this.intentionCodeList[i].childs[j].childs.length;k++){
+      //               if(this.intentionCodeList[i].childs[j].childs[k].code == this.followForm.serviceCodeList[2]) {
+      //                 this.followForm.intention = this.intentionCodeList[i].childs[j].childs[k].name
+      //               }
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
+      console.log(this.followForm)
       this.addInquiryLoading = true
-      serviceSaveIntention(this.enquiryForm).then(res => {
+      serviceSaveIntention(this.followForm).then(res => {
         if(res.code == 0){
           this.$notify({
             title: '成功',
@@ -1170,31 +1068,30 @@ export default {
             duration: 1000
           })
           this.addInquiryLoading = false
-          this.dialogEnquiryFormVisible = false
+          this.dialogfollowFormVisible = false
           this.init()
         }
       }).catch(err => {
         this.addInquiryLoading = false
       })
     },
-    // 打开补充询价单 弹框
-    editEnquiryFrom(item, serviceIntentionItem) {
+    // 打开新增跟进 弹框
+    openRecordDialog(item) {
       console.log(item)
-      this.resetEnquiryForm()
+      this.resetFollowForm()
       this.inputList = []
-      this.enquiryForm.siId = serviceIntentionItem.id
-      this.enquiryForm.intentionId = item.id
-      this.enquiryForm.followStatus = item.followStatus
-      // this.enquiryForm.companyName = item.companyName
-      this.enquiryForm.customerIntention = item.customerIntention
-      this.enquiryForm.remark = item.remark
-      this.enquiryForm.addressList = item.addressList
-      this.enquiryForm.area = item.area
-      this.enquiryForm.areaCode = item.areaCode
-      this.enquiryForm.intention = item.intention
-      this.enquiryForm.intentionCode = item.intentionCode
-      this.dialogTitle = '补充询价单'
-      this.dialogEnquiryFormVisible = true
+      this.followForm.intentionId = item.id
+      this.followForm.followStatus = item.followStatus
+      // this.followForm.companyName = item.companyName
+      this.followForm.customerIntention = item.customerIntention
+      this.followForm.remark = item.remark
+      this.followForm.addressList = item.addressList
+      this.followForm.area = item.area
+      this.followForm.areaCode = item.areaCode
+      this.followForm.intention = item.intention
+      this.followForm.intentionCode = item.intentionCode
+      this.dialogTitle = '跟进'
+      this.dialogfollowFormVisible = true
       this.getIntentionServiceExtend(item.intentionCode, () => {
         if (item.extra && item.extra != '') {
           let arr = JSON.parse(item.extra)
@@ -1208,8 +1105,28 @@ export default {
         }
       })
     },
-    // 补充询价单
-    editEnquirySheet() {
+    // 新增跟进
+    addFollowRecords() {
+
+      if (!this.followForm.opContent || this.followForm.opContent == '') {
+        this.$message({
+          message: '联系方式不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (!this.followForm.followStatus || this.followForm.followStatus == '') {
+        this.$message({
+          message: '联系状态不能为空',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+
       // extra 字段 数据处理
       let arr = []
       if (this.inputList && this.inputList.length > 0) {
@@ -1236,44 +1153,61 @@ export default {
                 }
               }
             }
+            // else if(this.inputList[i].type == 3) {
+            //   let valueName = []
+            //   if(this.inputList[i].value && this.inputList[i].value !='' && this.inputList[i].value.length > 0) {
+            //     for(let j=0;j<this.inputList[i].value.length;j++) {
+            //       for(let k=0;k<this.inputList[i].valueTrees.length;k++) {
+            //         if (this.inputList[i].valueTrees[k].code == this.inputList[i].value[j]) {
+            //            valueName.push(this.inputList[i].valueTrees[k].name)
+            //         }
+            //       }
+            //     }
+            //     arr.push({
+            //       valueCode: this.inputList[i].value,
+            //       valueName: valueName,
+            //       propCode: this.inputList[i].code,
+            //       propName: this.inputList[i].name,
+            //       type: this.inputList[i].type
+            //     })
+            //   }
+            // }
           }
         }
       }
+      console.log(arr)
+      this.followForm.extra = JSON.stringify(arr)
 
-      this.enquiryForm.extra = JSON.stringify(arr)
-
-      if (this.enquiryForm.addressList && this.enquiryForm.addressList.length > 0) {
-        this.enquiryForm.areaCode = this.enquiryForm.addressList[this.enquiryForm.addressList.length - 1]
+      if (this.followForm.addressList && this.followForm.addressList.length > 0) {
+        this.followForm.areaCode = this.followForm.addressList[this.followForm.addressList.length - 1]
       }
 
-      this.addEnquiryFromLoading = true
-      intentionReplenish(this.enquiryForm).then(res => {
+      this.addFollowRecordsLoading = true
+      intentionSaveFollowUp(this.followForm).then(res => {
         if(res.code == 0){
           this.$notify({
             title: '成功',
-            message: '询价单补充成功',
+            message: '跟进添加成功',
             type: 'success',
             duration: 1000
           })
-          this.addEnquiryFromLoading = false
-          this.dialogEnquiryFormVisible = false
+          this.addFollowRecordsLoading = false
+          this.dialogfollowFormVisible = false
           this.init()
         }
       }).catch(err => {
-        this.addEnquiryFromLoading = false
+        this.addFollowRecordsLoading = false
       })
     },
     // 打开一键分发弹框
-    openAKeyDistributeDialog(item, serviceIntentionItem) {
+    openAKeyDistributeDialog(item) {
       this.resetAKeyDistributeForm()
-      this.aKeyDistributeForm.siId = serviceIntentionItem.id
       this.aKeyDistributeForm.intentionId = item.id
       this.aKeyDistributeDialog = true
     },
     // 重置一键分发表单
     resetAKeyDistributeForm() {
       this.aKeyDistributeForm = {
-        siId: '',
         intentionId: '',
         price: 200
       }
@@ -1283,7 +1217,6 @@ export default {
       this.$refs['aKeyDistributeRef'].validate((valid) => {
         if (valid) {
           let params = {
-            siId: this.aKeyDistributeForm.siId,
             intentionId: this.aKeyDistributeForm.intentionId,
             price: this.aKeyDistributeForm.price
           }
@@ -1309,250 +1242,165 @@ export default {
       })
     },
     // 打开分发弹框
-    openDistributeDialog(item, serviceIntentionItem) {
+    openDistributeDialog(item) {
+      this.merchantMark = 1
+      this.merchantInfo = {}
       this.resetDistributeForm()
       this.distributeForm.intentionId = item.id
-      this.distributeForm.siId = serviceIntentionItem.id
       this.distributeDialog = true
     },
     // 重置分发表单
     resetDistributeForm(){
       this.distributeForm = {
-        siId: '',
         intentionId: '',
+        phone: '',
         merchantId: '',
-        currentMerchant: '',
+        companyName: '',
+        enteringFlag: '',
         price: 200
       }
-      this.selectMerchants = []
     },
-    // 动态获取商户
-    searchCompanyRemoteMethod(query) {
-      console.log(query)
-      let params = {
-        keyword: query,
-        pageNum: 1,
-        pageSize: 30
-      }
-      companySearch(params).then(res => {
-        if(res.code == 0){
-          this.merchantInfoList = res.data.items
-        }
-      })
-    },
-    // 添加指定分发商户
-    addDistributeCompany(val) {
-      console.log(val)
-      if(this.includeIsOrNot(val, this.selectMerchants)) {
+    // 检索商户
+    retrieveCompany() {
+      if (!this.distributeForm.phone || this.distributeForm.phone == '') {
         this.$message({
-          message: '当前公司已被选中!',
+          message: '手机号不能为空',
           type: 'error',
           showClose: true,
           duration: 1000
         })
         return
-      } else {
-        for(let i=0; i<this.merchantInfoList.length;i++) {
-          if(this.merchantInfoList[i].id == val) {
-            this.selectMerchants.push(this.merchantInfoList[i])
+      }
+      if (this.distributeForm.phone.length != 11) {
+        this.$message({
+          message: '请输入11位合法手机号',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      let params = {
+        phone: this.distributeForm.phone
+      }
+      merchantGetByPhone(params).then(res => {
+        if(res.code == 0){
+          if (res.data) {
+            this.merchantInfo = res.data
+            this.merchantMark = 3
+          } else {
+            this.merchantMark = 2
+            this.$message({
+              message: '未检索到商户信息',
+              type: 'error',
+              showClose: true,
+              duration: 1000
+            })
           }
+        } else {
+          this.merchantMark = 2
         }
-      }
-      console.log(this.selectMerchants)
+      })
     },
-    // 判断已选列表中是否包含目前这个
-    includeIsOrNot(currentId, arr) {
-      let mark = false
-      for(let j=0;j<arr.length;j++) {
-        if(arr[j].id == currentId) {
-          mark = true
-        }
-      }
-      return mark
-    },
-    // 删除以选择的商户
-    deleteCurrentCompanyRow(row) {
-      console.log(row)
-      this.distributeForm.currentMerchant = ''
-      for(let i=0;i<this.selectMerchants.length;i++) {
-        if(this.selectMerchants[i].id == row.id) {
-          this.selectMerchants.splice(i, 1)
-        }
+    // 分发的字段发生变化
+    distributePhoneChange(val) {
+      console.log(this.distributeForm.phone)
+      if(this.distributeForm.phone.length < 11) {
+        this.merchantMark = 1
+        this.merchantInfo = {}
       }
     },
     // 分发
     distribute(){
-      if (this.selectMerchants.length < 1) {
+      console.log(this.merchantInfo)
+      this.distributeForm.merchantId = this.merchantInfo.id
+      this.distributeForm.companyName = this.merchantInfo.companyName
+      this.distributeForm.enteringFlag = this.merchantInfo.enteringFlag
+
+      if (!this.distributeForm.phone || this.distributeForm.phone == '') {
         this.$message({
-          message: '请先选择商户',
+          message: '手机号不能为空',
           type: 'error',
           showClose: true,
           duration: 1000
         })
         return
       }
-      let params = {
-        siId: this.distributeForm.siId,
-        intentionId: this.distributeForm.intentionId,
-        price: this.distributeForm.price
+
+      if (this.distributeForm.phone.length != 11) {
+        this.$message({
+          message: '请输入11位合法手机号',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
       }
-      if (this.selectMerchants.length == 1) {
-        params.merchantId = this.selectMerchants[0].id
-      } else {
-        params.merchantIds = []
-        for(let i=0;i<this.selectMerchants.length;i++) {
-          params.merchantIds.push(this.selectMerchants[i].id)
-        }
+
+      if(!this.distributeForm.companyName || this.distributeForm.companyName == '') {
+        this.$message({
+          message: '请先检索商户',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
       }
-      console.log(params)
-      this.distributeLoading = true
-      intentionDistribute(params).then(res => {
-        if(res.code == 0){
-          this.$notify({
-            title: '成功',
-            message: '分发成功',
-            type: 'success',
-            duration: 1000
+
+      if (!this.distributeForm.enteringFlag) {
+        this.$message({
+          message: '该商户未入驻',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      this.$refs['distributeRef'].validate((valid) => {
+        if (valid) {
+          this.$confirm('是否确定向“' + this.distributeForm.companyName + '”发送此询价单, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.distributeLoading = true
+            intentionDistribute(this.distributeForm).then(res => {
+              if(res.code == 0){
+                this.$notify({
+                  title: '成功',
+                  message: '分发成功',
+                  type: 'success',
+                  duration: 1000
+                })
+                this.distributeLoading = false
+                this.distributeDialog = false
+                this.init()
+              }
+            }).catch(err => {
+              this.distributeLoading = false
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消分发'
+            })
           })
-          this.distributeLoading = false
-          this.distributeDialog = false
-          this.init()
-        }
-      }).catch(err => {
-        this.distributeLoading = false
-      })
-      // this.$refs['distributeRef'].validate((valid) => {
-      //   if (valid) {
-      //     this.$confirm('是否确定向“' + this.distributeForm.companyName + '”发送此询价单, 是否继续?', '提示', {
-      //       confirmButtonText: '确定',
-      //       cancelButtonText: '取消',
-      //       type: 'warning'
-      //     }).then(() => {
-      //       this.distributeLoading = true
-      //       intentionDistribute(this.distributeForm).then(res => {
-      //         if(res.code == 0){
-      //           this.$notify({
-      //             title: '成功',
-      //             message: '分发成功',
-      //             type: 'success',
-      //             duration: 1000
-      //           })
-      //           this.distributeLoading = false
-      //           this.distributeDialog = false
-      //           this.init()
-      //         }
-      //       }).catch(err => {
-      //         this.distributeLoading = false
-      //       })
-      //     }).catch(() => {
-      //       this.$message({
-      //         type: 'info',
-      //         message: '已取消分发'
-      //       })
-      //     })
-      //   } else {
-      //     return false
-      //   }
-      // })
-    },
-    // 打开新增跟进弹框
-    openFollowUpDialog(row) {
-      this.resetFollowUpForm()
-      this.followForm.siId = row.id
-      this.dialogfollowFormVisible = true
-    },
-    // 重置跟进弹框表单
-    resetFollowUpForm() {
-      this.followForm = {
-        siId: '',
-        opContent: '',
-        followStatus: '',
-        remark: ''
-      }
-    },
-    // 新增跟进
-    addFollowUpRecords() {
-      if (!this.followForm.opContent || this.followForm.opContent == '') {
-        this.$message({
-          message: '联系方式不能为空',
-          type: 'error',
-          showClose: true,
-          duration: 1000
-        })
-        return
-      }
-      if (!this.followForm.followStatus || this.followForm.followStatus == '') {
-        this.$message({
-          message: '联系状态不能为空',
-          type: 'error',
-          showClose: true,
-          duration: 1000
-        })
-        return
-      }
-      this.addFollowRecordsLoading = true
-      intentionSaveFollowUp(this.followForm).then(res => {
-        if(res.code == 0){
-          this.$notify({
-            title: '成功',
-            message: '跟进添加成功',
-            type: 'success',
-            duration: 1000
-          })
-          this.addFollowRecordsLoading = false
-          this.dialogfollowFormVisible = false
-          this.init()
+        } else {
+          return false
         }
       })
-    },
-    // 打开跟进记录弹框
-    lookFollowUpRecord(row) {
-      this.resetOperationRecordQueryForm()
-      this.operationRecordQuery.operationId = row.id
-      this.getOperationList()
-      // let params = {
-      //   id: row.id
-      // }
-      // intentionFollowUp(params).then(res => {
-      //   if(res.code == 0){
-      //     this.recordList = res.data
-      //     this.lookFollowUpRecordDialog = true
-      //   }
-      // })
-    },
-    // 获取操作记录
-    getOperationList() {
-      operationRecordList(this.operationRecordQuery).then(res => {
-        if(res.code == 0){
-          this.recordList = res.data.items
-          this.operationTotal = res.data.total
-          this.lookFollowUpRecordDialog = true
-        }
-      })
-    },
-    // 重置表单
-    resetOperationRecordQueryForm() {
-      this.operationRecordQuery = {
-        operationId: '',
-        operationName: '需求',
-        pageNum: 1,
-        pageSize: 10
-      }
     },
     // 输入框改变视图
-    inputChange(item) {
-      console.log(item)
+    inputChange() {
       this.$forceUpdate()
     },
     itemChange() {
       this.$forceUpdate()
     },
-    // 一键分发询价单单价输入验证
     aKeyDistributePriceChange(){
       this.aKeyDistributeForm.price = this.aKeyDistributeForm.price.replace(/[^\.\d]/g,'')
       this.aKeyDistributeForm.price = this.aKeyDistributeForm.price.replace('.','')
     },
-    // 指定分发询价单单价输入验证
     distributePriceChange(){
       this.distributeForm.price = this.distributeForm.price.replace(/[^\.\d]/g,'')
       this.distributeForm.price = this.distributeForm.price.replace('.','')
@@ -1564,48 +1412,6 @@ export default {
 .demandDetailComponent {
   // padding: 20px;
   // min-height: calc(100vh - 84px);
-  .demandAttribute {
-    margin-bottom: 20px;
-  }
-  .list_body {
-    margin: 0 50px;
-    margin-top: 10px;
-    .list_body_table {
-      color: rgba(0, 0, 0, 0.65);
-      font-size: 14px;
-      .list_body_table_row {
-        min-height: 50px;
-        display: flex;
-        border: 1px solid #ccc;
-        border-top: 0;
-        .list_body_table_col {
-          height: auto;
-          text-align: center;
-          line-height: 20px;
-          padding: 10px;
-          position: relative;
-          .leftTitle {
-            display: block;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-          }
-        }
-        .list_body_table_col:first-child {
-          width: 200px;
-          border-right: 1px solid #ccc;
-        }
-        .list_body_table_col:last-child {
-          flex: 1;
-        }
-      }
-      .list_body_table_row:first-child{
-        border-top: 1px solid #ccc;
-      }
-    }
-  }
-  .demandAttribute,
   .content {
     overflow: hidden;
     .contentItem {
@@ -1634,7 +1440,7 @@ export default {
   .datePicker {
     display: inline-flex;
   }
-  .enquiryFormDialog,
+  .followFormDialog,
   .addFormDialog {
     .el-form {
       overflow: hidden;

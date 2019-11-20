@@ -25,6 +25,10 @@ const global = {
     {name: '已经处理好了',id: 2},
     {name: '目前需要重新考虑',id: 3},
     {name: '目前暂时不需要办理了',id: 4},
+    {name: '关机/停机/空号',id: 6},
+    {name: '入驻服务商',id: 7},
+    {name: '内部测试',id: 8},
+    {name: '表明来意被挂断',id: 9}
   ]
 }
 export default global
