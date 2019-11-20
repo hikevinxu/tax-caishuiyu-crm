@@ -133,8 +133,7 @@ export default {
       props: {
         value: 'code',
         label: 'name',
-        children: 'childs',
-        checkStrictly: true
+        children: 'childs'
       }
     }
   },
