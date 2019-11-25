@@ -1,4 +1,5 @@
 const global = {
+  // 跟进状态
   followStatusList: [
     {name: '六级：很有兴趣', id: 1},
     {name: '五级：较感兴趣/后续有需要/可加微信保持沟通', id: 2},
@@ -7,6 +8,7 @@ const global = {
     {name: '二级：挂断/不回复/强硬抵触', id: 4},
     {name: '一级：空号/无效/资料不符', id: 6}
   ],
+  // 跟进次数
   followUpCountList: [
     {name: '0次', id: 0},
     {name: '1次', id: 1},
@@ -16,10 +18,12 @@ const global = {
     {name: '5次', id: 5},
     {name: '6次', id: 6}
   ],
+  // 上架状态
   statusList: [
     {name: '待上架',id: 0},
     {name: '已上架',id: 1}
   ],
+  // 结束原因
   endDemandReason: [
     {name: '已经在对接中',id: 1},
     {name: '已经处理好了',id: 2},
@@ -29,6 +33,13 @@ const global = {
     {name: '入驻服务商',id: 7},
     {name: '内部测试',id: 8},
     {name: '表明来意被挂断',id: 9}
+  ],
+  // 询价状态
+  inqueryStatus: [
+    {name: '报价中',id: 1},
+    {name: '超时未报价',id: 2},
+    {name: '已购买',id: 3},
+    {name: '反馈价格',id: 4}
   ]
 }
 export default global

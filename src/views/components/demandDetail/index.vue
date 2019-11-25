@@ -88,7 +88,7 @@
                 <el-card  class="box-card intentionInfoList">
                   <div slot="header" class="clearfix">
                     <svg-icon icon-class="form" />
-                    <span style="margin-left: 5px;">询价单{{item.price ? '（价格：' +  item.price / 100 + '金币）' : ''}}</span>
+                    <span style="margin-left: 5px;">询价单{{item.price ? '（价格：' +  item.price + '金币）' : ''}}</span>
                     <div style="float: right">
                       <el-button style="margin-right: 10px;" v-waves size="mini" type="info" @click="lookFollowUpRecord(item)">操作记录</el-button>
                       <span v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
@@ -1459,6 +1459,7 @@ export default {
     openFollowUpDialog(row) {
       this.resetFollowUpForm()
       this.followForm.siId = row.id
+      this.followForm.remark = row.remark
       this.dialogfollowFormVisible = true
     },
     // 重置跟进弹框表单

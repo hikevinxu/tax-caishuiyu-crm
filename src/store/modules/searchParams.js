@@ -39,7 +39,8 @@ const searchParams = {
       intentionCodeList: [],
       areaCodeList: [],
       areaCode: '',
-      opUserName: ''
+      opUserName: '',
+      searchStatus: ''
     },
     // 客户管理列表页面搜索
     customerManagerPageQuery: {

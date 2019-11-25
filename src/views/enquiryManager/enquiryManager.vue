@@ -5,6 +5,9 @@
       <el-input class="filter-item" style="width: 200px" v-model="listQuery.companyNames" clearable @clear="getSearchList" placeholder="请输入绑定商户名称" />
       <el-cascader class="filter-item" v-model="listQuery.intentionCodeList" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务类型"></el-cascader>
       <el-cascader class="filter-item" v-model="listQuery.areaCodeList" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择需求区域"></el-cascader>
+      <el-select class="filter-item" v-model="listQuery.searchStatus" clearable @change="getSearchList" placeholder="请选择询价状态">
+        <el-option v-for="item in inqueryStatus" :key="'inquery' + item.id" :label="item.name" :value="item.id"></el-option>
+      </el-select>
       <el-input v-permission="['OPNAME_SCREEN_BUT']" class="filter-item" style="width: 200px" v-model="listQuery.opUserName" clearable @clear="getSearchList" placeholder="请输入操作员姓名" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
     </div>
@@ -57,13 +60,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="绑定商户名称" width="250" align="center">
+        <el-table-column label="询价商户名称" width="250" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.quotedMerchant.companyName ? scope.row.quotedMerchant.companyName : '-'  }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="绑定状态" width="120" align="center">
+        <el-table-column label="询价状态" width="120" align="center">
           <template slot-scope="scope">
             <span>
               <el-tag v-if="scope.row.status == 1">{{ scope.row.status | inquiryFilters }}</el-tag>
@@ -74,7 +77,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="绑定时间" width="160" align="center">
+        <el-table-column label="询价时间" width="160" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.quotedMerchant.quotingTime ? scope.row.quotedMerchant.quotingTime : '-' }}</span>
           </template>
@@ -123,7 +126,8 @@ export default {
         intentionCodeList: [],
         areaCodeList: [],
         areaCode: '',
-        opUserName: ''
+        opUserName: '',
+        searchStatus: ''
       },
       listData: [],
       intentionCodeList: [],
@@ -134,7 +138,8 @@ export default {
         value: 'code',
         label: 'name',
         children: 'childs'
-      }
+      },
+      inqueryStatus: global.inqueryStatus
     }
   },
   created() {
