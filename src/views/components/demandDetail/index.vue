@@ -1582,7 +1582,7 @@ export default {
         .list_body_table_col {
           height: auto;
           text-align: center;
-          line-height: 20px;
+          line-height: 29px;
           padding: 10px;
           position: relative;
           .leftTitle {

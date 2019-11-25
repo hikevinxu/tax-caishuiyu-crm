@@ -14,26 +14,32 @@
       <div class="list_body_table">
         <div class="list_body_table_row">
           <div class="list_body_table_col">
-            <span>购买商户（{{(!demandData.buyMerchant || demandData.buyMerchant.length == 0) ? 0 : demandData.buyMerchant.length}}）</span>
+            <span class="leftTitle">购买商户（{{(!demandData.buyMerchant || demandData.buyMerchant.length == 0) ? 0 : demandData.buyMerchant.length}}）</span>
           </div>
           <div class="list_body_table_col">
-            <span>{{(!demandData.buyMerchant || demandData.buyMerchant.length == 0) ? '-' : demandData.buyMerchant.join('，')}}</span>
-          </div>
-        </div>
-        <div class="list_body_table_row">
-          <div class="list_body_table_col">
-            <span>分发商户（{{(!demandData.distributeMerchant || demandData.distributeMerchant.length == 0) ? 0 : demandData.distributeMerchant.length}}）</span>
-          </div>
-          <div class="list_body_table_col">
-            <span>{{(!demandData.distributeMerchant || demandData.distributeMerchant.length == 0) ? '-' : demandData.distributeMerchant.join(',')}}</span>
+            <span v-if="demandData.buyMerchant && demandData.buyMerchant.length > 0">
+              <el-tag style="margin: 5px;" v-for="(merchant, index) in demandData.buyMerchant" :key="'buyMerchant'+index">{{merchant}}</el-tag>
+            </span>
+            <span v-else>-</span>
           </div>
         </div>
         <div class="list_body_table_row">
           <div class="list_body_table_col">
-            <span>产生价值（元）</span>
+            <span class="leftTitle">分发商户（{{(!demandData.distributeMerchant || demandData.distributeMerchant.length == 0) ? 0 : demandData.distributeMerchant.length}}）</span>
           </div>
           <div class="list_body_table_col">
-            <span>{{ (!demandData.price) ? 0 : demandData.price / 100 }}</span>
+            <span v-if="demandData.distributeMerchant && demandData.distributeMerchant.length > 0">
+              <el-tag style="margin: 5px;" v-for="(merchant, index) in demandData.distributeMerchant" :key="'distributeMerchant'+index">{{merchant}}</el-tag>
+            </span>
+            <span v-else>—</span>
+          </div>
+        </div>
+        <div class="list_body_table_row">
+          <div class="list_body_table_col">
+            <span class="leftTitle">产生价值（元）</span>
+          </div>
+          <div class="list_body_table_col">
+            <span>{{ (!demandData.price) ? 0 : demandData.price }}</span>
           </div>
         </div>
       </div>
@@ -109,10 +115,11 @@ export default {
         border-top: 0;
         .list_body_table_col {
           text-align: center;
-          line-height: 20px;
+          line-height: 29px;
           padding: 10px;
           position: relative;
-          span {
+          .leftTitle {
+            display: block;
             position: absolute;
             top: 50%;
             left: 50%;
