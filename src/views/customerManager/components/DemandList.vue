@@ -31,7 +31,7 @@
             <span v-if="demandData.distributeMerchant && demandData.distributeMerchant.length > 0">
               <el-tag style="margin: 5px;" v-for="(merchant, index) in demandData.distributeMerchant" :key="'distributeMerchant'+index">{{merchant}}</el-tag>
             </span>
-            <span v-else>—</span>
+            <span v-else>-</span>
           </div>
         </div>
         <div class="list_body_table_row">
