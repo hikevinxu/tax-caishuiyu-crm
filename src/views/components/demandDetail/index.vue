@@ -81,8 +81,9 @@
                   <span class="contentValue">{{serviceIntentionItem.remark}}</span>
                 </div>
               </div>
+
               <div style="text-align: center;" v-if="!serviceIntentionItem.intentionInfoList || serviceIntentionItem.intentionInfoList.length == 0">
-                暂无询价单
+                <Empty-Imag descriptionText="暂无询价单" />
               </div>
               <el-row v-else v-for="(item, index) in serviceIntentionItem.intentionInfoList" :key="'intentionInfoList' + index" >
                 <el-card  class="box-card intentionInfoList">
@@ -460,13 +461,14 @@
 <script>
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import EmptyImag from '@/components/EmptyImag/index'
 import global from '@/utils/global'
 import { isInteger } from '@/utils/validate'
 import { intentionServiceExtend, intentionTrees, addressGlobalTrees, getAddressCityTrees, companySearch } from '@/api/global'
 import { intentionFollowUp, userSave, serviceUpdate, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform, intentionDistributeGroup, operationRecordList, intentionReplenish, intentionObtainPrevious } from '@/api/demandDetail'
 
 export default {
-  components: { Pagination },
+  components: { Pagination, EmptyImag },
   directives: { waves },
   props: {
     customerInfo: {
