@@ -209,12 +209,12 @@ export const asyncRouterMap = [
         hidden: true,
         meta: { title: '我的业绩', noCache: true, roles: ['PERSON_PER'] }
       },
-      {
-        path: 'demand',
-        component: () => import('@/views/customer/demand'),
-        name: 'demand',
-        meta: { title: '需求预审', noCache: true, roles: ['PRE_AUDIT'] }
-      },
+      // {
+      //   path: 'demand',
+      //   component: () => import('@/views/customer/demand'),
+      //   name: 'demand',
+      //   meta: { title: '需求预审', noCache: true, roles: ['PRE_AUDIT'] }
+      // },
       {
         path: 'review',
         component: () => import('@/views/customer/review'),
