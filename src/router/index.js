@@ -194,7 +194,7 @@ export const asyncRouterMap = [
   {
     path: '/customer',
     component: Layout,
-    redirect: '/customer/myPerformance',
+    redirect: '/customer/review',
     name: 'customer',
     meta: {
       title: '客服管理',
