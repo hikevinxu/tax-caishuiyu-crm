@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     lookDemandDetail(item) {
-      console.log(item)
+      console.log(item)  
       this.$router.push({
         path: '/customerManager/DemandDetail',
         query: {
