@@ -173,18 +173,18 @@ export default {
           this.loadMoreLoading = false
           if (res.data.items.length > 0) {
             this.customerInfo = res.data.items[0].customerVo
-            if(res.data.items.length == 1) {
-              if (res.data.items[0].intention == '' || res.data.items[0].intention == '无需求') {
-                this.total = 0
-                this.listData = []
-              } else {
-                this.total = res.data.total
-                this.listData = this.listData.concat(res.data.items)
-              }
-            } else {
+            // if(res.data.items.length == 1) {
+            //   if (res.data.items[0].intention == '' || res.data.items[0].intention == '无需求') {
+            //     this.total = 0
+            //     this.listData = []
+            //   } else {
+            //     this.total = res.data.total
+            //     this.listData = this.listData.concat(res.data.items)
+            //   }
+            // } else {
               this.total = res.data.total
               this.listData = this.listData.concat(res.data.items)
-            }
+            // }
           }
         }
       })
