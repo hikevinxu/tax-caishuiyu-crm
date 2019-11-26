@@ -62,7 +62,7 @@
                 </div>
                 <div class="contentItem">
                   <label>联系方式:</label>
-                  <span class="contentValue">{{serviceIntentionItem.phone}}</span>
+                  <span class="contentValue">{{serviceIntentionItem.contact}}</span>
                 </div>
                 <div class="contentItem">
                   <label>跟进状态:</label>
@@ -239,21 +239,6 @@
       <!-- 新增询价单/ 补充询价单 -->
       <el-dialog class="enquiryFormDialog" :title="dialogTitle" :visible.sync="dialogEnquiryFormVisible" width="720px">
         <el-form :model="enquiryForm" :rules="enquiryFormRules" label-width="120px">
-          <!-- <el-form-item v-if="dialogTitle == '新增询价单'" label="联系方式：" prop="opContent">
-            <el-select v-model="enquiryForm.opContent" placeholder="请选择联系方式">
-              <el-option label="手机" value="手机"></el-option>
-              <el-option label="微信" value="微信"></el-option>
-              <el-option label="QQ" value="QQ"></el-option>
-              <el-option label="财税鱼官方IM" value="财税鱼官方IM"></el-option>
-              <el-option label="邮件" value="邮件"></el-option>
-              <el-option label="其他" value="其他"></el-option>
-            </el-select>
-          </el-form-item> -->
-          <!-- <el-form-item v-if="dialogTitle == '新增询价单'" label="联系状态：" prop="followStatus">
-            <el-select v-model="enquiryForm.followStatus" placeholder="请选择联系状态">
-              <el-option v-for="item in followStatusList" :key="item.name + item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-          </el-form-item> -->
           <el-form-item v-for="(item, index) in inputList" :key="'input' + index"  :label="item.name + '：'">
             <el-input v-if="item.type == 1" v-model="item.value" :placeholder="'请输入' + item.name" @input="itemChange"></el-input>
             <el-select v-if="item.type == 2" v-model="item.value" :placeholder="'请选择' + item.name" @change="itemChange">
@@ -266,9 +251,6 @@
           <el-form-item style="width: 635px;" label="客户意向：">
             <el-input maxlength="200" v-model="enquiryForm.customerIntention" placeholder="请输入客户意向"></el-input>
           </el-form-item>
-          <!-- <el-form-item v-if="dialogTitle == '新增询价单'" label="备注：">
-            <el-input type="textarea" v-model="enquiryForm.remark"></el-input>
-          </el-form-item> -->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogEnquiryFormVisible = false">取 消</el-button>
@@ -1423,39 +1405,6 @@ export default {
       }).catch(err => {
         this.distributeLoading = false
       })
-      // this.$refs['distributeRef'].validate((valid) => {
-      //   if (valid) {
-      //     this.$confirm('是否确定向“' + this.distributeForm.companyName + '”发送此询价单, 是否继续?', '提示', {
-      //       confirmButtonText: '确定',
-      //       cancelButtonText: '取消',
-      //       type: 'warning'
-      //     }).then(() => {
-      //       this.distributeLoading = true
-      //       intentionDistribute(this.distributeForm).then(res => {
-      //         if(res.code == 0){
-      //           this.$notify({
-      //             title: '成功',
-      //             message: '分发成功',
-      //             type: 'success',
-      //             duration: 1000
-      //           })
-      //           this.distributeLoading = false
-      //           this.distributeDialog = false
-      //           this.init()
-      //         }
-      //       }).catch(err => {
-      //         this.distributeLoading = false
-      //       })
-      //     }).catch(() => {
-      //       this.$message({
-      //         type: 'info',
-      //         message: '已取消分发'
-      //       })
-      //     })
-      //   } else {
-      //     return false
-      //   }
-      // })
     },
     // 打开新增跟进弹框
     openFollowUpDialog(row) {
@@ -1513,15 +1462,6 @@ export default {
       this.resetOperationRecordQueryForm()
       this.operationRecordQuery.operationId = row.id
       this.getOperationList()
-      // let params = {
-      //   id: row.id
-      // }
-      // intentionFollowUp(params).then(res => {
-      //   if(res.code == 0){
-      //     this.recordList = res.data
-      //     this.lookFollowUpRecordDialog = true
-      //   }
-      // })
     },
     // 获取操作记录
     getOperationList() {
