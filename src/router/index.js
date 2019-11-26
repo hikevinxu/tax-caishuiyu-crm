@@ -199,7 +199,7 @@ export const asyncRouterMap = [
     meta: {
       title: '客服管理',
       icon: 'table',
-      roles: ['PERSON_PER', 'PRE_AUDIT', 'REVISIT_MA']
+      roles: ['PERSON_PER', 'REVISIT_MA']
     },
     children: [
       {

@@ -69,10 +69,12 @@
         <el-table-column label="询价状态" width="120" align="center">
           <template slot-scope="scope">
             <span>
-              <el-tag v-if="scope.row.status == 1">{{ scope.row.status | inquiryFilters }}</el-tag>
+              <el-tag v-if="scope.row.status == 1 || scope.row.status == 2" type="danger">未响应</el-tag>
+              <el-tag v-if="scope.row.status == 3 || scope.row.status == 4" type="success">已购买</el-tag>
+              <!-- <el-tag v-if="scope.row.status == 1">{{ scope.row.status | inquiryFilters }}</el-tag>
               <el-tag v-if="scope.row.status == 2" type="success">{{ scope.row.status | inquiryFilters }}</el-tag>
               <el-tag v-if="scope.row.status == 3" type="warning">{{ scope.row.status | inquiryFilters }}</el-tag>
-              <el-tag v-if="scope.row.status == 4" type="danger">{{ scope.row.status | inquiryFilters }}</el-tag>
+              <el-tag v-if="scope.row.status == 4" type="danger">{{ scope.row.status | inquiryFilters }}</el-tag> -->
             </span>
           </template>
         </el-table-column>
