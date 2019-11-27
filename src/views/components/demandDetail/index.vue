@@ -93,9 +93,9 @@
                     <div style="float: right">
                       <el-button style="margin-right: 10px;" v-waves size="mini" type="info" @click="lookFollowUpRecord(item)">操作记录</el-button>
                       <span v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
-                        <el-button v-if="(!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}') || (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openAKeyDistributeDialog(item, serviceIntentionItem)">一键分发</el-button>
-                        <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' || (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openDistributeDialog(item, serviceIntentionItem)">指定分发</el-button>
-                        <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' || (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="warning" @click="editEnquiryFrom(item, serviceIntentionItem)">补充询价单</el-button>
+                        <el-button v-if="(!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}') && (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openAKeyDistributeDialog(item, serviceIntentionItem)">一键分发</el-button>
+                        <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' && (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openDistributeDialog(item, serviceIntentionItem)">指定分发</el-button>
+                        <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' && (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="warning" @click="editEnquiryFrom(item, serviceIntentionItem)">补充询价单</el-button>
                       </span>
                     </div>
                   </div>
