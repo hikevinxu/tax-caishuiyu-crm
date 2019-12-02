@@ -262,3 +262,22 @@ export function distributionTypeFilters(distributionType) {
       break;
   }
 }
+
+/**
+ * 需求地区格式转化
+ * @function areaFilter
+ * @param area String 需求地区
+ */
+export function areaFilter(area) {
+  if (area) {
+    let areaArr = area.split('-')
+    if(areaArr.length >= 2) {
+      return areaArr[areaArr.length - 2] + '-' + areaArr[areaArr.length - 1]
+    }else if(areaArr.length > 0) {
+      return areaArr[0]
+    } else {
+      return area
+    }
+  }
+  return area
+}

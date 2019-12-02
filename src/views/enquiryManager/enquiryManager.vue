@@ -54,18 +54,6 @@
 
         <el-table-column label="序号" type="index" :index="1" width="50px" align="center" ></el-table-column>
 
-        <!-- <el-table-column label="客户称呼" width="120px" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column> -->
-
-        <!-- <el-table-column label="手机号码" align="center" width="120px">
-          <template slot-scope="scope">
-            <span class="textHidden">{{ scope.row.phone }}</span>
-          </template>
-        </el-table-column> -->
-
         <el-table-column label="业务类型" width="200" align="center">
           <template slot-scope="scope">
             <span><el-tag>{{ (scope.row.intention && scope.row.intention != '') ? scope.row.intention : '未知需求' }}</el-tag></span>
@@ -74,7 +62,7 @@
 
         <el-table-column label="需求区域" align="center">
           <template slot-scope="scope">
-            <span v-if="scope.row.area">{{ scope.row.area }}</span>
+            <span v-if="scope.row.area">{{ scope.row.area | areaFilter }}</span>
             <span v-else>-</span>
           </template>
         </el-table-column>
@@ -86,7 +74,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="询价商户名称" width="250" align="center">
+        <el-table-column label="询价商户名称" align="center">
           <template slot-scope="scope">
             <span v-if="scope.row.quotedMerchant">{{ scope.row.quotedMerchant.companyName ? scope.row.quotedMerchant.companyName : '-'  }}</span>
           </template>

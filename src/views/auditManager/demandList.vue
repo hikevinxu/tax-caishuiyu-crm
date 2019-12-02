@@ -56,12 +56,6 @@
 
         <el-table-column label="序号" type="index" :index="1" width="80px" align="center" ></el-table-column>
 
-        <!-- <el-table-column label="客户称呼" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column> -->
-
         <el-table-column label="手机号码" align="center">
           <template slot-scope="scope">
             <span class="textHidden">{{ scope.row.phone }}</span>
@@ -76,7 +70,7 @@
 
         <el-table-column label="需求区域" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.area }}</span>
+            <span>{{ scope.row.area | areaFilter }}</span>
           </template>
         </el-table-column>
 
