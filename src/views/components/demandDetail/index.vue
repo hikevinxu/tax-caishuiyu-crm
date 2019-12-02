@@ -176,10 +176,10 @@
                         <label>备注:</label>
                         <span class="contentValue">{{item.remark}}</span>
                       </div>
-                      <div class="contentItem">
+                      <!-- <div class="contentItem">
                         <label>成交价格:</label>
                         <span class="contentValue">{{item.quotedPrice ? item.quotedPrice : '0' }} 元</span>
-                      </div>
+                      </div> -->
                     </div>
                     <div class="list_body" v-if="item.quotedMerchantDistributeVo && JSON.stringify(item.quotedMerchantDistributeVo) != '{}'">
                       <div class="list_body_table">
