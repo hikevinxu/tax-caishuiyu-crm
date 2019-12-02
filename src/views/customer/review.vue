@@ -50,7 +50,7 @@
                 <span>{{ props.row.price ? props.row.price : '-' }}</span>
               </el-form-item>
               <el-form-item label="购买次数">
-                <span>{{ props.row.inquiryBuyAmount }} 次</span>
+                <span>{{ props.row.inquiryBuyAmount ? props.row.inquiryBuyAmount : 0 }} 次</span>
               </el-form-item>
             </el-form>
           </template>
