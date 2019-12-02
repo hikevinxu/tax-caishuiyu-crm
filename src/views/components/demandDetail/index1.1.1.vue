@@ -50,12 +50,12 @@
                   <el-button v-if="serviceIntentionItem.status != 4" v-waves size="mini" type="danger" @click.stop="openEndDemandDialog(serviceIntentionItem)">结束需求</el-button>
                   <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')" v-waves size="mini" type="primary" @click.stop="openTransferDialog(serviceIntentionItem)">转移</el-button>
                   <el-button v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '') && pageId != 'enquiryDetail'" v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openAddInquiryDialog(serviceIntentionItem)">新增询价单</el-button>
-                  <el-button v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openFollowUpDialog(serviceIntentionItem)">需求跟进</el-button>
+                  <el-button v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openFollowUpDialog(serviceIntentionItem)">新增跟进</el-button>
                 </div>
               </div>
             </template>
             <div class="demandList">
-              <div class="demandAttribute bgOptimize">
+              <div class="demandAttribute">
                 <div class="contentItem">
                   <label>联系状态:</label>
                   <span class="contentValue">{{serviceIntentionItem.followStatus | followStatusFilter}}</span>
@@ -97,11 +97,10 @@
                         <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' && (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openDistributeDialog(item, serviceIntentionItem)">指定分发</el-button>
                         <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' && (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="warning" @click="editEnquiryFrom(item, serviceIntentionItem)">补充询价单</el-button>
                       </span>
-                      <el-button v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openInquiryFollowUpDialog(item, serviceIntentionItem)">询价单跟进</el-button>
                     </div>
                   </div>
-                  <div style="margin-bottom: 10px;">
-                    <div class="content" style="margin-bottom: 10px;">
+                  <div style="margin-bottom:50px;">
+                    <div class="content" style="margin-bottom: 30px;">
                       <div class="contentItem">
                         <label>需求地区:</label>
                         <span class="contentValue">{{item.area}}</span>
@@ -114,10 +113,10 @@
                         </span>
                       </div>
                       <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <!-- <div class="contentItem" v-if="item.followStatus">
+                      <div class="contentItem" v-if="item.followStatus">
                         <label>联系状态:</label>
                         <span class="contentValue">{{item.followStatus | followStatusFilter}}</span>
-                      </div> -->
+                      </div>
                       <div class="contentItem">
                         <label>录入时间:</label>
                         <span class="contentValue">{{item.createTime}}</span>
@@ -127,15 +126,15 @@
                         <span class="contentValue">{{item.modifyTime}}</span>
                       </div>
                       <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <!-- <div class="contentItem" v-if="item.distributeCount && item.distributeCount != 0">
+                      <div class="contentItem" v-if="item.distributeCount && item.distributeCount != 0">
                         <label>分发次数:</label>
                         <span class="contentValue">{{item.distributeCount ? item.distributeCount : '0'}}次</span>
-                      </div> -->
+                      </div>
                       <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
-                      <!-- <div class="contentItem" v-if="item.followUpCount && item.followUpCount != 0">
+                      <div class="contentItem" v-if="item.followUpCount && item.followUpCount != 0">
                         <label>跟进状态:</label>
                         <span class="contentValue">{{item.followUpCount ? item.followUpCount : '0' }}次</span>
-                      </div> -->
+                      </div>
                       <!-- 1.1.1P1版本以后询价单属性里没有该属性 -->
                       <div class="contentItem" v-if="(item.quotedMerchant && JSON.stringify(item.quotedMerchant) != '{}') && !item.quotedMerchantDistributeVo">
                         <label>询价公司:</label>
@@ -159,26 +158,6 @@
                       <div class="contentItem" v-if="item.customerIntention && item.customerIntention != ''">
                         <label>客户意向:</label>
                         <span class="contentValue">{{item.customerIntention}}</span>
-                      </div>
-                      <div class="contentItem">
-                        <label>沟通详情:</label>
-                        <span class="contentValue">{{ item.communicationDetails | communicationStatusFilter }}</span>
-                      </div>
-                      <div class="contentItem">
-                        <label>联系方式:</label>
-                        <span class="contentValue">{{item.contact}}</span>
-                      </div>
-                      <div class="contentItem">
-                        <label>跟进次数:</label>
-                        <span class="contentValue">{{item.followUpCount ? item.followUpCount : '0' }}次</span>
-                      </div>
-                      <div class="contentItem">
-                        <label>备注:</label>
-                        <span class="contentValue">{{item.remark}}</span>
-                      </div>
-                      <div class="contentItem">
-                        <label>成交价格:</label>
-                        <span class="contentValue">{{item.quotedPrice ? item.quotedPrice : '0' }} 元</span>
                       </div>
                     </div>
                     <div class="list_body" v-if="item.quotedMerchantDistributeVo && JSON.stringify(item.quotedMerchantDistributeVo) != '{}'">
@@ -279,8 +258,8 @@
           <el-button type="primary" v-else :loading="addEnquiryFromLoading" @click="editEnquirySheet">确 定</el-button>
         </div>
       </el-dialog>
-      <!-- 需求跟进 -->
-      <el-dialog class="followFormDialog" title="需求跟进" :visible.sync="dialogfollowFormVisible" width="720px">
+      <!-- 新增跟进 -->
+      <el-dialog class="followFormDialog" title="新增跟进" :visible.sync="dialogfollowFormVisible" width="720px">
         <el-form :model="followForm" :rules="followFormRules" label-width="120px">
           <el-form-item label="联系方式：" prop="opContent">
             <el-select v-model="followForm.opContent" placeholder="请选择联系方式">
@@ -304,33 +283,6 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogfollowFormVisible = false">取 消</el-button>
           <el-button type="primary" :loading="addFollowRecordsLoading" @click="addFollowUpRecords">确 定</el-button>
-        </div>
-      </el-dialog>
-      <!-- 询价单跟进 -->
-      <el-dialog class="followFormDialog" title="询价单跟进" :visible.sync="dialogInqueryFollowFormVisible" width="720px">
-        <el-form :model="inqueryFollowForm" :rules="inqueryFollowFormRules" label-width="120px">
-          <el-form-item label="联系方式：" prop="opContent">
-            <el-select v-model="inqueryFollowForm.opContent" placeholder="请选择联系方式">
-              <el-option label="手机" value="手机"></el-option>
-              <el-option label="微信" value="微信"></el-option>
-              <el-option label="QQ" value="QQ"></el-option>
-              <el-option label="财税鱼官方IM" value="财税鱼官方IM"></el-option>
-              <el-option label="邮件" value="邮件"></el-option>
-              <el-option label="其他" value="其他"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="沟通详情：" prop="communicationDetails">
-            <el-select v-model="inqueryFollowForm.communicationDetails" placeholder="请选择沟通详情">
-              <el-option v-for="item in communicationDetailList" :key="item.name + item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="备注：">
-            <el-input type="textarea" v-model="inqueryFollowForm.remark"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogInqueryFollowFormVisible = false">取 消</el-button>
-          <el-button type="primary" :loading="addInqueryFollowRecordsLoading" @click="addInqueryFollowUpRecords">确 定</el-button>
         </div>
       </el-dialog>
       <!-- 编辑客户信息 -->
@@ -495,7 +447,7 @@ import EmptyImag from '@/components/EmptyImag/index'
 import global from '@/utils/global'
 import { isInteger } from '@/utils/validate'
 import { intentionServiceExtend, intentionTrees, addressGlobalTrees, getAddressCityTrees, companySearch } from '@/api/global'
-import { intentionFollowUp, userSave, serviceUpdate, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform, intentionDistributeGroup, operationRecordList, intentionReplenish, intentionObtainPrevious, intentionSaveIntentionFollowUp } from '@/api/demandDetail'
+import { intentionFollowUp, userSave, serviceUpdate, intentionEndService, serviceSaveIntention, intentionSaveFollowUp, servicesSave, merchantGetByPhone, intentionDistribute, opUserIndex, intentionTransform, intentionDistributeGroup, operationRecordList, intentionReplenish, intentionObtainPrevious } from '@/api/demandDetail'
 
 export default {
   components: { Pagination, EmptyImag },
@@ -660,7 +612,7 @@ export default {
         pageSize: 10
       },
       operationTotal: 0,
-      // 需求跟进
+      // 新增跟进
       dialogfollowFormVisible: false,
       addFollowRecordsLoading: false,
       followForm: {
@@ -674,27 +626,9 @@ export default {
           { required: true, message: '请选择联系方式', trigger: 'blur' }
         ],
         followStatus: [
-          { required: true, message: '请选择沟通详情', trigger: 'blur' }
+          { required: true, message: '请选择联系状态', trigger: 'blur' }
         ]
-      },
-      // 询价单跟进
-      dialogInqueryFollowFormVisible: false,
-      addInqueryFollowRecordsLoading: false,
-      inqueryFollowForm: {
-        intentionId: '',
-        opContent: '',
-        communicationDetails: '',
-        remark: ''
-      },
-      inqueryFollowFormRules: {
-        opContent: [
-          { required: true, message: '请选择联系方式', trigger: 'blur' }
-        ],
-        communicationDetails: [
-          { required: true, message: '请选择沟通详情', trigger: 'blur' }
-        ]
-      },
-      communicationDetailList: global.communicationStatus
+      }
     }
   },
   created() {
@@ -1477,8 +1411,6 @@ export default {
       this.resetFollowUpForm()
       this.followForm.siId = row.id
       this.followForm.remark = row.remark
-      this.followForm.opContent = row.contact
-      this.followForm.followStatus = row.followStatus
       this.dialogfollowFormVisible = true
     },
     // 重置跟进弹框表单
@@ -1490,7 +1422,7 @@ export default {
         remark: ''
       }
     },
-    // 新增需求跟进
+    // 新增跟进
     addFollowUpRecords() {
       if (!this.followForm.opContent || this.followForm.opContent == '') {
         this.$message({
@@ -1521,58 +1453,6 @@ export default {
           })
           this.addFollowRecordsLoading = false
           this.dialogfollowFormVisible = false
-          this.init()
-        }
-      })
-    },
-    // 打开询价单跟进弹框
-    openInquiryFollowUpDialog(row) {
-      this.resetInqueryFollowUpForm()
-      this.inqueryFollowForm.intentionId = row.id
-      this.inqueryFollowForm.remark = row.remark
-      this.inqueryFollowForm.opContent = row.opContent
-      this.inqueryFollowForm.communicationDetails = row.communicationDetails
-      this.dialogInqueryFollowFormVisible = true
-    },
-    // 
-    resetInqueryFollowUpForm() {
-      this.inqueryFollowForm = {
-        intentionId: '',
-        opContent: '',
-        communicationDetails: '',
-        remark: ''
-      }
-    },
-    addInqueryFollowUpRecords() {
-      if (!this.inqueryFollowForm.opContent || this.inqueryFollowForm.opContent == '') {
-        this.$message({
-          message: '联系方式不能为空',
-          type: 'error',
-          showClose: true,
-          duration: 1000
-        })
-        return
-      }
-      if (!this.inqueryFollowForm.communicationDetails || this.inqueryFollowForm.communicationDetails == '') {
-        this.$message({
-          message: '沟通详情不能为空',
-          type: 'error',
-          showClose: true,
-          duration: 1000
-        })
-        return
-      }
-      this.addFollowRecordsLoading = true
-      intentionSaveIntentionFollowUp(this.inqueryFollowForm).then(res => {
-        if(res.code == 0){
-          this.$notify({
-            title: '成功',
-            message: '跟进添加成功',
-            type: 'success',
-            duration: 1000
-          })
-          this.addInqueryFollowRecordsLoading = false
-          this.dialogInqueryFollowFormVisible = false
           this.init()
         }
       })
@@ -1693,25 +1573,6 @@ export default {
         line-height: 20px;
       }
     }
-  }
-  .bgOptimize {
-    width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    color: rgba(0, 0, 0, 0.65);
-    font-size: 14px;
-    font-variant: tabular-nums;
-    line-height: 1.5;
-    list-style: none;
-    font-feature-settings: 'tnum';
-    position: relative;
-    padding: 8px 15px 8px 37px;
-    word-wrap: break-word;
-    border-radius: 4px;
-    background-color: #e6f7ff;
-    border: 1px solid #91d5ff;
-    margin-bottom: 20px;
   }
   .datePicker {
     display: inline-flex;

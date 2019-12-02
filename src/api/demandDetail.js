@@ -143,3 +143,12 @@ export function intentionReplenish(params) {
 export function operationRecordList(params) {
   return fetchPost('/operation/record/list', params)
 }
+
+/**
+ * 询价单跟进
+ * @function intentionSaveIntentionFollowUp
+ * @type 'Post'
+ */
+export function intentionSaveIntentionFollowUp(params) {
+  return fetchPost('/intention/save/intention/followUp', params)
+}

@@ -30,6 +30,40 @@ export function followStatusFilter(followStatus) {
 }
 
 /**
+ * 沟通详情过滤器
+ * @function communicationStatusFilter
+ * @param communicationStatus Number 联系状态
+ */
+export function communicationStatusFilter(communicationStatus) {
+  switch (communicationStatus) {
+    case 1:
+      return '没有金币'
+      break;
+    case 2:
+      return '不在服务区域'
+      break;
+    case 3:
+      return '业务操作不了'
+      break;
+    case 4:
+      return '不感兴趣（备注：利润低、距离远、操作繁琐等）'
+      break;
+    case 5:
+      return '没有看到'
+      break;
+    case 6:
+      return '没有绑定公众号'
+      break;
+    case 7:
+      return '没联系上'
+      break;
+    default: 
+      return '-'
+      break;
+  }
+}
+
+/**
  * 启用-停用
  * @function statusFilters
  * @param status Number 状态码
@@ -99,12 +133,18 @@ export function timeFilters(time) {
 }
 
 /**
- * 
+ * 需求状态过滤器
  * @function demandStatusFilters
  * @param demandStatus Number 需求状态
  */
 export function demandStatusFilters(demandStatus) {
   switch (demandStatus) {
+    case -1:
+      return '无效需求'
+      break;
+    case 0:
+      return '待预审'
+      break;
     case 1:
       return '需求待分发'
       break;
@@ -121,7 +161,7 @@ export function demandStatusFilters(demandStatus) {
 }
 
 /**
- * 
+ * 询价单状态过滤器
  * @function inquiryFilters
  * @param status Number 询价单状态
  */
@@ -143,9 +183,9 @@ export function inquiryFilters(status) {
 }
 
 /**
- * 
+ * 结束原因过滤器
  * @function endResonFilters
- * @param endReson Number 询价单状态
+ * @param endReson Number 结束原因
  */
 export function endResonFilters(endReson) {
   switch (endReson) {
@@ -175,6 +215,50 @@ export function endResonFilters(endReson) {
       break;
     case 9:
       return '表明来意被挂断'
+      break;
+  }
+}
+
+/**
+ * 处理状态过滤器
+ * @function visitTypeFilters
+ * @param visitType Number 处理状态
+ */
+export function visitTypeFilters(visitType) {
+  switch (visitType) {
+    case 1:
+      return '待回访'
+      break;
+    case 2:
+      return '已回访'
+      break;
+    default:
+      return ''
+      break;
+  }
+}
+
+/**
+ * 分发类型过滤器
+ * @function distributionTypeFilters
+ * @param distributionType Number 分发类型
+ */
+export function distributionTypeFilters(distributionType) {
+  switch (distributionType) {
+    case 1:
+      return '被动CPC'
+      break;
+    case 2:
+      return '被动CPA'
+      break;
+    case 3:
+      return '主动CPA'
+      break;
+    case 4:
+      return '主动CPS'
+      break;
+    default:
+      return '-'
       break;
   }
 }

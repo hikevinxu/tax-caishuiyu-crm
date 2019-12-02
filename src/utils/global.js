@@ -8,6 +8,16 @@ const global = {
     {name: '二级：挂断/不回复/强硬抵触', id: 4},
     {name: '一级：空号/无效/资料不符', id: 6}
   ],
+  // 沟通详情
+  communicationStatus: [
+    {name: '没有金币', id: 1},
+    {name: '不在服务区域', id: 2},
+    {name: '业务操作不了', id: 3},
+    {name: '不感兴趣（备注：利润低、距离远、操作繁琐等）', id: 4},
+    {name: '没有看到', id: 5},
+    {name: '没有绑定公众号', id: 6},
+    {name: '没联系上', id: 7}
+  ],
   // 跟进次数
   followUpCountList: [
     {name: '0次', id: 0},
@@ -40,6 +50,20 @@ const global = {
     {name: '超时未报价',id: 2},
     {name: '已购买',id: 3},
     {name: '反馈价格',id: 4}
+  ],
+  // 处理状态
+  visitTypeStatus: [
+    {name: '未回访',id: 1},
+    {name: '已回访',id: 2}
+  ],
+  // 需求状态
+  demandStatus: [
+    {name: '无效需求',id: -1},
+    {name: '待预审',id: 0},
+    {name: '需求待分发',id: 1},
+    {name: '商户未响应',id: 2},
+    {name: '商户报价中',id: 3},
+    {name: '询价已结束',id: 4}
   ]
 }
 export default global

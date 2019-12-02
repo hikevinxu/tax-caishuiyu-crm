@@ -7,27 +7,49 @@
         border
         fit
         highlight-current-row
+        :expand-row-keys="expandArray"
+        @expand-change="expandChange"
+        row-key="index"
         style="width: 100%;">
 
-        <el-table-column label="序号" type="index" :index="1" width="50px" align="center" ></el-table-column>
-
-        <el-table-column label="称呼" width="120px" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="客户称呼">
+                <span>{{ props.row.name ? props.row.name : '-' }}</span>
+              </el-form-item>
+              <el-form-item label="手机号码">
+                <span>{{ props.row.phone ? props.row.phone : '-' }}</span>
+              </el-form-item>
+              <el-form-item label="跟进次数">
+                <span>{{ props.row.followUpCount ? props.row.followUpCount : '-' }}</span>
+              </el-form-item>
+              <el-form-item label="联系状态">
+                <span>{{ props.row.contact ? props.row.contact : '-' }}</span>
+              </el-form-item>
+              <el-form-item label="产生价值">
+                <span>{{ props.row.price ? props.row.price : '-' }}</span>
+              </el-form-item>
+              <el-form-item label="购买次数">
+                <span>{{ props.row.inquiryBuyAmount }} 次</span>
+              </el-form-item>
+            </el-form>
           </template>
         </el-table-column>
 
-        <el-table-column label="工作手机" align="center" width="120px">
+        <el-table-column label="序号" type="index" :index="1" width="50px" align="center" ></el-table-column>
+
+        <!-- <el-table-column label="客户称呼" width="120px" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column> -->
+
+        <el-table-column label="手机号码" align="center" width="120px">
           <template slot-scope="scope">
             <span class="textHidden">{{ scope.row.phone }}</span>
           </template>
         </el-table-column>
-
-        <!-- <el-table-column label="需求区域" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.area }}</span>
-          </template>
-        </el-table-column> -->
 
         <el-table-column label="业务类型" width="150" align="center">
           <template slot-scope="scope">
@@ -35,9 +57,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="更新时间" align="center">
+        <el-table-column label="需求区域" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.lastModifyTime }}</span>
+            <span>{{ scope.row.area }}</span>
           </template>
         </el-table-column>
 
@@ -55,6 +77,21 @@
               <el-tag v-if="scope.row.status == 3" type="warning">{{ scope.row.status | demandStatusFilters }}</el-tag>
               <el-tag v-if="scope.row.status == 4" type="danger">{{ scope.row.status | demandStatusFilters }}</el-tag>
             </span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="处理状态" width="120" align="center">
+          <template slot-scope="scope">
+            <span>
+              <el-tag v-if="scope.row.visitType == 1">{{ scope.row.visitType | visitTypeFilters }}</el-tag>
+              <el-tag v-if="scope.row.visitType == 2" type="success">{{ scope.row.visitType | visitTypeFilters }}</el-tag>
+            </span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="更新时间" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.lastModifyTime }}</span>
           </template>
         </el-table-column>
 
@@ -140,7 +177,8 @@ export default {
       },
       transUserList: [],
       transferLoading: false,
-      transUserSearchLoading: false
+      transUserSearchLoading: false,
+      expandArray: []
     }
   },
   created() {
@@ -156,6 +194,7 @@ export default {
           this.listData[i].time = 0
         }
       }
+      this.expandArray = []
       this.listLoading = true
       this.$store.dispatch('saveTimeReviewPageQueryInfo', this.listQuery)
       let params = {}
@@ -180,6 +219,7 @@ export default {
                 this.$forceUpdate()
               },1000)
             }
+            this.listData[i].index = this.listQuery.pageNum + i
             if (this.listData[i].extra && this.listData[i].extra != '') {
               this.listData[i].extraArr = JSON.parse(this.listData[i].extra)
               for(let j=0;j<this.listData[i].extraArr.length;j++){
@@ -286,6 +326,20 @@ export default {
       }).catch(err => {
         this.transferLoading = false
       })
+    },
+    expandChange(row) {
+      Array.prototype.remove = function (val) {
+        let index = this.indexOf(val)
+        if (index > -1) {
+          this.splice(index, 1)
+        }
+      }
+      if (this.expands.indexOf(row.index) < 0) {
+        this.expands.push(row.index)
+      } else {
+        this.expands.remove(row.index)
+      }
+      console.log(this.expandArray)
     }
   }
 }
@@ -295,6 +349,24 @@ export default {
   padding: 20px;
   .datePicker {
     display: inline-flex;
+  }
+  .table {
+    .el-form--inline .el-form-item {
+      display: block;
+    }
+    .el-form-item {
+      margin-bottom: 0;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.reviewTask {
+  .table {
+    .el-form .el-form-item--medium .el-form-item__label {
+      display: inline-block;
+      width: 100px;
+    }
   }
 }
 </style>

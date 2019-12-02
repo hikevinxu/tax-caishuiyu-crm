@@ -10,7 +10,11 @@ const searchParams = {
       endDate: '',
       intentionCodeList: [],
       intentionCode: '',
-      areaCode: ''
+      areaCodeList: [],
+      areaCode: '',
+      visitType: '',
+      status: '',
+      opUserName: ''
     },
     // 历史回访记录页面搜索
     historyReviewPageQuery: {
@@ -22,7 +26,10 @@ const searchParams = {
       endDate: '',
       intentionCodeList: [],
       intentionCode: '',
-      areaCode: ''
+      areaCodeList: [],
+      areaCode: '',
+      visitType: '',
+      status: ''
     },
     // 限时回访任务页面搜索
     timeReviewPageQuery: {
@@ -40,7 +47,8 @@ const searchParams = {
       areaCodeList: [],
       areaCode: '',
       opUserName: '',
-      searchStatus: ''
+      searchStatus: '',
+      merchantName: ''
     },
     // 客户管理列表页面搜索
     customerManagerPageQuery: {
