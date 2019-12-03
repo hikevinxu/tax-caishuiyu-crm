@@ -1523,6 +1523,8 @@ export default {
           this.dialogfollowFormVisible = false
           this.init()
         }
+      }).catch(err => {
+        this.addFollowRecordsLoading = false
       })
     },
     // 打开询价单跟进弹框
@@ -1562,7 +1564,7 @@ export default {
         })
         return
       }
-      this.addFollowRecordsLoading = true
+      this.addInqueryFollowRecordsLoading = true
       intentionSaveIntentionFollowUp(this.inqueryFollowForm).then(res => {
         if(res.code == 0){
           this.$notify({
@@ -1575,6 +1577,8 @@ export default {
           this.dialogInqueryFollowFormVisible = false
           this.init()
         }
+      }).catch(err => {
+        this.addInqueryFollowRecordsLoading = false
       })
     },
     // 打开跟进记录弹框
