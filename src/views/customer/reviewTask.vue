@@ -66,7 +66,7 @@
         <el-table-column label="需求状态" width="120" align="center">
           <template slot-scope="scope">
             <span>
-              <el-tag v-if="scope.row.status == 1">{{ scope.row.status | demandStatusFilters }}</el-tag>
+              <el-tag v-if="scope.row.status != 2 && scope.row.status != 3 && scope.row.status != 4">{{ scope.row.status | demandStatusFilters }}</el-tag>
               <el-tag v-if="scope.row.status == 2" type="success">{{ scope.row.status | demandStatusFilters }}</el-tag>
               <el-tag v-if="scope.row.status == 3" type="warning">{{ scope.row.status | demandStatusFilters }}</el-tag>
               <el-tag v-if="scope.row.status == 4" type="danger">{{ scope.row.status | demandStatusFilters }}</el-tag>
