@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-input class="filter-item" style="width: 250px" v-model="listQuery.phone" clearable @clear="getSearchList" placeholder="请输入手机号/四位尾号" />
       <el-cascader class="filter-item" v-model="listQuery.intentionCodeList" @change="intentionCodeChange" :options="intentionCodeList" clearable :props="props" :show-all-levels="false"  placeholder="请选择业务需求"></el-cascader>
-      <el-cascader class="filter-item" v-model="listQuery.areaCodeList" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择服务区域"></el-cascader>
+      <!-- <el-cascader class="filter-item" v-model="listQuery.areaCodeList" @change="areaCodeChange" :options="areaCodeList" :props="props" :show-all-levels="false" clearable placeholder="请选择服务区域"></el-cascader> -->
       <el-select class="filter-item" v-model="listQuery.status" @change="getSearchList" clearable placeholder="请选择需求状态">
         <el-option v-for="item in demandStatus" :key="item.id" :label="item.name" :value="item.id"></el-option>
       </el-select>
