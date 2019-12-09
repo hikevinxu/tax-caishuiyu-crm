@@ -77,7 +77,7 @@
                   <span class="contentValue">{{serviceIntentionItem.serviceDistributedAmount ? serviceIntentionItem.serviceDistributedAmount : '0' }}次</span>
                 </div>
                 <div class="contentItem" v-if="serviceIntentionItem.remark && serviceIntentionItem.remark != ''">
-                  <label>备注:</label>
+                  <label>客服备注:</label>
                   <span class="contentValue">{{serviceIntentionItem.remark}}</span>
                 </div>
               </div>
@@ -93,9 +93,10 @@
                     <div style="float: right">
                       <el-button style="margin-right: 10px;" v-waves size="mini" type="info" @click="lookFollowUpRecord(item)">操作记录</el-button>
                       <span v-if="serviceIntentionItem.status != 4 && (serviceIntentionItem.intentionCode && serviceIntentionItem.intentionCode != '')">
-                        <el-button v-if="(!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}') && (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openAKeyDistributeDialog(item, serviceIntentionItem)">自动分发</el-button>
-                        <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' && (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="danger" @click="openDistributeDialog(item, serviceIntentionItem)">指定分发</el-button>
-                        <el-button v-if="!item.quotedMerchant || JSON.stringify(item.quotedMerchant) == '{}' && (!item.quotedMerchantDistributeVo || JSON.stringify(item.quotedMerchantDistributeVo) == '{}')" v-waves size="mini" type="warning" @click="editEnquiryFrom(item, serviceIntentionItem)">补充询价单</el-button>
+                        <!-- <el-button v-if="!item.merchantId" v-waves size="mini" type="danger" @click="openAKeyDistributeDialog(item, serviceIntentionItem)">一键分发</el-button> -->
+                        <el-button v-if="!item.merchantId && serviceIntentionItem.autoDistributeButton" v-waves size="mini" type="danger" :loading="autoDistributeLoading" @click="autoDistribute(item, serviceIntentionItem)">自动群发</el-button>
+                        <el-button v-if="!item.merchantId" v-waves size="mini" type="danger" @click="openDistributeDialog(item, serviceIntentionItem)">指定分发</el-button>
+                        <el-button v-if="!item.merchantId" v-waves size="mini" type="warning" @click="editEnquiryFrom(item, serviceIntentionItem)">补充询价单</el-button>
                       </span>
                       <el-button v-waves size="mini" icon="el-icon-circle-plus" type="success" @click.stop="openInquiryFollowUpDialog(item, serviceIntentionItem)">询价单跟进</el-button>
                     </div>
@@ -173,7 +174,7 @@
                         <span class="contentValue">{{item.followUpCount ? item.followUpCount : '0' }}次</span>
                       </div>
                       <div class="contentItem">
-                        <label>备注:</label>
+                        <label>商户备注:</label>
                         <span class="contentValue">{{item.remark}}</span>
                       </div>
                       <!-- <div class="contentItem">
@@ -628,6 +629,8 @@ export default {
       merchantInfoList: [],
       selectMerchants: [],
       currentMerchant: '',
+      // 自动分发
+      autoDistributeLoading: false,
       // 一键分发
       aKeyDistributeDialog: false,
       aKeyDistributeLoading: false,
@@ -1470,6 +1473,38 @@ export default {
         }
       }).catch(err => {
         this.distributeLoading = false
+      })
+    },
+    // 自动群发
+    autoDistribute(item, serviceIntentionItem) {
+      this.$confirm('自动群发会对满足相关需求的三位商户间隙推送询价单', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(item, serviceIntentionItem)
+        let params = {
+          siId: serviceIntentionItem.id,
+          intentionId: item.id
+        }
+        console.log(params)
+        this.autoDistributeLoading = true
+        intentionDistributeGroup(params).then(res => {
+          if(res.code == 0){
+            this.$notify({
+              title: '成功',
+              message: '分发成功',
+              type: 'success',
+              duration: 1000
+            })
+            this.autoDistributeLoading = false
+            this.init()
+          }
+        }).catch(err => {
+          this.autoDistributeLoading = false
+        })
+      }).catch(() => {
+        this.autoDistributeLoading = false
       })
     },
     // 打开新增跟进弹框
