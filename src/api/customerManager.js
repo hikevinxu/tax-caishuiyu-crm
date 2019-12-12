@@ -36,3 +36,12 @@ export function customerDetailManage(params) {
 export function customerNext(params) {
   return fetchPost('/customer/next', params)
 }
+
+/**
+ * 创建客户
+ * @function userCrmRegister
+ * @type 'Post'
+ */
+export function userCrmRegister(params) {
+  return fetchPost('/user/crm/register', params)
+}

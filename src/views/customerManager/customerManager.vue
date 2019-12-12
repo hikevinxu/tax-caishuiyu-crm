@@ -281,6 +281,12 @@ export default {
           this.addDemandLoading = false
           this.addDemandDialog = false
           this.getInitList()
+          this.$router.push({
+            path: '/customerManager/DemandDetail',
+            query: {
+              id: res.data,
+            }
+          })
         }
       }).catch(err => {
         this.addDemandLoading = false

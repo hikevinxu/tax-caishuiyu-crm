@@ -1,6 +1,7 @@
 <template>
   <div class="customerList">
     <div class="filter-container">
+      <el-button v-waves class="filter-item" icon="el-icon-circle-plus" type="warning" @click="openAddDataDialog">添加</el-button>
       <el-input class="filter-item" type="tel" style="width: 250px" v-model="listQuery.phone" clearable @clear="getSearchList" placeholder="请输入客户电话号码" />
       <el-button v-waves class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-search" @click="getSearchList">搜索</el-button>
     </div>
@@ -73,12 +74,31 @@
 
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.pageNum" :limit.sync="listQuery.pageSize" @pagination="getList" />
     </div>
+    <div class="dialog">
+      <el-dialog
+        title="创建新用户"
+        width="500px"
+        :visible.sync="addDialog">
+        <el-form ref="addForm" :model="addForm" label-width="140px">
+          <el-form-item label="请输入客户称呼：" prop="name">
+            <el-input v-model="addForm.name" placeholder="请输入客户称呼" style="width: 200px;"></el-input>
+          </el-form-item>
+          <el-form-item label="请输入用户账号：" prop="phone">
+            <el-input v-model="addForm.phone" maxlength="11" placeholder="请输入用户账号" style="width: 200px;"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addDialog = false">取 消</el-button>
+          <el-button type="primary" @click="addData">确 定</el-button>
+        </span>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
 import waves from '@/directive/waves' // Waves directive
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import { customerList } from '@/api/customerManager'
+import { customerList, userCrmRegister } from '@/api/customerManager'
 export default {
   components: { Pagination },
   directives: { waves },
@@ -91,7 +111,12 @@ export default {
       },
       listLoading: false,
       listData: [],
-      total: 0
+      total: 0,
+      addDialog: false,
+      addForm: {
+        name: '',
+        phone: ''
+      }
     }
   },
   created() {
@@ -127,6 +152,57 @@ export default {
         query: {
           siid: row.siid,
           userId: row.userId
+        }
+      })
+    },
+    // 打开添加客户弹框
+    openAddDataDialog() {
+      this.resetAddForm()
+      this.addDialog = true
+    },
+    resetAddForm() {
+      this.addForm = {
+        name: '',
+        phone: ''
+      }
+    },
+    // 添加
+    addData() {
+      console.log(this.addForm)
+      if (this.addForm.name == ''){
+        this.$message({
+          message: '请输入客户称呼',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.addForm.phone == ''){
+        this.$message({
+          message: '请输入用户账号',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      userCrmRegister(this.addForm).then(res => {
+        if(res.code == 0){
+          this.$notify({
+            title: '成功',
+            message: '添加成功',
+            type: 'success',
+            duration: 1000
+          })
+          this.addDialog = false
+          console.log(res)
+          this.$router.push({
+            path: '/customerManager/detail',
+            query: {
+              userId: res.data
+            }
+          })
         }
       })
     }
