@@ -178,15 +178,6 @@ export default {
         })
         return
       }
-      if (this.addForm.phone == ''){
-        this.$message({
-          message: '请输入用户账号',
-          type: 'error',
-          showClose: true,
-          duration: 1000
-        })
-        return
-      }
       userCrmRegister(this.addForm).then(res => {
         if(res.code == 0){
           this.$notify({
