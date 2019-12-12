@@ -169,9 +169,9 @@ export default {
     // 添加
     addData() {
       console.log(this.addForm)
-      if (this.addForm.name == ''){
+      if (this.addForm.phone == ''){
         this.$message({
-          message: '请输入客户称呼',
+          message: '请输入用户账号',
           type: 'error',
           showClose: true,
           duration: 1000
