@@ -176,7 +176,7 @@ export default {
     },
     resetAddForm() {
       this.addForm = {
-        name: '',
+        name: undefined,
         phone: '',
         channelType: ''
       }
