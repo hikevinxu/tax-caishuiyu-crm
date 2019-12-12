@@ -211,7 +211,13 @@ export default {
         })
         return
       }
-      userCrmRegister(this.addForm).then(res => {
+      let params = {}
+      for(let key  in this.addForm){
+        if(this.addForm[key] !== '') {
+          params[key] = this.addForm[key]
+        }
+      }
+      userCrmRegister(params).then(res => {
         if(res.code == 0){
           this.$notify({
             title: '成功',
