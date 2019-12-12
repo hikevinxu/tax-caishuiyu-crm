@@ -86,6 +86,11 @@
           <el-form-item label="请输入用户账号：" prop="phone">
             <el-input v-model="addForm.phone" maxlength="11" placeholder="请输入用户账号" style="width: 200px;"></el-input>
           </el-form-item>
+          <el-form-item label="请选择用户来源：" prop="channel">
+            <el-select v-model="addForm.channelType" placeholder="请选择用户来源" style="width: 300px;">
+              <el-option v-for="(item, index) in channelList" :key="'channel' + index" :label="item.name" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="addDialog = false">取 消</el-button>
@@ -115,8 +120,17 @@ export default {
       addDialog: false,
       addForm: {
         name: '',
-        phone: ''
-      }
+        phone: '',
+        channelType: ''
+      },
+      channelList: [
+        {id: 'baidu', name: '百度'},
+        {id: 'shenma', name: '神马'},
+        {id: '360', name: '360'},
+        {id: 'sougou', name: '搜狗'},
+        {id: 'toutiao', name: '头条'},
+        {id: 'UC', name: 'UC'}
+      ]
     }
   },
   created() {
@@ -163,7 +177,8 @@ export default {
     resetAddForm() {
       this.addForm = {
         name: '',
-        phone: ''
+        phone: '',
+        channelType: ''
       }
     },
     // 添加
@@ -171,7 +186,25 @@ export default {
       console.log(this.addForm)
       if (this.addForm.phone == ''){
         this.$message({
-          message: '请输入用户账号',
+          message: '请输入用户手机号',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.addForm.phone.length != 11){
+        this.$message({
+          message: '请输入11位手机号',
+          type: 'error',
+          showClose: true,
+          duration: 1000
+        })
+        return
+      }
+      if (this.addForm.channelType == ''){
+        this.$message({
+          message: '请选择用户来源',
           type: 'error',
           showClose: true,
           duration: 1000
