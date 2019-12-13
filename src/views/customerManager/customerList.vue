@@ -129,7 +129,8 @@ export default {
         {id: '360', name: '360'},
         {id: 'sougou', name: '搜狗'},
         {id: 'toutiao', name: '头条'},
-        {id: 'UC', name: 'UC'}
+        {id: 'UC', name: 'UC'},
+        {id: 'other', name: '其他'}
       ]
     }
   },
